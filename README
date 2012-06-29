@@ -1,0 +1,38 @@
+Updated for API version [1.12] for TShock ver. 3.9.
+
+Bugs fixed:
+    Spamming of player upon entry of any quest region defined after the first.
+    Fixed a bug in TakeItem().
+    Fixed a bug in GetXYWallPercentage().
+    Fixed a bug in WallEdit().
+    When a player leaves their open quest threads and quests will now close properly, to prevent memory leaks. (I think.)
+    Probably more that I can't remember.
+
+
+Functions Added:
+GetTile(int x, int y) : returns TileData2
+    Get's a TileData2 object which contains all of a tile's data.
+    Credit to Olink for the basic idea for the struct. It came from his Schematics plugin source.
+
+SetTile(int x, int y, TileData2 data)
+    Sets the specified tile to have the data provided.
+
+CheckEmpty(int x, int y) : returns bool
+    Returns true the specified tile has neither a tile nor a wall on it. Otherwise returns false.
+
+BuffPlayer(string buffname, QPlayer Player, int time) : returns bool
+    Buffs the specified player using standard buff name lookup for [time] seconds.
+    returns true if successful, returns false if more than one buff was found.
+
+CheckDay() : returns bool
+    Returns true if it is daytime.
+
+CheckTime(double time, int range, bool dayTime = true) : returns bool
+    Checks the game time for any time withing [range] of [time].
+        Example: CheckTime(27000, 10000, true);
+    This will return true if the time is anywhere between 17000 and 37000 and Main.dayTime == true.
+    If dayTime = true then this will apply to Main.dayTime == true, if false then it will apply Main.dayTime == false.
+
+HealPlayer(QPlayer Player)
+    Heals the specified player.
+    This comes almost directly out of the TShockAPI source. Thanks to the team behind TShock.
