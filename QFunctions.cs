@@ -222,7 +222,7 @@ namespace QuestSystemLUA
                 {
                     for (int j = Y; j < (Y + Height); j++)
                     {
-                        if (Main.tile[i, j].active && Main.tile[i, j].wall == type)
+                        if (Main.tile[i, j].wall == type)
                             amountofmatchedwalls++;
                         totalwallcount++;
                     }
@@ -264,13 +264,26 @@ namespace QuestSystemLUA
         }
         public static void Kill(string name, QPlayer Player, int amount = 1)
         {
-            for (int i = 0; i < amount; i++)
+            var npc = TShock.Utils.GetNPCByName(name);
+            if (npc.Count == 1)
             {
+                string naem = npc[0].name;
+                for (int i = 0; i < amount; i++)
+                {
+                    Player.KillNames.Add(naem);
+                }
                 Player.AwaitingKill = true;
-                while (!Player.KillNames.Contains(name)) { Thread.Sleep(1); }
-                Player.KillNames.Remove(name);
+                while (Player.KillNames.Contains(naem))
+                {
+                    Thread.Sleep(1); 
+                }
                 Player.AwaitingKill = false;
             }
+                /*Player.AwaitingKill = true;
+                while (!Player.KillNames.Contains(name)) { Thread.Sleep(1); }
+                Player.KillNames.Remove(name);
+                Player.AwaitingKill = false;*/
+            //}
         } //In Wiki
         public static void KillNpc(int id)
         {
@@ -340,13 +353,25 @@ namespace QuestSystemLUA
             Main.tile[x, y].wire  = data.wire;
             QTools.UpdateTile(x, y);
         }
-        public static bool CheckEmpty(int x, int y)
+        public static bool CheckEmpty(int x, int y, bool tile = true)
         {
-            if (Main.tile[x, y].type > 0 || Main.tile[x,y].wall > 0)
+            if (tile == true)
             {
-                return false;
+                if (Main.tile[x, y].type > 0)
+                {
+                    return false;
+                }
+                return true;
             }
-            return true;
+            else
+            {
+                if (Main.tile[x, y].wall > 0)
+                {
+                    return false;
+                }
+                return true;
+
+            }
         }
         public static bool BuffPlayer(string buffname, QPlayer Player, int time)
         {
@@ -394,6 +419,115 @@ namespace QuestSystemLUA
                 Player.TSPlayer.GiveItem(heart.type, heart.name, heart.width, heart.height, heart.maxStack);
             for (int i = 0; i < 10; i++)
                 Player.TSPlayer.GiveItem(star.type, star.name, star.width, star.height, star.maxStack);
+        }
+        public static void SetWire(int x, int y, bool wire = true, bool active = false)
+        {
+            Main.tile[x, y].wire = wire;
+            Main.tile[x, y].active = active;
+            QTools.UpdateTile(x, y);
+        }
+        public static void SetTileType(int x, int y, byte type, short frameX = 0, short frameY = 0)
+            //Offers a more specific function than TileEdit(). You can set frames using this function and so can create multitile objects like plants, furniture, and boulders. Also, this function uses direct IDs while TileEdit() goes through a list lookup first.
+        {
+            Main.tile[x, y].type = type;
+            Main.tile[x, y].frameX = frameX;
+            Main.tile[x, y].frameY = frameY;
+            QTools.UpdateTile(x, y);
+        }
+        public static void AddParty(QPlayer Player, string partyname)
+        {
+            if (QMain.QuestParties.Count > 0)
+            {
+                foreach (QuestParty pty in QMain.QuestParties)
+                {
+                    if (pty.PartyName == partyname)
+                    {
+                        pty.AddMember(Player);
+                        Player.CurrentParties.Add(pty);
+                    }
+                }
+            }
+            else
+            {
+                QMain.QuestParties.Add(new QuestParty(partyname));
+                foreach (QuestParty pty in QMain.QuestParties)
+                {
+                    if (pty.PartyName == partyname)
+                    {
+                        pty.AddMember(Player);
+                        Player.CurrentParties.Add(pty);
+                    }
+                }
+            }
+        }
+        public static void PartyHunt(string pty, string npc, int amt = 1)
+        {
+            QuestParty party = QTools.GetQuestPartyByName(pty);
+            var name = TShock.Utils.GetNPCByName(npc);
+            if (party.Expansion)
+            {
+                if (name.Count == 1)
+                {
+                    party.ObjComplete = false;
+                    party.Hunt(name[0].name, amt);
+                    party.Expansion = false;
+                    while (party.ObjComplete == false) { Thread.Sleep(1); }
+                    QMain.QuestParties.Remove(party);
+                }
+            }
+        }
+        public static void PartyHuntList(string pty, LuaInterface.LuaTable hunt)
+        {
+            //This whole function is pretty messy and kind of stupid. But it works. At least it works.
+            QuestParty party = QTools.GetQuestPartyByName(pty);
+            string name = ""; //I know, I know. Meh. This mess stemmed from a "fuck it" moment. If you go the npc name wrong, you're fucked anyway.
+            if (party.Expansion == true)
+            {
+                foreach (LuaInterface.LuaTable tbl in hunt.Values)
+                {
+                    foreach (var info in tbl.Values)
+                    {
+                        string buff = info.GetType().ToString();
+                        if (buff == "System.String")
+                        {
+                            name = info.ToString();
+                        }
+                        else
+                        {
+                            if (buff == "System.Double")
+                            {
+                                party.ObjComplete = false;
+                                party.Hunt(name, Convert.ToInt16(info));
+                                party.Expansion = false;
+                            }
+                        }
+                    }
+                }
+                while (party.ObjComplete == false)
+                {
+                    /*Cosole.WriteLine(party.AwaitingKill.Count);
+                    foreach (string mem in party.AwaitingKill)
+                    {
+                        Console.WriteLine(mem);
+                    }*/
+                    Thread.Sleep(1);
+                }
+                QMain.QuestParties.Remove(party);
+            }
+        }
+        public static void ListTest(LuaInterface.LuaTable Lol)
+        {
+            //LuaInterface.Lua lul = new LuaInterface.Lua();
+            //LuaInterface.LuaTable lol = lul.GetTable("Lol");
+            foreach (LuaInterface.LuaTable str in Lol.Values)
+            {
+                Console.WriteLine(str);
+                foreach (var derp in str.Values)
+                {
+                    Console.WriteLine(derp);
+                    Console.WriteLine(derp.GetType());
+                }
+            }
         }
     }
 }

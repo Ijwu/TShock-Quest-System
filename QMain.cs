@@ -36,6 +36,7 @@ namespace QuestSystemLUA
         public static List<Quest> QuestPool = new List<Quest>();
         public static List<StoredQPlayer> StoredPlayers = new List<StoredQPlayer>();
         public static List<QuestRegion> QuestRegions = new List<QuestRegion>();
+        public static List<QuestParty> QuestParties = new List<QuestParty>();
         public static SqlTableEditor SQLEditor;
         public static SqlTableCreator SQLWriter;
 

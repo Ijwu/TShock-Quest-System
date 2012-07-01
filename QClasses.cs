@@ -50,6 +50,7 @@ namespace QuestSystemLUA
         public string LastChatMessage = "";
         public int LastTileHitX;
         public int LastTileHitY;
+        public List<QuestParty> CurrentParties = new List<QuestParty>();
         public List<RunQuestParameters> RunningQuestThreads = new List<RunQuestParameters>();
 
         public QPlayer(int index)
@@ -150,6 +151,39 @@ namespace QuestSystemLUA
             QuestName = name;
             Complete = complete;
             Attempts = attempts;
+        }
+    }
+    public class QuestParty
+    {
+        public string PartyName;
+        public List<string> AwaitingKill = new List<string>();
+        public int Count;
+        public List<QPlayer> Members = new List<QPlayer>();
+        public bool Expansion = true;
+        public bool ObjComplete = false;
+
+        public QuestParty(string name)
+        {
+            PartyName = name;
+        }
+
+        public void AddMember(QPlayer Player)
+        {
+            //QPlayer newmember = QTools.GetPlayerByName(name);
+            this.Members.Add(Player);
+            this.Count++;
+        }
+
+        public void Hunt(string mob, int amount)
+        {
+            var results = TShock.Utils.GetNPCByName(mob);
+            if (results.Count == 1)
+            {
+                for (int i = 0; i < amount; i++)
+                {
+                    this.AwaitingKill.Add(results[0].name);
+                }
+            }
         }
     }
 }

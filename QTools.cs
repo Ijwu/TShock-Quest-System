@@ -51,6 +51,14 @@ namespace QuestSystemLUA
             lua.RegisterFunction("CheckDay", functions, functions.GetType().GetMethod("CheckDay"));  //none
             lua.RegisterFunction("CheckTime", functions, functions.GetType().GetMethod("CheckTime")); //double time, int range, bool dayTime = true
             lua.RegisterFunction("HealPlayer", functions, functions.GetType().GetMethod("HealPlayer")); //QPlayer Player
+            lua.RegisterFunction("SetWire", functions, functions.GetType().GetMethod("SetWire")); //int x, int y, bool wire = true, bool active = false
+            lua.RegisterFunction("SetTileType", functions, functions.GetType().GetMethod("SetTileType")); //int x, int y, byte type, short frameX = 0, short frameY = 0
+            //Quest Party Update
+            //Implemented Party Kill Counting
+            //Changed CheckEmpty
+            lua.RegisterFunction("AddParty", functions, functions.GetType().GetMethod("AddParty")); //QPlayer Player, string partyname
+            lua.RegisterFunction("PartyHunt", functions, functions.GetType().GetMethod("PartyHunt")); //string pty, string npc, int amt
+            lua.RegisterFunction("PartyHuntList", functions, functions.GetType().GetMethod("PartyHuntList")); //string pty, LuaInterface.LuaTable hunt -- LuaTable Format {{string NPCName, int amount},{repeat}} Ex: {{'zombie', 5},{'skeleton',5}}
 
             var parameters = (RunQuestParameters)RunQuestOb;
             QuestPlayerData qdata = null;
@@ -375,6 +383,17 @@ namespace QuestSystemLUA
                 {
                     if (qp.Quest.Name == questname)
                         return qp;
+                }
+            }
+            return null;
+        }
+        public static QuestParty GetQuestPartyByName(string name)
+        {
+            foreach (QuestParty pty in QMain.QuestParties)
+            {
+                if (pty.PartyName.ToLower() == name.ToLower())
+                {
+                    return pty;
                 }
             }
             return null;

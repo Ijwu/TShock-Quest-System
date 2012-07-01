@@ -50,8 +50,22 @@ namespace QuestSystemLUA
             if (npc.life - damage <= 0)
             {
                 var player = QTools.GetPlayerByID(args.Player.Index);
-                if (player.AwaitingKill && !player.KillNames.Contains(npc.name))
-                    player.KillNames.Add(npc.name);
+                if (player.AwaitingKill && player.KillNames.Contains(npc.name))
+                    player.KillNames.Remove(npc.name);
+                if (player.RunningQuests.Count > 0)
+                {
+                    foreach (QuestParty pty in player.CurrentParties)
+                    {
+                        if (pty.AwaitingKill.Contains(npc.name))
+                        {
+                            pty.AwaitingKill.Remove(npc.name);
+                            if (pty.AwaitingKill.Count == 0)
+                            {
+                                pty.ObjComplete = true;
+                            }
+                        }
+                    }
+                }
             }
             return false;
         }

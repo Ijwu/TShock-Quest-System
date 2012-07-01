@@ -2,39 +2,66 @@ This is a plugin originally created by Twitchy on the TShock forums. It was then
 
 Updated for API version [1.12] for TShock ver. 3.9.
 
-Bugs fixed:
-    Spamming of player upon entry of any quest region defined after the first.
-    Fixed a bug in TakeItem().
-    Fixed a bug in GetXYWallPercentage().
-    Fixed a bug in WallEdit().
-    When a player leaves their open quest threads and quests will now close properly, to prevent memory leaks. (I think.)
-    Probably more that I can't remember.
+
+Ijwu Version 2:
+    Changed how the Kill() function works.
+        I didn't like how Twitchy did it.
+    Added in Quest Parties.
+        Allows for multiple quests to link and share kill counts.
+        Allows for having multiple people run raids (boss fights, dungeons, etc)
+    Functions added:
+        AddParty(QPlayer Player, string PartyName)
+            Adds the specified player to the specified party.
+            It will create the party if it doesn't exist.
+            
+        PartyHunt(string PartyName, string NPC, int amount = 1)
+            Adds the specified mob in the specified amount to the party's hunting list.
+            Only the first call of this function will take effect as to stop duplicate calls due to multiple quest instances.
+            Automatically deletes the party upon completion.
+            Also stops the script until this objective is complete.
+           
+        PartyHuntList(string PartyName, LuaTable HuntingList)
+            Using a list of mob lists, you can add more than one mob to a party's hunt list at once.
+            Only the first call of this function will take effect as to stop duplicate calls due to multiple quest instances.
+            Table format: {{Mob Name, Amount},{Repeat as many times as necessary}}
+            Example: {{"zombie",1},{"skeleton",20}}
+            Automatically deletes the party upon completion.
+            Also stops the script until this objective is complete.
 
 
-Functions Added:
-GetTile(int x, int y) : returns TileData2
-    Get's a TileData2 object which contains all of a tile's data.
-    Credit to Olink for the basic idea for the struct. It came from his Schematics plugin source.
+Ijwu Version 1:
+    Bugs fixed:
+        Spamming of player upon entry of any quest region defined after the first.
+        Fixed a bug in TakeItem().
+        Fixed a bug in GetXYWallPercentage().
+        Fixed a bug in WallEdit().
+        When a player leaves their open quest threads and quests will now close properly, to prevent memory leaks. (I think.)
+        Probably more that I can't remember.
 
-SetTile(int x, int y, TileData2 data)
-    Sets the specified tile to have the data provided.
+    Functions Added:
+        GetTile(int x, int y) : returns TileData2
+            Get's a TileData2 object which contains all of a tile's data.
+            Credit to Olink for the basic idea for the struct. It came from his Schematics plugin source.
 
-CheckEmpty(int x, int y) : returns bool
-    Returns true the specified tile has neither a tile nor a wall on it. Otherwise returns false.
+        SetTile(int x, int y, TileData2 data)
+            Sets the specified tile to have the data provided.
 
-BuffPlayer(string buffname, QPlayer Player, int time) : returns bool
-    Buffs the specified player using standard buff name lookup for [time] seconds.
-    returns true if successful, returns false if more than one buff was found.
+        CheckEmpty(int x, int y) : returns bool
+            Returns true the specified tile has neither a tile nor a wall on it. Otherwise returns false.
 
-CheckDay() : returns bool
-    Returns true if it is daytime.
+        BuffPlayer(string buffname, QPlayer Player, int time) : returns bool
+            Buffs the specified player using standard buff name lookup for [time] seconds.
+            returns true if successful, returns false if more than one buff was found.
 
-CheckTime(double time, int range, bool dayTime = true) : returns bool
-    Checks the game time for any time withing [range] of [time].
-        Example: CheckTime(27000, 10000, true);
-    This will return true if the time is anywhere between 17000 and 37000 and Main.dayTime == true.
-    If dayTime = true then this will apply to Main.dayTime == true, if false then it will apply Main.dayTime == false.
+        CheckDay() : returns bool
+            Returns true if it is daytime.
 
-HealPlayer(QPlayer Player)
-    Heals the specified player.
-    This comes almost directly out of the TShockAPI source. Thanks to the team behind TShock.
+        CheckTime(double time, int range, bool dayTime = true) : returns bool
+            Checks the game time for any time withing [range] of [time].
+                Example: CheckTime(27000, 10000, true);
+            This will return true if the time is anywhere between 17000 and 37000 and Main.dayTime == true.
+            If dayTime = true then this will apply to Main.dayTime == true, if false then it will apply Main.dayTime == false.
+
+        HealPlayer(QPlayer Player)
+            Heals the specified player.
+            This comes almost directly out of the TShockAPI source. Thanks to the team behind TShock.
