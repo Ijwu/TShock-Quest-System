@@ -52,6 +52,8 @@ namespace QuestSystemLUA
         public int LastTileHitY;
         public List<QuestParty> CurrentParties = new List<QuestParty>();
         public List<RunQuestParameters> RunningQuestThreads = new List<RunQuestParameters>();
+        public bool RunningPython = false;
+        public int MenuOption;
 
         public QPlayer(int index)
         {
@@ -161,6 +163,7 @@ namespace QuestSystemLUA
         public List<QPlayer> Members = new List<QPlayer>();
         public bool Expansion = true;
         public bool ObjComplete = false;
+        public string Leader = "";
 
         public QuestParty(string name)
         {
@@ -172,6 +175,10 @@ namespace QuestSystemLUA
             //QPlayer newmember = QTools.GetPlayerByName(name);
             this.Members.Add(Player);
             this.Count++;
+            if (this.Leader == "")
+            {
+                this.Leader = Player.TSPlayer.Name;
+            }
         }
 
         public void Hunt(string mob, int amount)

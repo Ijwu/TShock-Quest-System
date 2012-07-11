@@ -37,6 +37,7 @@ namespace QuestSystemLUA
             tileTypeNames.Add("copper brick", 47);
             tileTypeNames.Add("spike", 48);
             tileTypeNames.Add("cobweb", 51);
+            tileTypeNames.Add("vines", 52);
             tileTypeNames.Add("sand", 53);
             tileTypeNames.Add("glass", 54);
             tileTypeNames.Add("obsidian", 56);
@@ -44,6 +45,7 @@ namespace QuestSystemLUA
             tileTypeNames.Add("hellstone", 58);
             tileTypeNames.Add("mud", 59);
             tileTypeNames.Add("jungle grass", 60);
+            tileTypeNames.Add("jungle vines", 62);
             tileTypeNames.Add("sapphire", 63);
             tileTypeNames.Add("ruby", 64);
             tileTypeNames.Add("emerald", 65);
@@ -58,6 +60,7 @@ namespace QuestSystemLUA
             tileTypeNames.Add("hallowed grass", 109);
             tileTypeNames.Add("adamantite ore", 111);
             tileTypeNames.Add("ebonsand", 112);
+            tileTypeNames.Add("hallow vines", 115);
             tileTypeNames.Add("pearlsand", 116);
             tileTypeNames.Add("pearlstone", 117);
             tileTypeNames.Add("pearlstone brick", 118);

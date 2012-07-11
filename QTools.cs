@@ -7,6 +7,10 @@ using LuaInterface;
 using Terraria;
 using TShockAPI;
 using TShockAPI.DB;
+using IronPython.Hosting;
+using IronPython.Runtime;
+using Microsoft.Scripting;
+using Microsoft.Scripting.Hosting; 
 
 namespace QuestSystemLUA
 {
@@ -14,8 +18,14 @@ namespace QuestSystemLUA
     {
         public static void RunQuest(object RunQuestOb)
         {
-            Lua lua = new Lua();
             QFunctions functions = new QFunctions();
+
+            ScriptEngine pyEngine = Python.CreateEngine();
+            ScriptScope pyScope = pyEngine.CreateScope();
+
+            pyScope.SetVariable("Functions", functions);
+
+            Lua lua = new Lua();
 
             //Updated In 1.1
             lua.RegisterFunction("AtXY", functions, functions.GetType().GetMethod("AtXY")); //int x, int y, QPlayer Player
@@ -43,7 +53,7 @@ namespace QuestSystemLUA
             lua.RegisterFunction("Private", functions, functions.GetType().GetMethod("Private")); //string message, QPlayer Player, Color color
             lua.RegisterFunction("Broadcast", functions, functions.GetType().GetMethod("Broadcast")); //string message, Color color
             lua.RegisterFunction("SpawnMob", functions, functions.GetType().GetMethod("SpawnMob")); //string name, int x, int y, int amount = 1
-            //Custom; added by Ijwu
+            //Custom; added by Ijwu (Ijwu Version 1)
             lua.RegisterFunction("GetTile", functions, functions.GetType().GetMethod("GetTile")); //int x, int y
             lua.RegisterFunction("SetTile", functions, functions.GetType().GetMethod("SetTile")); //int x, int y, Tile newtile
             lua.RegisterFunction("CheckEmpty", functions, functions.GetType().GetMethod("CheckEmpty")); //int x, int y
@@ -53,12 +63,13 @@ namespace QuestSystemLUA
             lua.RegisterFunction("HealPlayer", functions, functions.GetType().GetMethod("HealPlayer")); //QPlayer Player
             lua.RegisterFunction("SetWire", functions, functions.GetType().GetMethod("SetWire")); //int x, int y, bool wire = true, bool active = false
             lua.RegisterFunction("SetTileType", functions, functions.GetType().GetMethod("SetTileType")); //int x, int y, byte type, short frameX = 0, short frameY = 0
-            //Quest Party Update
-            //Implemented Party Kill Counting
-            //Changed CheckEmpty
+            //Added in Ijwu Version 2 (and some changed in Version 3)
             lua.RegisterFunction("AddParty", functions, functions.GetType().GetMethod("AddParty")); //QPlayer Player, string partyname
-            lua.RegisterFunction("PartyHunt", functions, functions.GetType().GetMethod("PartyHunt")); //string pty, string npc, int amt
-            lua.RegisterFunction("PartyHuntList", functions, functions.GetType().GetMethod("PartyHuntList")); //string pty, LuaInterface.LuaTable hunt -- LuaTable Format {{string NPCName, int amount},{repeat}} Ex: {{'zombie', 5},{'skeleton',5}}
+            lua.RegisterFunction("PartyHunt", functions, functions.GetType().GetMethod("PartyHunt")); //QPlayer Player, string pty, string npc, int amt = 1
+            lua.RegisterFunction("PartyHuntList", functions, functions.GetType().GetMethod("PartyHuntList")); //QPlayer Player, string pty, dynamic hunt (The hunt var is a list. Depending on if you use Python or Lua. It will [hopefully] auto-detect and compensate for either.)
+            lua.RegisterFunction("ChangeGroup", functions, functions.GetType().GetMethod("ChangeGroup")); //QPlayer Player, string group
+            //Added in Ijwu Version 3
+            lua.RegisterFunction("CreateMenu", functions, functions.GetType().GetMethod("CreateMenu")); // QPlayer Player, string title, dynamic menu
 
             var parameters = (RunQuestParameters)RunQuestOb;
             QuestPlayerData qdata = null;
@@ -72,32 +83,62 @@ namespace QuestSystemLUA
             }
             parameters.Player.RunningQuests.Add(parameters.Quest.Name);
             object[] returnvalues = new object[1];
-            try
+            if (parameters.Quest.FilePath.EndsWith(".lua"))
             {
-                lua["Player"] = parameters.Player;
-                lua["Name"] = parameters.Player.TSPlayer.Name;
-                lua["QName"] = parameters.Quest.Name;
-                lua["Color"] = new Color();
-                returnvalues = lua.DoFile(parameters.Quest.FilePath);
+                try
+                {
+                    parameters.Player.RunningPython = false;
+                    lua["Player"] = parameters.Player;
+                    lua["Name"] = parameters.Player.TSPlayer.Name;
+                    lua["QName"] = parameters.Quest.Name;
+                    lua["Color"] = new Color();
+                    returnvalues = lua.DoFile(parameters.Quest.FilePath);
 
-                if (returnvalues == null || returnvalues[0] == null || (bool)returnvalues[0])
+                    if (returnvalues == null || returnvalues[0] == null || (bool)returnvalues[0])
+                        qdata.Complete = true;
+                    UpdateStoredPlayersInDB();
+                    parameters.Player.RunningQuests.Remove(parameters.Quest.Name);
+                    parameters.Player.RunningQuestThreads.Remove(parameters);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e.ToString());
+                    parameters.Player.RunningQuests.Remove(parameters.Quest.Name);
+                    parameters.Player.RunningQuestThreads.Remove(parameters);
+                    UpdateStoredPlayersInDB();
+                }
+            }
+            else
+            {
+                try
+                {
+                    parameters.Player.RunningPython = true;
+                    pyScope.SetVariable("Player", parameters.Player);
+                    pyScope.SetVariable("Name", parameters.Player.TSPlayer.Name);
+                    pyScope.SetVariable("QName", parameters.Quest.Name);
+                    pyScope.SetVariable("Color", new Color());
+                    //Note to self: See if you can get them return values to work here.
+
+                    //Console.WriteLine("Var setting success.");
+                    ScriptSource source = pyEngine.CreateScriptSourceFromFile(parameters.Quest.FilePath);
+                    //Console.WriteLine("Source retrieval success.");
+                    CompiledCode compiled = source.Compile();
+                    //Console.WriteLine("Source compilation success.");
+                    compiled.Execute(pyScope);
+                    //Console.WriteLine("Source execution success.");
+
                     qdata.Complete = true;
-                UpdateStoredPlayersInDB();
-                parameters.Player.RunningQuests.Remove(parameters.Quest.Name);
-                parameters.Player.RunningQuestThreads.Remove(parameters);
-            }
-            catch (LuaException e)
-            {
-                Log.Error(e.Message);
-                parameters.Player.RunningQuests.Remove(parameters.Quest.Name);
-                parameters.Player.RunningQuestThreads.Remove(parameters);
-                UpdateStoredPlayersInDB();
-            }
-            catch
-            {
-                parameters.Player.RunningQuests.Remove(parameters.Quest.Name);
-                parameters.Player.RunningQuestThreads.Remove(parameters);
-                UpdateStoredPlayersInDB();
+                    UpdateStoredPlayersInDB();
+                    parameters.Player.RunningQuests.Remove(parameters.Quest.Name);
+                    parameters.Player.RunningQuestThreads.Remove(parameters);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e.ToString());
+                    parameters.Player.RunningQuests.Remove(parameters.Quest.Name);
+                    parameters.Player.RunningQuestThreads.Remove(parameters);
+                    UpdateStoredPlayersInDB();
+                }
             }
         }
         public static QPlayer GetPlayerByID(int id)
@@ -289,7 +330,8 @@ namespace QuestSystemLUA
             if (!Directory.Exists("Quests"))
                 Directory.CreateDirectory("Quests");
             string[] filePaths = Directory.GetFiles("Quests", "*.lua");
-            foreach (string path in filePaths)
+            IEnumerable<string> filePathz = filePaths.Concat(Directory.GetFiles("Quests","*.py")); // Couldn't find the explicit conversion that Visual C# insisted existed. So, I got sloppy.
+            foreach (string path in filePathz)
             {
                 try
                 {
@@ -397,6 +439,11 @@ namespace QuestSystemLUA
                 }
             }
             return null;
+        }
+        public static void MenuCallback(Object sender, ChatAssistant.MenuEventArgs args)
+        {
+            QPlayer player = GetPlayerByID(args.PlayerID);
+            player.MenuOption = args.Selected;
         }
     }
 }
