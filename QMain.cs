@@ -43,8 +43,7 @@ namespace QuestSystemLUA
         public override void Initialize()
         {
             TypesList.SetupTyps();
-
-            NetHooks.GreetPlayer += OnGreetPlayer;
+            ServerHooks.Join += OnJoin;
             ServerHooks.Leave += OnLeave;
             NetHooks.GetData += GetData;
             GameHooks.Initialize += OnInitialize;
@@ -57,7 +56,7 @@ namespace QuestSystemLUA
         {
             if (disposing)
             {
-                NetHooks.GreetPlayer -= OnGreetPlayer;
+                ServerHooks.Join -= OnJoin;
                 ServerHooks.Leave -= OnLeave;
                 NetHooks.GetData -= GetData;
                 GameHooks.Initialize -= OnInitialize;
@@ -182,7 +181,7 @@ namespace QuestSystemLUA
                 }
             }
         }
-        public void OnGreetPlayer(int who, HandledEventArgs e)
+        public void OnJoin(int who, HandledEventArgs e)
         {
             QPlayer player = new QPlayer(who);
 

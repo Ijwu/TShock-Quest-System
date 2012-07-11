@@ -1,11 +1,37 @@
 This is a plugin originally created by Twitchy on the TShock forums. It was then maintained by Olink, on the same forums. I've only updated it and added some things. In no way does this make me responsible for its continued life.
 
 Updated for API version [1.12] for TShock ver. 3.9.
+NOTE: I am *not* currently working on TShock Ver. 4.0 compatibility. That will force me to restructure some of the code and I'd rather do that when it's needed; at my leisure.
 
+Ijwu Version 3:
+    Added in Python Script reading using IronPython
+        Requires some more DLLs to be placed in your main server folder.
+            These are mandatory. Even if you don't script in Python.
+        Automatically works for files with the .py extension.
+        All functions are under the Functions namespace.
+            Ex: Instead of "Private()" like in Lua, you will instead use "Functions.Private()"
+    Added ChatAssistant integration
+        If you don't have ChatAssistant installed and you attempt using CreateMenu() your script WILL crash.
+        Find ChatAssistant here: http://tshock.co/xf/index.php?threads/1-12-chat-assistant.1538/
+        Functions Added:
+            CreateMenu(QPlayer Player, string title, dynamic menu)
+                The title is the title of the menu. The "menu" argument is a list of dictionaries that you pass to the method.
+                Each dictionary represents a menu option. 
+                Each dictionary must contain the keys (string)"title", (int)"value" and (bool)"selectable".
+                All other keys will be ignored.
+                Lua Example: {{title = "Option 1", value = 0, selectable = true}, {title = "Option 2", value = 1, selectable = false}}
+                Python Example: [{"title":"Option 1", "value":0, "selectable":True},{"title":"Option 2", "value":1, "selectable":False}]
+        Functions Changed:
+            PartyHuntList
+                Changed to allow for Python integration.
+                Python list example: [["zombie",1],["skeleton",6]]
+            
 
 Ijwu Version 2:
     Changed how the Kill() function works.
         I didn't like how Twitchy did it.
+            Expanding on that: It seemed much to complicated how it was being done. Each kill would be put into a list and if that mob happened to be on your objective list, then it would be removed from the objective list. This would have the kill list gain in length with each kill, even if the mob isn't on your objective list. (I think that's how he did it, anyway)
+            My change was to make an objective list and just check each kill as it happens, if the kill is on the objective list then remove it from the objective list. Once the objective list is empty, complete the objective and move on.
     Added in Quest Parties.
         Allows for multiple quests to link and share kill counts.
         Allows for having multiple people run raids (boss fights, dungeons, etc)

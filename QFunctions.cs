@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using TShockAPI;
 using Terraria;
+using ChatAssistant;
 
 namespace QuestSystemLUA
 {
@@ -460,74 +461,114 @@ namespace QuestSystemLUA
                 }
             }
         }
-        public static void PartyHunt(string pty, string npc, int amt = 1)
+        public static void PartyHunt(QPlayer Player, string pty, string npc, int amt = 1)
         {
             QuestParty party = QTools.GetQuestPartyByName(pty);
             var name = TShock.Utils.GetNPCByName(npc);
-            if (party.Expansion)
+            //if (Player.TSPlayer.Name == party.Leader)
+            if (party.Expansion == true)
             {
                 if (name.Count == 1)
                 {
                     party.ObjComplete = false;
                     party.Hunt(name[0].name, amt);
                     party.Expansion = false;
-                    while (party.ObjComplete == false) { Thread.Sleep(1); }
-                    QMain.QuestParties.Remove(party);
+                }
+            }
+            while (party.ObjComplete == false) { Thread.Sleep(1); }
+        }
+        /*public static void WaitForObjective(string pty)
+        {
+            QuestParty party = QTools.GetQuestPartyByName(pty);
+            while (party.ObjComplete == false) { Thread.Sleep(1); }
+        }*/
+        public static void ChangeGroup(QPlayer Player, string group)
+        {
+            var user = TShock.Users.GetUserByID(Player.TSPlayer.UserID);
+            TShock.Users.SetUserGroup(user, group);
+        }
+        public static void CreateMenu(QPlayer Player, string title, dynamic menu) // {text = "", value = "", selectable = ""}
+        {
+            List<MenuItem> newmenu = new List<MenuItem>();
+            if (!Player.RunningPython)
+            {
+                LuaInterface.LuaTable menu2 = menu;
+                foreach (LuaInterface.LuaTable item in menu2.Values)
+                {
+                    string textbuffer = "";
+                    int valuebuffer = 0;
+                    bool selectbuffer = false;
+                    textbuffer = item["text"].ToString();
+                    valuebuffer = Convert.ToInt16(item["value"]);
+                    selectbuffer = Convert.ToBoolean(item["selectable"]);
+                    newmenu.Add(new MenuItem(textbuffer, valuebuffer, selectbuffer, false));
+                }
+            }
+            else
+            {
+                foreach (IronPython.Runtime.PythonDictionary item in menu)
+                {
+                    string textbuffer = "";
+                    int valuebuffer = 0;
+                    bool selectbuffer = false;
+                    textbuffer = item["text"].ToString();
+                    valuebuffer = Convert.ToInt16(item["value"]);
+                    selectbuffer = Convert.ToBoolean(item["selectable"]);
+                    newmenu.Add(new MenuItem(textbuffer, valuebuffer, selectbuffer, false));
+                }
+            }
+            Chat.Menu menu3 = Chat.CreateMenu(Player.TSPlayer.Index, title, newmenu, new Chat.MenuAction(QTools.MenuCallback));
+            //Section to wait until menu input happens.
+            Player.MenuOption = -21546985; // Ok, I'm getting a little silly.
+            bool decided = false;
+            while (!decided)
+            {
+                if (Player.MenuOption != -21546985)
+                {
+                    decided = true;
                 }
             }
         }
-        public static void PartyHuntList(string pty, LuaInterface.LuaTable hunt)
+        public static void PartyHuntList(QPlayer Player, string pty, dynamic hunt)
         {
-            //This whole function is pretty messy and kind of stupid. But it works. At least it works.
             QuestParty party = QTools.GetQuestPartyByName(pty);
-            string name = ""; //I know, I know. Meh. This mess stemmed from a "fuck it" moment. If you go the npc name wrong, you're fucked anyway.
             if (party.Expansion == true)
             {
-                foreach (LuaInterface.LuaTable tbl in hunt.Values)
+                if (!Player.RunningPython)
                 {
-                    foreach (var info in tbl.Values)
+                    foreach (LuaInterface.LuaTable tbl in hunt.Values)
                     {
-                        string buff = info.GetType().ToString();
-                        if (buff == "System.String")
+                        //This area is pretty shitty. For some reason I found trouble indexing a lua table, so I just resorted to doing this.
+                        string name = "";
+                        int amt = 0;
+                        foreach (var val in tbl.Values)
                         {
-                            name = info.ToString();
-                        }
-                        else
-                        {
-                            if (buff == "System.Double")
+                            if (val.GetType().ToString() == "System.String")
                             {
-                                party.ObjComplete = false;
-                                party.Hunt(name, Convert.ToInt16(info));
-                                party.Expansion = false;
+                                name = val.ToString();
+                            }
+                            else
+                            {
+                                amt = Convert.ToInt16(val);
                             }
                         }
+                        party.Hunt(name, amt);
+                    }
+                    party.ObjComplete = false;
+                    party.Expansion = false;
+                }
+                else
+                {
+                    foreach (IronPython.Runtime.List tbl in hunt)
+                    {
+                        party.Hunt(tbl[0].ToString(), Convert.ToInt16(tbl[1]));
+                        party.ObjComplete = false;
+                        party.Expansion = false;
                     }
                 }
-                while (party.ObjComplete == false)
-                {
-                    /*Cosole.WriteLine(party.AwaitingKill.Count);
-                    foreach (string mem in party.AwaitingKill)
-                    {
-                        Console.WriteLine(mem);
-                    }*/
-                    Thread.Sleep(1);
-                }
-                QMain.QuestParties.Remove(party);
             }
-        }
-        public static void ListTest(LuaInterface.LuaTable Lol)
-        {
-            //LuaInterface.Lua lul = new LuaInterface.Lua();
-            //LuaInterface.LuaTable lol = lul.GetTable("Lol");
-            foreach (LuaInterface.LuaTable str in Lol.Values)
-            {
-                Console.WriteLine(str);
-                foreach (var derp in str.Values)
-                {
-                    Console.WriteLine(derp);
-                    Console.WriteLine(derp.GetType());
-                }
-            }
+
+            while (party.ObjComplete == false) { Thread.Sleep(1); }
         }
     }
 }

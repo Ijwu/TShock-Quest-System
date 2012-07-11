@@ -62,6 +62,7 @@ namespace QuestSystemLUA
                             if (pty.AwaitingKill.Count == 0)
                             {
                                 pty.ObjComplete = true;
+                                QMain.QuestParties.Remove(pty);
                             }
                         }
                     }
