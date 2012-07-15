@@ -21,6 +21,7 @@ Ijwu Version 3:
                 All other keys will be ignored.
                 Lua Example: {{title = "Option 1", value = 0, selectable = true}, {title = "Option 2", value = 1, selectable = false}}
                 Python Example: [{"title":"Option 1", "value":0, "selectable":True},{"title":"Option 2", "value":1, "selectable":False}]
+                The result of the players choice can be found as Player.MenuOpion.
         Functions Changed:
             PartyHuntList
                 Changed to allow for Python integration.
