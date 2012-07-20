@@ -3,6 +3,10 @@ This is a plugin originally created by Twitchy on the TShock forums. It was then
 Updated for API version [1.12] for TShock ver. 3.9.
 NOTE: I am *not* currently working on TShock Ver. 4.0 compatibility. That will force me to restructure some of the code and I'd rather do that when it's needed; at my leisure.
 
+Ijwu Verstion 4:
+    Removed return bool fromm BuffPlayer
+    Added /questr remove
+
 Ijwu Version 3:
     Added in Python Script reading using IronPython
         Requires some more DLLs to be placed in your main server folder.
