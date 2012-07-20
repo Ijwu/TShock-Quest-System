@@ -76,9 +76,8 @@ Ijwu Version 1:
         CheckEmpty(int x, int y) : returns bool
             Returns true the specified tile has neither a tile nor a wall on it. Otherwise returns false.
 
-        BuffPlayer(string buffname, QPlayer Player, int time) : returns bool
+        BuffPlayer(string buffname, QPlayer Player, int time)
             Buffs the specified player using standard buff name lookup for [time] seconds.
-            returns true if successful, returns false if more than one buff was found.
 
         CheckDay() : returns bool
             Returns true if it is daytime.

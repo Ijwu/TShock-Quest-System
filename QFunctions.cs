@@ -374,15 +374,13 @@ namespace QuestSystemLUA
 
             }
         }
-        public static bool BuffPlayer(string buffname, QPlayer Player, int time)
+        public static void BuffPlayer(string buffname, QPlayer Player, int time)
         {
             var buffs = TShock.Utils.GetBuffByName(buffname);
             if (buffs.Count == 1)
             {
                 Player.TSPlayer.SetBuff(buffs[0], time*60);
-                return true;
             }
-            return false;
         }
         public static bool CheckDay()
         {
@@ -425,6 +423,8 @@ namespace QuestSystemLUA
         {
             Main.tile[x, y].wire = wire;
             Main.tile[x, y].active = active;
+            if (active)
+                WorldGen.TripWire(x, y);
             QTools.UpdateTile(x, y);
         }
         public static void SetTileType(int x, int y, byte type, short frameX = 0, short frameY = 0)

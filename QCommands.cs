@@ -156,6 +156,29 @@ namespace QuestSystemLUA
                                 args.Player.SendMessage("Invalid syntax! Proper syntax: /questr add [RegionName] [QuestName]", Color.Red);
                             break;
                         }
+                    case "remove":
+                        {
+                            if (args.Parameters.Count > 2)
+                            {
+                                string rName = args.Parameters[1];
+                                string qName = args.Parameters[2];
+                                Quest q = QTools.GetQuestByName(qName);
+                                QuestRegion r = QTools.GetRegionByName(rName);
+                                if (r != null && q != null && r.Quests.Contains(q))
+                                {
+                                    args.Player.SendMessage(string.Format("Removed Quest: \"{0}\" from the Quest Region: \"{1}\"", q.Name, r.Name), Color.Yellow);
+                                    r.Quests.Remove(q);
+                                    QTools.UpdateRegionsInDB();
+                                }
+                                else if (r == null)
+                                    args.Player.SendMessage("Invalid Quest Region Name", Color.Red);
+                                else if (q == null || !r.Quests.Contains(q))
+                                    args.Player.SendMessage("Invalid Quest Name", Color.Red);
+                            }
+                            else
+                                args.Player.SendMessage("Invalid syntax! Proper syntax: /questr remove [RegionName] [QuestName]", Color.Red);
+                            break;
+                        }
                     case "delete":
                         {
                             if (args.Parameters.Count > 1)

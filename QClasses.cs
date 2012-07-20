@@ -48,12 +48,12 @@ namespace QuestSystemLUA
         public bool AwaitingChat = false;
         public bool HideChat = false;
         public string LastChatMessage = "";
-        public int LastTileHitX;
-        public int LastTileHitY;
+        public int LastTileHitX { get; set; }
+        public int LastTileHitY { get; set; }
         public List<QuestParty> CurrentParties = new List<QuestParty>();
         public List<RunQuestParameters> RunningQuestThreads = new List<RunQuestParameters>();
         public bool RunningPython = false;
-        public int MenuOption;
+        public int MenuOption { get; set; }
 
         public QPlayer(int index)
         {

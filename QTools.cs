@@ -70,6 +70,10 @@ namespace QuestSystemLUA
             lua.RegisterFunction("ChangeGroup", functions, functions.GetType().GetMethod("ChangeGroup")); //QPlayer Player, string group
             //Added in Ijwu Version 3
             lua.RegisterFunction("CreateMenu", functions, functions.GetType().GetMethod("CreateMenu")); // QPlayer Player, string title, dynamic menu
+            /*Version 4
+             *Changed the BuffPlayer shit to not return a bool. What the hell was that for? 
+             *Added a /questr remove command
+             */
 
             var parameters = (RunQuestParameters)RunQuestOb;
             QuestPlayerData qdata = null;
