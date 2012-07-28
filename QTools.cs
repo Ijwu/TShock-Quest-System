@@ -70,9 +70,14 @@ namespace QuestSystemLUA
             lua.RegisterFunction("ChangeGroup", functions, functions.GetType().GetMethod("ChangeGroup")); //QPlayer Player, string group
             //Added in Ijwu Version 3
             lua.RegisterFunction("CreateMenu", functions, functions.GetType().GetMethod("CreateMenu")); // QPlayer Player, string title, dynamic menu
+            lua.RegisterFunction("DirectoryIterate", functions, functions.GetType().GetMethod("DirectoryIterate")); // string path, string pattern, bool alldir = false // RETURNS JSON FORMATTED STRING
             /*Version 4
              *Changed the BuffPlayer shit to not return a bool. What the hell was that for? 
              *Added a /questr remove command
+             */
+            /*Version 5
+             *When saving names to DB, escape characters should be placed in front of most troublesome characters. (e.g. quotes, escape characters)
+             *Added the DirectoryIterate function, is for my own use in a personal project, but I've decided to include it here.
              */
 
             var parameters = (RunQuestParameters)RunQuestOb;
@@ -248,20 +253,23 @@ namespace QuestSystemLUA
 
             foreach (StoredQPlayer player in QMain.StoredPlayers)
             {
+                string name = SanitizeString(player.LoggedInName);
+                Console.WriteLine(name);
                 List<SqlValue> values = new List<SqlValue>();
-                values.Add(new SqlValue("LogInName", "'" + player.LoggedInName + "'"));
+                values.Add(new SqlValue("LogInName", "\"" + name + "\""));
 
                 string playerdata = "";
 
                 foreach (QuestPlayerData data in player.QuestPlayerData)
                 {
+                    string qname = data.QuestName;
                     if (playerdata != "")
-                        playerdata = string.Join(":", playerdata, string.Join(",", data.QuestName, data.Complete.ToString(), data.Attempts));
+                        playerdata = string.Join(":", playerdata, string.Join(",", qname, data.Complete.ToString(), data.Attempts));
                     else
                         playerdata = string.Join(",", data.QuestName, data.Complete.ToString(), data.Attempts);
                 }
 
-                values.Add(new SqlValue("QuestPlayerData", "'" + playerdata + "'"));
+                values.Add(new SqlValue("QuestPlayerData", "\"" + playerdata + "\""));
 
                 QMain.SQLEditor.InsertValues("QuestPlayers", values);
             }
@@ -272,8 +280,9 @@ namespace QuestSystemLUA
 
             foreach (QuestRegion r in QMain.QuestRegions)
             {
+                string rname = r.Name;
                 List<SqlValue> values = new List<SqlValue>();
-                values.Add(new SqlValue("RegionName", "'" + r.Name + "'"));
+                values.Add(new SqlValue("RegionName", "\"" + rname + "\""));
                 values.Add(new SqlValue("X1", "'" + r.Area.X + "'"));
                 values.Add(new SqlValue("Y1", "'" + r.Area.Y + "'"));
                 values.Add(new SqlValue("X2", "'" + (r.Area.X + r.Area.Width) + "'"));
@@ -364,7 +373,7 @@ namespace QuestSystemLUA
             }
             for (int i = 0; i < QMain.SQLEditor.ReadColumn("QuestPlayers", "LogInName", new List<SqlValue>()).Count; i++)
             {
-                string qname = QMain.SQLEditor.ReadColumn("QuestPlayers", "LogInName", new List<SqlValue>())[i].ToString();
+                string qname = DesanitizeString(QMain.SQLEditor.ReadColumn("QuestPlayers", "LogInName", new List<SqlValue>())[i].ToString());
                 string questdata = QMain.SQLEditor.ReadColumn("QuestPlayers", "QuestPlayerData", new List<SqlValue>())[i].ToString();
                 List<QuestPlayerData> playerdata = new List<QuestPlayerData>();
                 foreach (string data in questdata.Split(':'))
@@ -448,6 +457,18 @@ namespace QuestSystemLUA
         {
             QPlayer player = GetPlayerByID(args.PlayerID);
             player.MenuOption = args.Selected;
+        }
+        public static string SanitizeString(string str)
+        {
+            str = str.Replace(@"\", @"\\");
+            str = str.Replace("\'", @"\'");
+            return str;
+        }
+        public static string DesanitizeString(string str)
+        {
+            str = str.Replace(@"\\", @"\");
+            str = str.Replace(@"\'", "\'");
+            return str;
         }
     }
 }

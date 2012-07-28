@@ -570,5 +570,11 @@ namespace QuestSystemLUA
 
             while (party.ObjComplete == false) { Thread.Sleep(1); }
         }
+        public static string DirectoryIterate(string path, string pattern, bool alldir = false)
+        {
+            string[] lol = System.IO.Directory.GetFiles(path, pattern, (alldir ? System.IO.SearchOption.AllDirectories : System.IO.SearchOption.TopDirectoryOnly));
+            string x = Newtonsoft.Json.JsonConvert.SerializeObject(lol);
+            return x;
+        }
     }
 }
