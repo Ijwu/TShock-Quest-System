@@ -89,7 +89,7 @@ namespace QuestSystemLUA
             }
             if (player.AwaitingHitCoords)
             {
-                player.TSPlayer.SendMessage("X:" + x + ", Y:" + y);
+                player.TSPlayer.SendInfoMessage("X:" + x + ", Y:" + y);
                 args.Player.SendTileSquare(x, y);
                 player.AwaitingHitCoords = false;
                 return true;
@@ -113,7 +113,7 @@ namespace QuestSystemLUA
             }
             if (player.AwaitingHitCoords)
             {
-                player.TSPlayer.SendMessage("X:" + x + ", Y:" + y);
+                player.TSPlayer.SendInfoMessage("X:" + x + ", Y:" + y);
                 args.Player.SendTileSquare(x, y);
                 player.AwaitingHitCoords = false;
                 return true;
@@ -130,7 +130,7 @@ namespace QuestSystemLUA
             player.LastTileHitY = y;
             if (player.AwaitingHitCoords)
             {
-                player.TSPlayer.SendMessage("X:" + x + ", Y:" + y);
+                player.TSPlayer.SendInfoMessage("X:" + x + ", Y:" + y);
                 args.Player.SendTileSquare(x, y);
                 player.AwaitingHitCoords = false;
                 return true;
@@ -146,7 +146,7 @@ namespace QuestSystemLUA
             player.LastTileHitY = y;
             if (player.AwaitingHitCoords)
             {
-                player.TSPlayer.SendMessage("X:" + x + ", Y:" + y);
+                player.TSPlayer.SendInfoMessage("X:" + x + ", Y:" + y);
                 args.Player.SendTileSquare(x, y);
                 player.AwaitingHitCoords = false;
                 return true;
@@ -190,9 +190,9 @@ namespace QuestSystemLUA
                     if (aitem.AwaitingAmount < 0)
                     {
                         if (Math.Abs(aitem.AwaitingAmount) > 1)
-                            player.TSPlayer.SendMessage(string.Format("Returning {0} {1}s", Math.Abs(aitem.AwaitingAmount), item.name));
+                            player.TSPlayer.SendInfoMessage(string.Format("Returning {0} {1}s", Math.Abs(aitem.AwaitingAmount), item.name));
                         else
-                            player.TSPlayer.SendMessage(string.Format("Returning {0} {1}", Math.Abs(aitem.AwaitingAmount), item.name));
+                            player.TSPlayer.SendInfoMessage(string.Format("Returning {0} {1}", Math.Abs(aitem.AwaitingAmount), item.name));
 
                         player.TSPlayer.GiveItem(item.type, item.name, item.width, item.width, Math.Abs(aitem.AwaitingAmount));
                         player.AwaitingItems.Remove(aitem);
@@ -201,17 +201,17 @@ namespace QuestSystemLUA
                     else if (aitem.AwaitingAmount > 0)
                     {
                         if (Math.Abs(aitem.AwaitingAmount) > 1)
-                            player.TSPlayer.SendMessage(string.Format("Drop another {0} {1}s, to continue", Math.Abs(aitem.AwaitingAmount), item.name));
+                            player.TSPlayer.SendInfoMessage(string.Format("Drop another {0} {1}s, to continue", Math.Abs(aitem.AwaitingAmount), item.name));
                         else
-                            player.TSPlayer.SendMessage(string.Format("Drop {0} {1}, to continue", Math.Abs(aitem.AwaitingAmount), item.name));
+                            player.TSPlayer.SendInfoMessage(string.Format("Drop {0} {1}, to continue", Math.Abs(aitem.AwaitingAmount), item.name));
                         return true;
                     }
                     else
                     {
                         if (stack > 1)
-                            player.TSPlayer.SendMessage(string.Format("You dropped {0} {1}s", stack, item.name));
+                            player.TSPlayer.SendInfoMessage(string.Format("You dropped {0} {1}s", stack, item.name));
                         else
-                            player.TSPlayer.SendMessage(string.Format("You dropped {0} {1}", stack, item.name));
+                            player.TSPlayer.SendInfoMessage(string.Format("You dropped {0} {1}", stack, item.name));
 
                         player.AwaitingItems.Remove(aitem);
                         return true;

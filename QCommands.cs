@@ -247,7 +247,7 @@ namespace QuestSystemLUA
         public static void LoadQuestData(CommandArgs args)
         {
             QTools.LoadQuestData();
-            args.Player.SendMessage("Successfully Loaded Quest Data!");
+            args.Player.SendMessage("Successfully Loaded Quest Data!", Color.Yellow);
         }
         public static void GiveQuest(CommandArgs args)
         {

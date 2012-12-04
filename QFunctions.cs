@@ -135,9 +135,9 @@ namespace QuestSystemLUA
                 var aitem = new AwaitingItem(qname, amt, iname);
                 Player.AwaitingItems.Add(aitem);
                 if (amt > 1)
-                    Player.TSPlayer.SendMessage(string.Format("Please drop {0} {1}s, The excess will be returned.", amt, iname));
+                    Player.TSPlayer.SendInfoMessage(string.Format("Please drop {0} {1}s, The excess will be returned.", amt, iname));
                 else
-                    Player.TSPlayer.SendMessage(string.Format("Please drop {0} {1}, The excess will be returned.", amt, iname));
+                    Player.TSPlayer.SendInfoMessage(string.Format("Please drop {0} {1}, The excess will be returned.", amt, iname));
                 while (Player.AwaitingItems.Contains(aitem)) { Thread.Sleep(1); }
             }
         }
@@ -235,11 +235,11 @@ namespace QuestSystemLUA
         }
         //Below = New in V1.2
         //Fixed/Working
-        public static void Give(string name, QPlayer Player, int amount = 1)
+        public static void Give(string name, QPlayer Player, int amount = 1, int prefix = 0)
         {
             Main.rand = new Random();
             Item item = TShock.Utils.GetItemByName(name)[0];
-            Player.TSPlayer.GiveItem(item.type, item.name, item.width, item.height, amount);
+            Player.TSPlayer.GiveItem(item.type, item.name, item.width, item.height, amount, prefix != 0 ? prefix : 0);
         } //In Wiki
         public static void Private(string message, QPlayer Player, Color color)
         {
@@ -575,6 +575,17 @@ namespace QuestSystemLUA
             string[] lol = System.IO.Directory.GetFiles(path, pattern, (alldir ? System.IO.SearchOption.AllDirectories : System.IO.SearchOption.TopDirectoryOnly));
             string x = Newtonsoft.Json.JsonConvert.SerializeObject(lol);
             return x;
+        }
+        public static void RunFileDirectly(string path)
+        {
+            if (path.EndsWith(".lua"))
+            {
+                QMain.lua.DoFile(path);
+            }
+            else if (path.EndsWith(".py"))
+            {
+                QMain.pyEngine.ExecuteFile(path);
+            }
         }
     }
 }

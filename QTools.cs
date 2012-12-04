@@ -18,68 +18,6 @@ namespace QuestSystemLUA
     {
         public static void RunQuest(object RunQuestOb)
         {
-            QFunctions functions = new QFunctions();
-
-            ScriptEngine pyEngine = Python.CreateEngine();
-            ScriptScope pyScope = pyEngine.CreateScope();
-
-            pyScope.SetVariable("Functions", functions);
-
-            Lua lua = new Lua();
-
-            //Updated In 1.1
-            lua.RegisterFunction("AtXY", functions, functions.GetType().GetMethod("AtXY")); //int x, int y, QPlayer Player
-            lua.RegisterFunction("TileEdit", functions, functions.GetType().GetMethod("TileEdit")); //int x, int y, string tile
-            lua.RegisterFunction("WallEdit", functions, functions.GetType().GetMethod("WallEdit")); //int x, int y, string wall
-            lua.RegisterFunction("DeleteBoth", functions, functions.GetType().GetMethod("DeleteBoth")); //int x, int y
-            lua.RegisterFunction("DeleteWall", functions, functions.GetType().GetMethod("DeleteWall")); //int x, int y
-            lua.RegisterFunction("DeleteTile", functions, functions.GetType().GetMethod("DeleteTile")); //int x, int y
-            lua.RegisterFunction("Sleep", functions, functions.GetType().GetMethod("Sleep")); //int time
-            lua.RegisterFunction("Teleport", functions, functions.GetType().GetMethod("Teleport")); //int x, int y, QPlayer Player
-            lua.RegisterFunction("ClearKillList", functions, functions.GetType().GetMethod("ClearKillList")); //QPlayer Player
-            lua.RegisterFunction("GoCollectItem", functions, functions.GetType().GetMethod("GoCollectItem")); //string itemname, int amount, QPlayer Player
-            lua.RegisterFunction("TakeItem", functions, functions.GetType().GetMethod("TakeItem")); //string qname, string iname, int amt, QPlayer Player
-            lua.RegisterFunction("GetRegionTilePercentage", functions, functions.GetType().GetMethod("GetRegionTilePercentage")); //string tiletype, string regionname
-            lua.RegisterFunction("GetXYTilePercentage", functions, functions.GetType().GetMethod("GetXYTilePercentage")); //string tiletype, int X, int Y, int Width, int Height
-            lua.RegisterFunction("GetRegionWallPercentage", functions, functions.GetType().GetMethod("GetRegionWallPercentage")); //string walltype, string regionname
-            lua.RegisterFunction("GetXYWallPercentage", functions, functions.GetType().GetMethod("GetXYWallPercentage"));//string walltype, int X, int Y, int Width, int Height
-            //Updated In 1.2
-            lua.RegisterFunction("Give", functions, functions.GetType().GetMethod("Give")); //string name, QPlayer Player
-            lua.RegisterFunction("Kill", functions, functions.GetType().GetMethod("Kill")); //string name, QPlayer Player, int amount = 1
-            lua.RegisterFunction("KillNpc", functions, functions.GetType().GetMethod("KillNpc")); //int id
-            lua.RegisterFunction("StartQuest", functions, functions.GetType().GetMethod("StartQuest")); //string qname, QPlayer Player
-            lua.RegisterFunction("ReadNextChatLine", functions, functions.GetType().GetMethod("ReadNextChatLine")); //QPlayer Player, bool hide = false
-            lua.RegisterFunction("SetNPCHealth", functions, functions.GetType().GetMethod("SetNPCHealth")); //int id, int health
-            lua.RegisterFunction("Private", functions, functions.GetType().GetMethod("Private")); //string message, QPlayer Player, Color color
-            lua.RegisterFunction("Broadcast", functions, functions.GetType().GetMethod("Broadcast")); //string message, Color color
-            lua.RegisterFunction("SpawnMob", functions, functions.GetType().GetMethod("SpawnMob")); //string name, int x, int y, int amount = 1
-            //Custom; added by Ijwu (Ijwu Version 1)
-            lua.RegisterFunction("GetTile", functions, functions.GetType().GetMethod("GetTile")); //int x, int y
-            lua.RegisterFunction("SetTile", functions, functions.GetType().GetMethod("SetTile")); //int x, int y, Tile newtile
-            lua.RegisterFunction("CheckEmpty", functions, functions.GetType().GetMethod("CheckEmpty")); //int x, int y
-            lua.RegisterFunction("BuffPlayer", functions, functions.GetType().GetMethod("BuffPlayer")); //string buffname, QPlayer Player, int time
-            lua.RegisterFunction("CheckDay", functions, functions.GetType().GetMethod("CheckDay"));  //none
-            lua.RegisterFunction("CheckTime", functions, functions.GetType().GetMethod("CheckTime")); //double time, int range, bool dayTime = true
-            lua.RegisterFunction("HealPlayer", functions, functions.GetType().GetMethod("HealPlayer")); //QPlayer Player
-            lua.RegisterFunction("SetWire", functions, functions.GetType().GetMethod("SetWire")); //int x, int y, bool wire = true, bool active = false
-            lua.RegisterFunction("SetTileType", functions, functions.GetType().GetMethod("SetTileType")); //int x, int y, byte type, short frameX = 0, short frameY = 0
-            //Added in Ijwu Version 2 (and some changed in Version 3)
-            lua.RegisterFunction("AddParty", functions, functions.GetType().GetMethod("AddParty")); //QPlayer Player, string partyname
-            lua.RegisterFunction("PartyHunt", functions, functions.GetType().GetMethod("PartyHunt")); //QPlayer Player, string pty, string npc, int amt = 1
-            lua.RegisterFunction("PartyHuntList", functions, functions.GetType().GetMethod("PartyHuntList")); //QPlayer Player, string pty, dynamic hunt (The hunt var is a list. Depending on if you use Python or Lua. It will [hopefully] auto-detect and compensate for either.)
-            lua.RegisterFunction("ChangeGroup", functions, functions.GetType().GetMethod("ChangeGroup")); //QPlayer Player, string group
-            //Added in Ijwu Version 3
-            lua.RegisterFunction("CreateMenu", functions, functions.GetType().GetMethod("CreateMenu")); // QPlayer Player, string title, dynamic menu
-            lua.RegisterFunction("DirectoryIterate", functions, functions.GetType().GetMethod("DirectoryIterate")); // string path, string pattern, bool alldir = false // RETURNS JSON FORMATTED STRING
-            /*Version 4
-             *Changed the BuffPlayer shit to not return a bool. What the hell was that for? 
-             *Added a /questr remove command
-             */
-            /*Version 5
-             *When saving names to DB, escape characters should be placed in front of most troublesome characters. (e.g. quotes, escape characters)
-             *Added the DirectoryIterate function, is for my own use in a personal project, but I've decided to include it here.
-             */
-
             var parameters = (RunQuestParameters)RunQuestOb;
             QuestPlayerData qdata = null;
             if ((qdata = GetPlayerQuestData(parameters.Quest.Name, parameters.Player)) != null)
@@ -97,11 +35,11 @@ namespace QuestSystemLUA
                 try
                 {
                     parameters.Player.RunningPython = false;
-                    lua["Player"] = parameters.Player;
-                    lua["Name"] = parameters.Player.TSPlayer.Name;
-                    lua["QName"] = parameters.Quest.Name;
-                    lua["Color"] = new Color();
-                    returnvalues = lua.DoFile(parameters.Quest.FilePath);
+                    QMain.lua["Player"] = parameters.Player;
+                    QMain.lua["Name"] = parameters.Player.TSPlayer.Name;
+                    QMain.lua["QName"] = parameters.Quest.Name;
+                    QMain.lua["Color"] = new Color();
+                    returnvalues = QMain.lua.DoFile(parameters.Quest.FilePath);
 
                     if (returnvalues == null || returnvalues[0] == null || (bool)returnvalues[0])
                         qdata.Complete = true;
@@ -122,19 +60,16 @@ namespace QuestSystemLUA
                 try
                 {
                     parameters.Player.RunningPython = true;
-                    pyScope.SetVariable("Player", parameters.Player);
-                    pyScope.SetVariable("Name", parameters.Player.TSPlayer.Name);
-                    pyScope.SetVariable("QName", parameters.Quest.Name);
-                    pyScope.SetVariable("Color", new Color());
-                    //Note to self: See if you can get them return values to work here.
+                    QMain.pyScope.SetVariable("Player", parameters.Player);
+                    QMain.pyScope.SetVariable("Name", parameters.Player.TSPlayer.Name);
+                    QMain.pyScope.SetVariable("QName", parameters.Quest.Name);
+                    QMain.pyScope.SetVariable("Color", new Color());
 
-                    //Console.WriteLine("Var setting success.");
-                    ScriptSource source = pyEngine.CreateScriptSourceFromFile(parameters.Quest.FilePath);
-                    //Console.WriteLine("Source retrieval success.");
-                    CompiledCode compiled = source.Compile();
-                    //Console.WriteLine("Source compilation success.");
-                    compiled.Execute(pyScope);
-                    //Console.WriteLine("Source execution success.");
+                    QMain.pyEngine.ExecuteFile(parameters.Quest.FilePath, QMain.pyScope);
+
+                    //ScriptSource source = QMain.pyEngine.CreateScriptSourceFromFile(parameters.Quest.FilePath);
+                    //CompiledCode compiled = source.Compile();
+                    //compiled.Execute(QMain.pyScope);
 
                     qdata.Complete = true;
                     UpdateStoredPlayersInDB();
@@ -254,7 +189,6 @@ namespace QuestSystemLUA
             foreach (StoredQPlayer player in QMain.StoredPlayers)
             {
                 string name = SanitizeString(player.LoggedInName);
-                Console.WriteLine(name);
                 List<SqlValue> values = new List<SqlValue>();
                 values.Add(new SqlValue("LogInName", "\"" + name + "\""));
 

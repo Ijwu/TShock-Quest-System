@@ -35,18 +35,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLLS\ChatAssistant.dll</HintPath>
     </Reference>
-    <Reference Include="Community.CsharpSqlite">
-      <HintPath>DLLS\Community.CsharpSqlite.dll</HintPath>
-    </Reference>
-    <Reference Include="Community.CsharpSqlite.SQLiteClient">
-      <HintPath>DLLS\Community.CsharpSqlite.SQLiteClient.dll</HintPath>
-    </Reference>
-    <Reference Include="HttpServer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5684c2c737cd4271, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>DLLS\HttpServer.dll</HintPath>
-    </Reference>
-    <Reference Include="IronPython, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="IronPython">
       <HintPath>DLLS\IronPython.dll</HintPath>
     </Reference>
     <Reference Include="IronPython.Modules, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
@@ -57,41 +46,28 @@
       <HintPath>DLLS\LuaInterface.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Microsoft.Dynamic">
       <HintPath>DLLS\Microsoft.Dynamic.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Microsoft.Scripting">
       <HintPath>DLLS\Microsoft.Scripting.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Scripting.Core, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>DLLS\Microsoft.Scripting.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Data.Sqlite">
-      <HintPath>DLLS\Mono.Data.Sqlite.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data">
-      <HintPath>DLLS\MySql.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Web">
-      <HintPath>DLLS\MySql.Web.dll</HintPath>
+      <HintPath>C:\Users\KassHuss\Desktop\Huss%27 Stuff\TShock-4.0\serverplugins\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>DLLS\Newtonsoft.Json.dll</HintPath>
+      <HintPath>C:\Users\KassHuss\Desktop\Huss%27 Stuff\TShock-4.0\serverplugins\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="TerrariaServer">
-      <HintPath>DLLS\TerrariaServer.exe</HintPath>
+      <HintPath>C:\Users\KassHuss\Desktop\Huss%27 Stuff\TShock-4.0\TerrariaServer.exe</HintPath>
     </Reference>
     <Reference Include="TShockAPI">
-      <HintPath>DLLS\TShockAPI.dll</HintPath>
+      <HintPath>C:\Users\KassHuss\Desktop\Huss%27 Stuff\TShock-4.0\serverplugins\TShockAPI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
