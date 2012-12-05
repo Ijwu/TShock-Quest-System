@@ -1,7 +1,6 @@
 This is a plugin originally created by Twitchy on the TShock forums. It was then maintained by Olink, on the same forums. I've only updated it and added some things. In no way does this make me responsible for its continued life.
 
-Updated for API version [1.12] for TShock ver. 3.9.
-NOTE: I am *not* currently working on TShock Ver. 4.0 compatibility. That will force me to restructure some of the code and I'd rather do that when it's needed; at my leisure.
+Updated for API version [1.12] for TShock ver. 4.0.
 
 Ijwu Verstion 4:
     Removed return bool fromm BuffPlayer
