@@ -1,7 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-# SharpDevelop 4.2.2.8818
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twitchys-Quest-Mod", "Twitchys-Quest-Mod.csproj", "{9C4D7A7D-A4AA-409E-BED2-CEF322884E1B}"
 EndProject
 Global

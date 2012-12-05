@@ -34,7 +34,7 @@ namespace QuestSystemLUA
         }
         public override Version Version
         {
-        	get { return new Version(1,2,0,0); }
+            get { return Assembly.GetExecutingAssembly().GetName().Version; }
         }
         public static List<QPlayer> Players = new List<QPlayer>();
         public static List<Quest> QuestPool = new List<Quest>();
