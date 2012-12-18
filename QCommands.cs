@@ -280,5 +280,35 @@ namespace QuestSystemLUA
                     args.Player.SendMessage("Invalid Arguments or Player is not running Quest", Color.Red);
             }
         }
+        public static void ForceQuestOnAllPlayers(CommandArgs args)
+        {
+        	bool forceQuests = false;
+        	Quest q = QTools.GetQuestByName(args.Parameters[0]);
+        	bool exitQuests = false;
+        	if (args.Parameters.Count >= 2)
+        	{
+        		forceQuests = bool.Parse(args.Parameters[1]);
+        		exitQuests = bool.Parse(args.Parameters[2]);
+        	}
+        	else if (args.Parameters.Count == 1)
+        	{
+        		forceQuests = bool.Parse(args.Parameters[1]);
+        	}
+
+        	foreach (QPlayer ply in QMain.Players)
+        	{
+        		if (ply.RunningQuestThreads.Count == 0 || forceQuests)
+        		{
+        			if (exitQuests)
+        			{
+        				foreach (RunQuestParameters param in ply.RunningQuestThreads)
+        				{
+        					param.QThread.Abort();
+        				}
+        			}
+        			ply.NewQuest(q, true);
+        		}
+        	}
+        }
     }
 }

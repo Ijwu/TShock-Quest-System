@@ -87,7 +87,8 @@ namespace QuestSystemLUA
             Commands.ChatCommands.Add(new Command("questregion", QCommands.QuestRegion, "questr"));
             Commands.ChatCommands.Add(new Command("reloadqdata", QCommands.LoadQuestData, "reloadquestdata"));
             Commands.ChatCommands.Add(new Command("giveq", QCommands.GiveQuest, "giveq"));
-            Commands.ChatCommands.Add(new Command("stopquest", QCommands.StopQuest, "stopquest")); 
+            Commands.ChatCommands.Add(new Command("stopquest", QCommands.StopQuest, "stopquest"));
+			Commands.ChatCommands.Add(new Command("forcequestonall", QCommands.ForceQuestOnAllPlayers, "forcequest"));             
             
             var table = new SqlTable("QuestPlayers",
                  new SqlColumn("LogInName", MySqlDbType.VarChar, 50) { Unique = true, Length = 50},
