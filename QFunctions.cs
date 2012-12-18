@@ -587,5 +587,9 @@ namespace QuestSystemLUA
                 QMain.pyEngine.ExecuteFile(path);
             }
         }
+        public static void RunTShockCommand(QPlayer player, string commandText)
+        {	
+        	TShockAPI.Commands.HandleCommand(player.TSPlayer, commandText);
+        }
     }
 }
