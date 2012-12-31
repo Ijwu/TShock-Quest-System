@@ -2,6 +2,10 @@ This is a plugin originally created by Twitchy on the TShock forums. It was then
 
 Updated for API version [1.12] for TShock ver. 4.0.
 
+Ijwu Version 5.1:
+	Edited RunTShockCommand slightly. Now takes a third, optional, bool argument to have the command be run by the server.
+	Added ModifyVaultBalance as a binding to the Vault function of same name. Takes two arguments: QPlayer player, int amount
+
 Ijwu Version 5:
 	Added /forcequest command under "forcequestonall" permission. See commit log for more info.
 	Added RunTShockCommand quest function. See commit log for more info.

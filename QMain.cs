@@ -159,8 +159,10 @@ namespace QuestSystemLUA
             lua.RegisterFunction("DirectoryIterate", functions, functions.GetType().GetMethod("DirectoryIterate")); // string path, string pattern, bool alldir = false RETURNS JSON FORMATTED STRING
             //Added in Ijwu Version 4
             lua.RegisterFunction("RunFileDirectly", functions, functions.GetType().GetMethod("RunFileDirectly")); // string path
-            lua.RegisterFunction("RunTShockCommand", functions, functions.GetType().GetMethod("RunTShockCommand")); //string name, string[] parameters
+            lua.RegisterFunction("RunTShockCommand", functions, functions.GetType().GetMethod("RunTShockCommand")); //QPlayer player, string commandText, bool serverRuns=false
+            lua.RegisterFunction("ModifyVaultBalance", functions, functions.GetType().GetMethod("ModifyVaultBalance")); //QPlayer player, int amount
         }
+            
         public QMain(Main game)
             : base(game)
         {
