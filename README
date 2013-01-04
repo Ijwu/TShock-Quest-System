@@ -11,7 +11,7 @@ Ijwu Version 5:
 	Added RunTShockCommand quest function. See commit log for more info.
 
 Ijwu Version 4:
-    Removed return bool fromm BuffPlayer
+    Removed return bool from BuffPlayer
     Added /questr remove
 
 Ijwu Version 3:
@@ -32,7 +32,7 @@ Ijwu Version 3:
                 All other keys will be ignored.
                 Lua Example: {{title = "Option 1", value = 0, selectable = true}, {title = "Option 2", value = 1, selectable = false}}
                 Python Example: [{"title":"Option 1", "value":0, "selectable":True},{"title":"Option 2", "value":1, "selectable":False}]
-                The result of the players choice can be found as Player.MenuOpion.
+                The result of the players choice can be found as Player.MenuOption.
         Functions Changed:
             PartyHuntList
                 Changed to allow for Python integration.
@@ -94,7 +94,7 @@ Ijwu Version 1:
             Returns true if it is daytime.
 
         CheckTime(double time, int range, bool dayTime = true) : returns bool
-            Checks the game time for any time withing [range] of [time].
+            Checks the game time for any time within [range] of [time].
                 Example: CheckTime(27000, 10000, true);
             This will return true if the time is anywhere between 17000 and 37000 and Main.dayTime == true.
             If dayTime = true then this will apply to Main.dayTime == true, if false then it will apply Main.dayTime == false.

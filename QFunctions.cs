@@ -487,7 +487,7 @@ namespace QuestSystemLUA
             var user = TShock.Users.GetUserByID(Player.TSPlayer.UserID);
             TShock.Users.SetUserGroup(user, group);
         }
-        public static void CreateMenu(QPlayer Player, string title, dynamic menu) // {text = "", value = "", selectable = ""}
+        public static void CreateMenu(QPlayer Player, string title, dynamic menu) // {text = string, value = int, selectable = bool}
         {
             List<MenuItem> newmenu = new List<MenuItem>();
             if (!Player.RunningPython)
@@ -517,7 +517,7 @@ namespace QuestSystemLUA
                     newmenu.Add(new MenuItem(textbuffer, valuebuffer, selectbuffer, false));
                 }
             }
-            Chat.Menu menu3 = Chat.CreateMenu(Player.TSPlayer.Index, title, newmenu, new Chat.MenuAction(QTools.MenuCallback));
+            ChatAssistant.Menu menu3 = ChatAssistant.Menu.CreateMenu(Player.TSPlayer.Index, title, newmenu, new ChatAssistant.CAMain.MenuAction(QTools.MenuCallback));
             //Section to wait until menu input happens.
             Player.MenuOption = -21546985; // Ok, I'm getting a little silly.
             bool decided = false;

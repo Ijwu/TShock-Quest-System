@@ -31,9 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ChatAssistant, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>DLLS\ChatAssistant.dll</HintPath>
+    <Reference Include="ChatAssistant">
+      <HintPath>C:\Users\KassHuss\Desktop\Huss%27 Stuff\Games\Terraria\TShock-4.0\serverplugins\ChatAssistant.dll</HintPath>
     </Reference>
     <Reference Include="IronPython">
       <HintPath>C:\Program Files %28x86%29\IronPython 2.7\Platforms\Net40\IronPython.dll</HintPath>

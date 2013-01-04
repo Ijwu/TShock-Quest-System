@@ -50,6 +50,11 @@ namespace QuestSystemLUA
                 catch (Exception e)
                 {
                     Log.Error(e.ToString());
+                    var colorBuffer = Console.ForegroundColor;
+                    Console.ForegroundColor = System.ConsoleColor.Red;
+                    Console.WriteLine("Error in QuestSystem: Quest: {0}, Player Running Quest: {1}", parameters.Quest.Name ,parameters.Player.TSPlayer.Name);
+                    Console.WriteLine(e.ToString());
+                    Console.ForegroundColor = colorBuffer;
                     parameters.Player.RunningQuests.Remove(parameters.Quest.Name);
                     parameters.Player.RunningQuestThreads.Remove(parameters);
                     UpdateStoredPlayersInDB();
@@ -79,6 +84,11 @@ namespace QuestSystemLUA
                 catch (Exception e)
                 {
                     Log.Error(e.ToString());
+                    var colorBuffer = Console.ForegroundColor;
+                    Console.ForegroundColor = System.ConsoleColor.Red;
+                    Console.WriteLine("Error in QuestSystem: Quest: {0}, Player Running Quest: {1}", parameters.Quest.Name ,parameters.Player.TSPlayer.Name);
+                    Console.WriteLine(e.ToString());
+                    Console.ForegroundColor = colorBuffer;
                     parameters.Player.RunningQuests.Remove(parameters.Quest.Name);
                     parameters.Player.RunningQuestThreads.Remove(parameters);
                     UpdateStoredPlayersInDB();
