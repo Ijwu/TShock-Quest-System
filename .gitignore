@@ -1,3 +1,5 @@
 *.lua
 /bin
 /obj
+DLLS/ChatAssistant.dll
+DLLS/Vault.dll

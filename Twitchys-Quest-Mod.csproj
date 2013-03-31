@@ -12,33 +12,40 @@
     <AssemblyName>Twitchys-Quest-Mod</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>PdbOnly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ChatAssistant">
       <HintPath>C:\Users\KassHuss\Desktop\Huss%27 Stuff\Games\Terraria\TShock-4.0\serverplugins\ChatAssistant.dll</HintPath>
-    </Reference>
-    <Reference Include="IronPython">
-      <HintPath>C:\Program Files %28x86%29\IronPython 2.7\Platforms\Net40\IronPython.dll</HintPath>
-    </Reference>
-    <Reference Include="IronPython.Modules">
-      <HintPath>C:\Program Files %28x86%29\IronPython 2.7\Platforms\Net40\IronPython.Modules.dll</HintPath>
     </Reference>
     <Reference Include="LuaInterface">
       <HintPath>DLLS\LuaInterface.dll</HintPath>
@@ -47,11 +54,8 @@
     <Reference Include="Microsoft.Dynamic">
       <HintPath>C:\Program Files %28x86%29\IronPython 2.7\Platforms\Net40\Microsoft.Dynamic.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Scripting">
-      <HintPath>C:\Program Files %28x86%29\IronPython 2.7\Platforms\Net40\Microsoft.Scripting.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data">
-      <HintPath>DLLS\MySql.Data.dll</HintPath>
+      <HintPath>C:\Users\KassHuss\Desktop\Huss%27 Stuff\Games\Terraria\TShock-4.0\serverplugins\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>DLLS\Newtonsoft.Json.dll</HintPath>
@@ -59,7 +63,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Numerics" />
     <Reference Include="TerrariaServer">
       <HintPath>DLLS\TerrariaServer.exe</HintPath>
@@ -72,15 +75,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NewQCommands.cs" />
+    <Compile Include="NewQMain.cs" />
+    <Compile Include="NewQClasses.cs" />
+    <Compile Include="NewQNPC.cs" />
+    <Compile Include="NewQTools.cs" />
+    <Compile Include="QThreadable.cs" />
+    <Compile Include="QuestTriggers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QClasses.cs" />
-    <Compile Include="QCommands.cs" />
-    <Compile Include="QDataHandler.cs" />
-    <Compile Include="QFunctions.cs" />
-    <Compile Include="QMain.cs" />
-    <Compile Include="QNPC.cs" />
-    <Compile Include="QTools.cs" />
-    <Compile Include="TypesList.cs" />
+    <Compile Include="QRewriteClasses.cs" />
+    <Compile Include="TypesList2.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
