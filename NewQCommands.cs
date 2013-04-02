@@ -49,7 +49,7 @@ namespace QuestSystemLUA
         		{
         			foreach (QuestInfo q in qr.Quests)
         			{
-        				if (q.Name.ToLower() == args.Parameters[0].ToLower())
+        				if (q.Name.ToLower() == args.Parameters[0].ToLower() && player.TSPlayer.Group.HasPermission(q.Permission))
 	        			{
 	        				if (QTools.IntervalLeft(player, q) == 0)
 	                        {
@@ -72,13 +72,17 @@ namespace QuestSystemLUA
 	        					return;
 	        				}
         				}
+        				else
+        				{
+        					player.TSPlayer.SendErrorMessage("This quest is either non-existant or you do not have the permission to start it.");
+        					return;
+        				}
         			}
-        			player.TSPlayer.SendMessage("Quest not found.", Color.Red);
         		}
         	}
         	else
         	{
-        		player.TSPlayer.SendMessage("You are not Logged in", Color.Red);
+        		player.TSPlayer.SendErrorMessage("You are not Logged in.");
         	}
         }
         public static void QuestRegion(CommandArgs args)

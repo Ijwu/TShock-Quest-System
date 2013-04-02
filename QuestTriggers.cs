@@ -9,8 +9,6 @@ using System.IO;
 using System.ComponentModel;
 using LuaInterface;
 
-//TODO: Debug and fix these triggers: All region percentage triggers, ReadNextChatLine, RetrieveItem.
-
 namespace Triggers
 {	
 	public class Hunt : Trigger
@@ -163,7 +161,7 @@ namespace Triggers
 				throw new FormatException("More than one or no items matched to name or ID.");
 			}
 		}
-		//NOTE: May need redoing
+		
 		private void checkItemDrops(GetDataEventArgs args)
 		{
 			if (args.MsgID == PacketTypes.ItemDrop)
