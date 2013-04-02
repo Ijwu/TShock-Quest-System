@@ -182,6 +182,9 @@ namespace Triggers
 		            
 		            var item = new Item();
 		            item.SetDefaults(type);
+		         	
+		            if (id == 0)
+		            	return;
 		            
 		            if (toBeCollected.ContainsKey(item.name))
 		            {
@@ -193,9 +196,9 @@ namespace Triggers
 		            		    player.TSPlayer.SendInfoMessage(string.Format("Returning {0} {1}s", Math.Abs(toBeCollected[item.name]), item.name));
 	                        else
 	                            player.TSPlayer.SendInfoMessage(string.Format("Returning {0} {1}", Math.Abs(toBeCollected[item.name]), item.name));
+	                        args.Handled = true;
 	                        player.TSPlayer.GiveItem(item.type, item.name, item.width, item.width, Math.Abs(toBeCollected[item.name]));
 	                        toBeCollected.Remove(item.name);
-	                        args.Handled = true;
 		            	}
 		            	else if (toBeCollected[item.name] > 0)
 		            	{
@@ -456,26 +459,22 @@ namespace Triggers
 		
 		public override void Initialize()
 		{
-			//NOTE: DEBUG
 			ServerHooks.Chat += onChat;
-			Console.WriteLine("Chat init");
 		}
 		
 		public ReadNextChatLine(QPlayer player, bool hideMsg = false)
 		{
 			this.player = player;
 			this.hideMessage = hideMsg;
-		}
+		}	
 		
 		public override void onComplete()
 		{
 			ServerHooks.Chat -= onChat;
-			Console.WriteLine("Chat end");
 		}
 		
 		public override bool Update()
 		{
-			Console.WriteLine("{0}", Message != null ? "true" : "false");
 			if (Message != null)
 				return true;
 			
@@ -483,9 +482,7 @@ namespace Triggers
 		}
 		
 		public void onChat(messageBuffer msg, int ply, string text, HandledEventArgs e)
-		{
-			Console.WriteLine("{0} || {1} || {2} || {3}", text, ply, player.Index, Message);
-			
+		{			
 			if (ply == player.Index)
 			{
 				Message = text;
@@ -556,7 +553,7 @@ namespace Triggers
 	{
 		public string tiletype;
 		public string regionname;
-		public int percentage = 0;
+		public float percentage = 0;
 		
 		public GetRegionTilePercentage(string tiletype, string regionname)
 		{
@@ -566,8 +563,8 @@ namespace Triggers
 		
 		public override bool Update()
 		{
-			int amountofmatchedtiles = 0;
-            int totaltilecount = 0;
+			float amountofmatchedtiles = 0;
+            float totaltilecount = 0;
             TShockAPI.DB.Region r = TShock.Regions.ZacksGetRegionByName(regionname);
             byte type;
             if (QTools.GetTileTypeFromName(tiletype, out type))
@@ -586,7 +583,7 @@ namespace Triggers
                 }
             }
             if (totaltilecount != 0)
-                percentage = ((amountofmatchedtiles / totaltilecount) * 100);
+            	percentage = (amountofmatchedtiles/totaltilecount)*100;
             return true;
 		}
 	}
@@ -595,7 +592,7 @@ namespace Triggers
 	{
 		public string tiletype;
 		public int X, Y, Width, Height;
-		public int percentage = 0;
+		public float percentage = 0;
 		public GetXYTilePercentage(string tiletype, int X, int Y, int Width, int Height)
 		{
 			this.tiletype = tiletype;
@@ -608,8 +605,8 @@ namespace Triggers
 		
 		public override bool Update()
 		{
-			int amountofmatchedtiles = 0;
-            int totaltilecount = 0;
+			float amountofmatchedtiles = 0;
+            float totaltilecount = 0;
             byte type;
             if (QTools.GetTileTypeFromName(tiletype, out type))
             {
@@ -633,7 +630,7 @@ namespace Triggers
 	{
 		public string regionname;
 		public string walltype;
-		public int percentage;
+		public float percentage;
 		
 		public GetRegionWallPercentage(string walltype, string regionname)
 		{
@@ -643,8 +640,8 @@ namespace Triggers
 		
 		public override bool Update()
 		{
-			int amountofmatchedwalls = 0;
-            int totalwallcount = 0;
+			float amountofmatchedwalls = 0;
+            float totalwallcount = 0;
             TShockAPI.DB.Region r = TShock.Regions.ZacksGetRegionByName(regionname);
             byte type;
             if (QTools.GetWallTypeFromName(walltype, out type))
@@ -673,7 +670,7 @@ namespace Triggers
 	{
 		public string walltype;
 		public int X, Y, Width, Height;
-		public int percentage = 0;
+		public float percentage = 0;
 		
 		public GetXYWallPercentage(string walltype, int X, int Y, int Width, int Height)
 		{
@@ -686,8 +683,8 @@ namespace Triggers
 		
 		public override bool Update()
 		{
-			int amountofmatchedwalls = 0;
-            int totalwallcount = 0;
+			float amountofmatchedwalls = 0;
+            float totalwallcount = 0;
             byte type;
             if (QTools.GetWallTypeFromName(walltype, out type))
             {
