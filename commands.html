@@ -1,0 +1,84 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>TShock Quest System - Index</title>
+		<meta name="description" content="So, Ijjie, how does it work?!">
+		<meta name="author" content="Ijwu">
+		
+		<link rel="stylesheet" href="stylesheets/base.css">
+		<link rel="stylesheet" href="stylesheets/skeleton.css">
+		<link rel="stylesheet" href="stylesheets/layout.css">
+		<link rel="stylesheet" href="stylesheets/docs.css">
+	</head>
+	<body>
+		<div class="container">
+			<div class="sixteen columns">
+				<h1 class="remove-bottom" style="margin-top: 40px">TShock Quest System</h1>
+				<hr />
+			</div>
+			<div class="twelve columns content">
+				<div class="doc-section">
+					<h3>Commands</h3>
+					<ul>
+						<li>
+							<p>
+								Command: getcoords<br />
+								Permission: None<br />
+								Description: Tells you your current coordinates.<br />
+								Syntax: /getcoords
+							</p>
+						</li>
+						<li>
+							<p>
+								Command: listquests<br />
+								Permission: usequest<br />
+								Description: Lists the quests available in the quest region you're in.<br />
+								Syntax: /listquests
+							</p>
+						</li>
+						<li>
+							<p>
+								Command: startquest<br />
+								Permission: usequest<br />
+								Description: Starts the specified quest if possible.<br />
+								Syntax: /startquest <questname>
+							</p>
+						</li>
+						<li>
+							<p>
+								Command: questr<br />
+								Permission: questregion<br />
+								Description: Command to manipulate quest regions.<br />
+								Syntax: /questr <sub-command> <parameters>
+							</p>
+						</li>
+						<li>
+							<p>
+								Command: reloadquestdata<br />
+								Permission: reloadqdata<br />
+								Description: Allows you to reload the quest data to allow changes to scripts or configs to take place.<br />
+								Syntax: /reloadquestdata
+							</p>
+						</li>
+						<li>
+							<p>
+								Command: giveq<br />
+								Permission: giveq<br />
+								Description: Forces a player to start a quest. Can cause quest overlaps<br />
+								Syntax: /giveq <player> <questname>
+							</p>
+						</li>
+						<li>
+							<p>
+								Command: forcequest<br />
+								Permission: forcequestonall<br />
+								Description: Removes all quests from all players and forces them to start a new one.<br />
+								Syntax: /forcequest <questname>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
