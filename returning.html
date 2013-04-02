@@ -1,0 +1,82 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>TShock Quest System - Returning User</title>
+		<meta name="description" content="So, Ijjie, how does it work?!">
+		<meta name="author" content="Ijwu">
+		
+		<link rel="stylesheet" href="stylesheets/base.css">
+		<link rel="stylesheet" href="stylesheets/skeleton.css">
+		<link rel="stylesheet" href="stylesheets/layout.css">
+		<link rel="stylesheet" href="stylesheets/docs.css">
+	</head>
+	<body>
+		<div class="container">
+			<div class="sixteen columns">
+				<h1 class="remove-bottom" style="margin-top: 40px">TShock Quest System</h1>
+				<hr />
+			</div>
+			<div class="three columns sidebar">
+				<nav>
+					<h3 id="logo">Contents</h3>
+					<ul>
+						<li><a href="#engineChanges">Changes to Engine</a></li>
+						<li><a href="#usingEngine">Using the New Engine</a></li>
+						<li><a href="#triggerList">List of Triggers</a></li>
+					</ul>
+				</nav>
+			</div>
+			<div class="twelve columns offset-by-three content">
+				<div class="doc-section" id="engineChanges">
+					<h3>Changes to the Quest Engine</h3>
+					<p>
+						The old engine, at its base level, ran a lua script file in its own thread in realtime. I found this inefficient and after consulting a friend designed a new engine. The new engine now pre-parses a script file and runs the quest after it is done with the file. It uses the file to come up with <em>Quest Triggers</em> which, simply, are quest objectives, such as <em>AtXY</em>, or <em>RetrieveItem</em>.
+					</p>
+					<p>
+						The new engine keeps an internal list of quest triggers. As it loads a file it will fill this list up. Then, at intervals of 250 milliseconds (1/4 of a second) it will execute these triggers in the order that they appeared. This is very important as the <em>Sleep</em> trigger now can only run in intervals of 250 milliseconds. To sleep for a period longer than 250 milliseconds you will need to add the <em>Sleep</em> trigger enough times.
+					</p>
+				</div>
+				<div class="doc-section" id="usingEngine">
+					<h3>Using the New Quest Engine</h3>
+					<p>
+						It is important that get familiar with the new system. In order to make a quest do something you must instantiate, or create a version of, a trigger and then manually add it to the quest. Sounds tedious, right? Don't worry! It's easy!
+					</p>
+					<p>Here's an example:</p>
+<pre>
+	<code>
+	messageTrigger = Private("This is just like before, right?", Player, Color.Aqua)
+	messageTrigger.Callback = 
+	function(trigger)
+		Prioritize(Private("Haha, this is a callback!", Player, Color.Magenta))
+	end
+	
+	Add(messageTrigger)
+	</code>
+</pre>
+					<p>
+						Let's examine what's happening in this code. First off you see a variable assignment which is taking the return value of a function. This function is a constructor, which means it returns a trigger object that we can toy with. Trigger objects have members, which are certain properties that we can edit. Most of the time you won't need to do this, but in this case there is an example of a member being edited.
+					</p>
+					<p>
+						Notice the code that reads "messageTrigger.Callback". This is how you access a member. You put the variable name, a period, and then the member name. Remember, all variable/function/member names are case-sensitive. Notice I define a function and set it to the member 'Callback'. All triggers have a 'Callback' member and the member should always be a function. The function is called when the trigger is executed. The function must accept one argument, this is the trigger object itself.
+					</p>
+					<p>
+						Lastly, notice the two new functions: <em>Add</em> and <em>Prioritize</em>. <em>Add</em> is used to add a trigger to the list of triggers to be executed. Each time you add a trigger to the list the trigger is sent to the back of the list. Sometimes you might want ao trigger to execute immediately, such as in callback functions. This is where <em>Prioritize</em> comes in handy and it adds a trigger to the front of the list of triggers. <em>Add</em> and <em>Prioritize</em> may only ever take one argument and that argument must always be a trigger.
+					</p>
+					<p>
+						Let's recap. In the example code I: 
+						<ol>
+							<li>Assign a <em>Private</em> trigger object to <em>messageTrigger</em>.</li>
+							<li>Assign a function to <em>messageTrigger.Callback</em>.</li>
+							<li>Use <em>Add</em> to add <em>messageTrigger</em> to the list of triggers to be executed when the quest starts.</li>
+						</ol>
+						And the result should be that the player gets a message saying "This is just like before, right?" in aqua and then "Haha, this is a callback!" in magenta.
+					</p>
+				</div>
+				<div class="doc-section" id="triggerList">
+					<h3>List of Triggers and Members</h3>
+					<p>If you would like to see the list of triggers and their members, along with all relevant information, click <a href="triggers.html">here</a></p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,116 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>TShock Quest System - New User</title>
+		<meta name="description" content="So, Ijjie, how does it work?!">
+		<meta name="author" content="Ijwu">
+		
+		<link rel="stylesheet" href="stylesheets/base.css">
+		<link rel="stylesheet" href="stylesheets/skeleton.css">
+		<link rel="stylesheet" href="stylesheets/layout.css">
+		<link rel="stylesheet" href="stylesheets/docs.css">
+	</head>
+	<body>
+		<div class="container">
+			<div class="sixteen columns">
+				<h1 class="remove-bottom" style="margin-top: 40px">TShock Quest System</h1>
+				<hr />
+			</div>
+			<div class="three columns sidebar">
+				<nav>
+					<h3 id="logo">Contents</h3>
+					<ul>
+						<li><a href="#intro">Overview</a></li>
+						<li><a href="#getlua">Getting lua</a></li>
+						<li><a href="#firstQuest">Your First Quest</a></li>
+						<li><a href="#callback">Using Callbacks</a></li>
+					</ul>
+				</nav>
+			</div>
+			<div class="twelve columns offset-by-three content">
+				<div class="doc-section" id="intro">
+					<h3>Overview of Use</h3>
+					<p>
+						Welcome to the TShock Quest System. The system is used for providing Terraria players with quests on a TShock server. As a server admin you may script quests using the lua scripting language (don't worry, it's real easy!) and create powerful quests for your players. If you're a more advanced programmer you can do some very interesting things.
+					</p>
+					<p>
+						I suggest looking up a tutorial in programming or finding a simple lua tutorial that can teach you the basic data types and concepts of programming. This tutorial is an attempt to teach the Quest System to the end user but <strong>not</strong> programming. That means that I may cover concepts you don't know.
+					</p>
+				</div>
+				<div class="doc-section" id="getlua">
+					<h3>How to get lua</h3>
+					<p>
+						First you need to install lua so you can have an IDE (integrated development environment) and the ability to check your scripts for syntax errors. If you run a windows system then I suggest installing lua for windows, which includes these things, from <a href="https://code.google.com/p/luaforwindows/">here</a>.
+					</p>
+					<p>
+						If you run a system other than windows, then I suggest getting lua from their website <a href="http:\\www.lua.org">here</a>. Also, a good IDE to use would be <a href="http://www.scintilla.org/SciTE.html">SciTE</a> with the <a href="http://www.scintilla.org/SciTELua.html">lua scripting extension</a>
+					</p>
+				</div>
+				<div class="doc-section" id="firstQuest">
+					<h3>Using the Quest System - Your First Quest</h3>
+					<p>
+						Think back to a game that you've played that has quests. You have to do certain things like kill some monsters or collect some items, right? Well, these special tasks are called 'triggers' in the Quest System. When you script a quest all you're doing is adding triggers to a special list. When the script file is done being processed the Quest System will automatically run these triggers with the player and pull them out of the list when they're done.
+					</p>
+					<p>
+						Scripting quests is very intuitive and basic quests should be something that you'll be able to pick up right away. Let's go over trigger creation. To create a trigger you must first put its name into the script file (case-sensitive!) and then an opening parenthesis. So, for example, I'll be using the <em>Private</em> trigger, which sends a colored message to the player. Now we have this:
+					</p>
+<pre>
+	<code>
+		Private(
+	</code>
+</pre>
+					<p>
+						Now we need to fill in the proper <em>constructor arguments</em>, that is the initial information that the trigger needs to do its job. You can find a list of triggers and constructors with their basic data types <a href="triggers.html">here</a>. The <em>Private</em> constructor first takes a <strong style="color:red">string</strong> object, then a <strong style="color:red">QPlayer</strong> object, and lastly a <strong style="color:red">Color</strong>. A string is any line of text within a set of quotations. Example: "Hello"<br />
+						A QPlayer object is the player taking the quest. This is always saved to the variable <em>Player</em>. Lastly, a Color object is any color in <a href="http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.graphics.color_members(v=xnagamestudio.31).aspx">this</a> list. You must write it the same way they're written in the list. So now that we have our constructors we must end the constructor call with a closing parenthesis. Now we have this: 
+					</p>
+<pre>
+	<code>
+		Private("Hello", Player, Color.Aqua)
+	</code>
+</pre>
+					<p>
+						To complete our addition to the quest we need to put the trigger in the <em>Add</em> function so that it is added to the list. Now we have:
+					</p>
+<pre>
+	<code>
+		Add(Private("Hello", Player, Color.Aqua))
+	</code>
+</pre>
+					<p>
+						It is also possible to save the constructor results to a variable and then add that, like so:
+					</p>
+<pre>
+	<code>
+		x = Private("Hello, Player, Color.Aqua)
+		Add(x)
+	</code>
+</pre>
+				</div>
+				<div class="doc-section" id="callback">
+					<h3>Using Callbacks</h3>
+					<p>
+						Callbacks are special functions that are called immediately after a trigger is completed. Some triggers might require a callback to be any good. Callbacks help you dynamically change the structure of your quest based on what your player is doing. A callback is a <em>member</em> of a trigger. A member is an object of a certain type that is accesible from its parent object. Every single trigger has a callback member, but that doesn't mean that triggers will always have the same members.
+					</p>
+					<p>
+						To access a trigger's members you must save the results of its constructor to a variable. Then you can access its members using a dot, or period. Like so:
+					</p>
+<pre>
+	<code>
+		function callbackFunc(trigger)
+			Prioritize(Private("Good Bye!", Player, Color.Magenta))
+		end
+		x = Private("Hello", Player, Color.Aqua)
+		x.Callback = callbackFunc
+	</code>
+</pre>
+					<p>
+						Let's examine what's happening here. First I define a function called <em>callbackFunc</em>. Notice how it uses a function within it that we have not encountered yet. The function <em>Prioritize</em> works just like <em>Add</em> but adds the trigger to the front of the trigger list, instead of the back. This makes it so that the trigger that <em>Prioritize</em> added will be executed next.
+					</p>
+					<p>
+						After the function definition we have a <em>Private</em> trigger saved to <em>x</em>. Now we access <em>x</em>'s member <em>Callback</em> to give it a function. We assigned <em>callbackFunc</em> to <em>x</em>'s <em>Callback</em> member. Now <em>x</em> will execute the function we gave its callback when it completes.
+					</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
