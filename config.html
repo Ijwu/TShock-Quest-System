@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>TShock Quest System - Index</title>
+		<meta name="description" content="So, Ijjie, how does it work?!">
+		<meta name="author" content="Ijwu">
+		
+		<link rel="stylesheet" href="stylesheets/base.css">
+		<link rel="stylesheet" href="stylesheets/skeleton.css">
+		<link rel="stylesheet" href="stylesheets/layout.css">
+		<link rel="stylesheet" href="stylesheets/docs.css">
+	</head>
+	<body>
+		<div class="container">
+			<div class="sixteen columns">
+				<h1 class="remove-bottom" style="margin-top: 40px">TShock Quest System</h1>
+				<hr />
+			</div>
+			<div class="twelve columns content">
+				<div class="doc-section" id="intro">
+					<h3>Config Files</h3>
+					<p>
+						Config file options:<br />
+						Name - string: Name in game<br />
+						QuestLine - Currently Unused<br />
+						Place - Currently Unused<br />
+						Required - Currently Unused<br />
+						Permission - string: Permission required to run quest<br />
+						Time - int: Time in seconds allowed for the player to complete the quest.<br />
+						Interval - TimeSpan: Time in between quest attempts.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;    TimeSpan Format: Hours:Minutes:Seconds<br />
+&nbsp;&nbsp;&nbsp;&nbsp;	Example: 01:30:00<br /><br />
+						Example Config:
+					</p>
+					<code>
+						Name=testquest<br />
+						Permission=testquest<br />
+						Time=600<br />
+						Interval=00:00:10
+					</code>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
