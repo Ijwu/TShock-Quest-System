@@ -9,6 +9,12 @@
 		<link rel="stylesheet" href="stylesheets/skeleton.css">
 		<link rel="stylesheet" href="stylesheets/layout.css">
 		<link rel="stylesheet" href="stylesheets/docs.css">
+		<style type="text/css">
+		.auto-style2 {
+			font-weight: bold;
+			color: #FF0000;
+		}
+		</style>
 	</head>
 	<body>
 		<div class="container">
@@ -23,21 +29,22 @@
 						<li><a href="#atxy">AtXY</a></li>
 						<li><a href="#broadcast">Broadcast</a></li>
 						<li><a href="#buffplayer">BuffPlayer</a></li>
-						<li><a href="#deleteboth">DeleteBoth</a></li>
+						<li><a href="#callfunc">CallFunction</a></li>
+						<li><a href="#pass">Delay</a></li>
 						<li><a href="#deletetile">DeleteTile</a></li>
+						<li><a href="#deleteboth">DeleteTileWall</a></li>
 						<li><a href="#deletewall">DeleteWall</a></li>
-						<li><a href="#gather">Gather</a></li>
+						<li><a href="#gather">GatherItem</a></li>
 						<li><a href="#getregiontile">GetRegionTilePercentage</a></li>
 						<li><a href="#getregionwall">GetRegionWallPercentage</a></li>
 						<li><a href="#getxytile">GetXYTilePercentage</a></li>
 						<li><a href="#getxywall">GetXYWallPercentage</a></li>
-						<li><a href="#hunt">Hunt</a></li>
-						<li><a href="#pass">Pass</a></li>
-						<li><a href="#private">Private</a></li>
+						<li><a href="#retrieve">GiveUpItem</a></li>
+						<li><a href="#hunt">HuntMob</a></li>
+						<li><a href="#private">MessagePlayer</a></li>
 						<li><a href="#chatline">ReadNextChatLine</a></li>
-						<li><a href="#retrieve">RetrieveItem</a></li>
 						<li><a href="#reward">Reward</a></li>
-						<li><a href="#spawnmob">SpawnMobs</a></li>
+						<li><a href="#spawnmob">SpawnMob</a></li>
 						<li><a href="#teleport">Teleport</a></li>
 						<li><a href="#tileedit">TileEdit</a></li>
 						<li><a href="#walledit">WallEdit</a></li>
@@ -55,16 +62,7 @@
 								<strong style="color:red">int</strong> x, 
 								<strong style="color:red">int</strong> y, 
 								<strong style="color:red">int</strong> radius = 1<br />
-							<strong>Members (Advanced Use Only)</strong>: 
-								<strong style="color:red">int</strong> x, 
-								<strong style="color:red">int</strong> y, 
-								<strong style="color:red">int</strong> radius, 
-								<strong style="color:red">QPlayer</strong> player, 
-								<strong style="color:red">Rectangle</strong> playerRect, 
-								<strong style="color:red">Rectangle</strong> targetRect<br />
-							<strong>Member Details (Advanced Use Only)</strong>: X and Y are the top left coords of the destination area. Radius is the width and height of the area. player is the expected player. playerRect and targetRect are properties and have getters to calculate the rects, they should not be used typically.<br />
-							<strong>Additional Details</strong>: When the quest handler comes across this trigger it will constantly evaluate it until the player is at the target zone. As in the old system, it will hold up the quest until the player enters the designated area. It does <strong>not</strong> tell the player where to go. This is left to the quest creator. I strongly suggest using this trigger as is without touching its members. Be sure to make a large enough target area so that it is impossible to run through within your tickrate. A player can run through the area without the system ticking and not complete this trigger.
-						</p>
+							<strong>Additional Details</strong>: When the quest handler comes across this trigger it will constantly evaluate it until the player is at the target zone. As in the old system, it will hold up the quest until the player enters the designated area. It does <strong>not</strong> tell the player where to go. This is left to the quest creator.</p>
 						<hr />
 					</li>
 					<li id="broadcast">
@@ -73,12 +71,7 @@
 							<strong>Function</strong>: Used to send a message to all online players.<br />
 							<strong>Arguments</strong>:
 								<strong style="color:red">string</strong> message,
-								<strong style="color:red">Color</strong> color<br />
-							<strong>Members (Advanced Use Only)</strong>:
-								<strong style="color:red">string</strong> message,
-								<strong style="color:red">Color</strong> color<br />
-							<strong>Member Details (Advanced Use Only)</strong>: message is the message to be sent. color is the color it's in. Not much to it.
-						</p>
+								<strong style="color:red">Color</strong> color</p>
 						<hr />
 					</li>
 					<li id="buffplayer">
@@ -88,27 +81,25 @@
 							<strong>Arguments</strong>:
 								<strong style="color:red">QPlayer</strong> player,
 								<strong style="color:red">string</strong> buffname,
-								<strong style="color:red">int</strong> time<br />
-							<strong>Members (Advanced Use Only)</strong>:
-								<strong style="color:red">QPlayer</strong> player,
-								<strong style="color:red">string</strong> buffname,
-								<strong style="color:red">int</strong> time<br />
-							<strong>Member Details (Advanced Use Only)</strong>: player is target player. buffname is literal name of buff (ex: "Shine"). time is time in minutes (I think).
-						</p>
+								<strong style="color:red">int</strong> time</p>
 						<hr />
 					</li>
-					<li id="deleteboth">
-						<h3>DeleteBoth</h3>
+					<li id="callfunc">
+						<h3>CallFunction</h3>
 						<p>
-							<strong>Function</strong>: Used to delete the tile and wall of a specific coordinate.<br />
+							<strong>Function</strong>:Calls the given function 
+							with the given arguments when the quest hits this 
+							trigger.<br />
 							<strong>Arguments</strong>:
-								<strong style="color:red">int</strong> x,
-								<strong style="color:red">int</strong> y<br />
-							<strong>Members (Advanced Use Only)</strong>: 
-								<strong style="color:red">int</strong> x,
-								<strong style="color:red">int</strong> y<br />
-							<strong>Member Details (Advanced Use Only)</strong>: x and y are the coordinates of the to-be-deleted wall and tile.
-						</p>
+								<span class="auto-style2">LuaFunction</span> 
+							func, <strong style="color:red">LuaTable</strong> 
+							args</p>
+						<hr />
+					</li>
+					<li id="pass">
+						<h3>Delay</h3>
+						<p>
+							TO BE DONE</p>
 						<hr />
 					</li>
 					<li id="deletetile">
@@ -117,40 +108,38 @@
 							<strong>Function</strong>: Used to delete the tile of a specific coordinate.<br />
 							<strong>Arguments</strong>:
 								<strong style="color:red">int</strong> x,
-								<strong style="color:red">int</strong> y<br />
-							<strong>Members (Advanced Use Only)</strong>: 
-								<strong style="color:red">int</strong> x,
-								<strong style="color:red">int</strong> y<br />
-							<strong>Member Details (Advanced Use Only)</strong>: x and y are the coordinates of the to-be-deleted tile.
-						</p>
+								<strong style="color:red">int</strong> y</p>
 						<hr />
 					</li>
+					<li id="deleteboth">
+						<h3>DeleteTileWall</h3>
+						<p>
+							<strong>Function</strong>: Used to delete the tile and wall of a specific coordinate.<br />
+							<strong>Arguments</strong>:
+								<strong style="color:red">int</strong> x,
+								<strong style="color:red">int</strong> y</p>
+						<hr />
+					</li>
+
 					<li id="deletewall">
 						<h3>DeleteWall</h3>
 						<p>
 							<strong>Function</strong>: Used to delete the wall of a specific coordinate.<br />
 							<strong>Arguments</strong>:
 								<strong style="color:red">int</strong> x,
-								<strong style="color:red">int</strong> y<br />
-							<strong>Members (Advanced Use Only)</strong>: 
-								<strong style="color:red">int</strong> x,
-								<strong style="color:red">int</strong> y<br />
-							<strong>Member Details (Advanced Use Only)</strong>: x and y are the coordinates of the to-be-deleted wall.
-						</p>
+								<strong style="color:red">int</strong> y</p>
 						<hr />
 					</li>
 					<li id="gather">
-						<h3>Gather</h3>
+						<h3>GatherItem</h3>
 						<p>
 							<strong>Function</strong>: Pauses the quest until the player has picked up a certain amount of a specific item.<br />
 							<strong>Arguments</strong>:
 								<strong style="color:red">QPlayer</strong> player,
 								<strong style="color:red">string</strong> item,
 								<strong style="color:red">int</strong> amount=1<br />
-							<strong>Members (Advanced Use Only)</strong>: 
-								<strong style="color:red">Item</strong> item,
-								<strong style="color:red">QPlayer</strong> player,
-								<strong style="color:red">int</strong> amount<br />
+							<strong>Useful Members (Advanced Use Only)</strong>: 
+								<strong style="color:red">Item</strong> item<br />
 							<strong>Member Details (Advanced Use Only)</strong>: item is the Item object that's being looked for. It uses TShock.Utils.GetItemByIdOrName to get a list of matching item objects. If the list contains only one object then it sticks the returned object into item. If there are multiple objects in the list then it will throw a FormatException. player is the player provided and the amount is the amount required.<br />
 							<strong>Additional Details</strong>: This trigger will only detect <strong>new</strong> items a player obtains. For example, if I have 20 dirt blocks in my inventory and get a quest to gather 20 dirt blocks I do not instantly complete the mission. I have to go out and gather 20 more dirt blocks. Furthermore, if I drop my 20 blocks into lava then I must go out and collect 40 blocks now. This is because the trigger counts the current amount of the designated item in the player's inventory and counts it against them. So they will always be able to collect the designated amount from the moment of starting the trigger. The count is made at the beginning of the quest and not when the player reaches the trigger. That means if I need to collect 2 dirt blocks for a quest and I collect them before I'm told to do so I will still pass the trigger. 
 						</p>
@@ -163,12 +152,11 @@
 							<strong>Arguments</strong>:
 								<strong style="color:red">string</strong> tiletype,
 								<strong style="color:red">string</strong> regionname<br />
-							<strong>Members (Advanced Use Only)</strong>: 
-								<strong style="color:red">string</strong> tiletype,
-								<strong style="color:red">string</strong> regionname,
+							<strong>Useful Members (Advanced Use Only)</strong>: 
 								<strong style="color:red">int</strong> percentage<br />
-							<strong>Member Details (Advanced Use Only)</strong>: tiletype is the tile name used, it is looked up according to the dict available in the source. regionname is the region name. percentage is the result of the percentage calculation.<br />
-							<strong>Additional Details</strong>: This trigger literally does nothing with the player. You <strong>must</strong> use a callback function with this trigger to make it useful. The callback function would take the trigger object passed to it and look up the percentage member and perform whatever needed calculation onto that.
+							<strong>Member Details (Advanced Use Only)</strong>: percentage is the result of the percentage calculation.<br />
+							<strong>Additional Details</strong>: This trigger literally does nothing 
+							except a calculation. You <strong>must</strong> use a callback function with this trigger to make it useful. The callback function would take the trigger object passed to it and look up the percentage member and perform whatever needed calculation onto that.
 						</p>
 						<hr />
 					</li>
@@ -179,12 +167,11 @@
 							<strong>Arguments</strong>:
 								<strong style="color:red">string</strong> walltype,
 								<strong style="color:red">string</strong> regionname<br />
-							<strong>Members (Advanced Use Only)</strong>: 
-								<strong style="color:red">string</strong> walltype,
-								<strong style="color:red">string</strong> regionname,
+							<strong>Useful Members (Advanced Use Only)</strong>: 
 								<strong style="color:red">int</strong> percentage<br />
-							<strong>Member Details (Advanced Use Only)</strong>: walltype is the wall name used, it is looked up according to the dict available in the source. regionname is the region name. percentage is the result of the percentage calculation.<br />
-							<strong>Additional Details</strong>: This trigger literally does nothing with the player. You <strong>must</strong> use a callback function with this trigger to make it useful. The callback function would take the trigger object passed to it and look up the percentage member and perform whatever needed calculation onto that.
+							<strong>Member Details (Advanced Use Only)</strong>: percentage is the result of the percentage calculation.<br />
+							<strong>Additional Details</strong>: This trigger 
+							literally does nothing except a calculation. You <strong>must</strong> use a callback function with this trigger to make it useful. The callback function would take the trigger object passed to it and look up the percentage member and perform whatever needed calculation onto that.
 						</p>
 						<hr />
 					</li>
@@ -198,15 +185,11 @@
 								<strong style="color:red">int</strong> Y,
 								<strong style="color:red">int</strong> Width,
 								<strong style="color:red">int</strong> Height,<br />
-							<strong>Members (Advanced Use Only)</strong>: 
-								<strong style="color:red">string</strong> tiletype,
-								<strong style="color:red">int</strong> X,
-								<strong style="color:red">int</strong> Y,
-								<strong style="color:red">int</strong> Width,
-								<strong style="color:red">int</strong> Height,
+							<strong>Useful Members (Advanced Use Only)</strong>: 
 								<strong style="color:red">int</strong> percentage<br />
-							<strong>Member Details (Advanced Use Only)</strong>: tiletype is the tile name used, it is looked up according to the dict available in the source. X and Y are the top left points of the rectangle, Width and Height are its width and height.<br />
-							<strong>Additional Details</strong>: This trigger literally does nothing with the player. You <strong>must</strong> use a callback function with this trigger to make it useful. The callback function would take the trigger object passed to it and look up the percentage member and perform whatever needed calculation onto that.
+							<strong>Member Details (Advanced Use Only)</strong>: percentage is the result of the percentage calculation.<br />
+							<strong>Additional Details</strong>: This trigger 
+							literally does nothing except a calculation. You <strong>must</strong> use a callback function with this trigger to make it useful. The callback function would take the trigger object passed to it and look up the percentage member and perform whatever needed calculation onto that.
 						</p>
 						<hr />
 					</li>
@@ -220,57 +203,54 @@
 								<strong style="color:red">int</strong> Y,
 								<strong style="color:red">int</strong> Width,
 								<strong style="color:red">int</strong> Height,<br />
-							<strong>Members (Advanced Use Only)</strong>: 
-								<strong style="color:red">string</strong> walltype,
-								<strong style="color:red">int</strong> X,
-								<strong style="color:red">int</strong> Y,
-								<strong style="color:red">int</strong> Width,
-								<strong style="color:red">int</strong> Height,
+							<strong>Useful Members (Advanced Use Only)</strong>: 
 								<strong style="color:red">int</strong> percentage<br />
-							<strong>Member Details (Advanced Use Only)</strong>: walltype is the tile name used, it is looked up according to the dict available in the source. X and Y are the top left points of the rectangle, Width and Height are its width and height.<br />
-							<strong>Additional Details</strong>: This trigger literally does nothing with the player. You <strong>must</strong> use a callback function with this trigger to make it useful. The callback function would take the trigger object passed to it and look up the percentage member and perform whatever needed calculation onto that.
+							<strong>Member Details (Advanced Use Only)</strong>: percentage is the result of the percentage calculation.<br />
+							<strong>Additional Details</strong>: This trigger 
+							literally does nothing except a calculation. You <strong>must</strong> use a callback function with this trigger to make it useful. The callback function would take the trigger object passed to it and look up the percentage member and perform whatever needed calculation onto that.
+						</p>
+						<hr />
+					</li>
+					<li id="retrieve">
+						<h3>GiveUpItem</h3>
+						<p>
+							<strong>Function</strong>: Waits for a player to drop a certain item in a certain amount. It then deletes the dropped item and allows them to continue.<br />
+							<strong>Arguments</strong>: 
+								<strong style="color:red">QPlayer</strong> player,
+								<strong style="color:red">string</strong> type,
+								<strong style="color:red">int</strong> amount=1<br />
+							<strong>Useful Members (Advanced Use Only)</strong>: 
+								<strong>Dictionary<</strong><strong style="color:red">string</strong>, <strong style="color:red">int</strong><strong>></strong> toBeCollected,
+								(function) <strong style="color:red">void</strong> addItem<br />		
+							<strong>Member Details (Advanced Use Only)</strong>: toBeCollected is a <string, int> 
+							dictionary where the key is the item name and the 
+							value is the amount expected.<br />
+							<strong>Additional Details</strong>: The contructor initially adds only one item to the dictionary of expected items. To have this trigger expect multiple items use the addItem method. addItem accepts a <strong style="color:red">string</strong> and then an <strong style="color:red">int</strong>. The string is the item name, the amount is the amount expected.
 						</p>
 						<hr />
 					</li>
 					<li id="hunt">
-						<h3>Hunt</h3>
+						<h3>HuntMob</h3>
 						<p>
 							<strong>Function</strong>: Pauses the quest until the player has hunted a specific amount of a certain mob or mobs.<br />
 							<strong>Arguments</strong>:
 								<strong style="color:red">QPlayer</strong> Player,
 								<strong style="color:red">string</strong> type,
 								<strong style="color:red">int</strong> amount = 1<br />
-							<strong>Members (Advanced Use Only)</strong>:
-								<strong>Dictionary<</strong><strong style="color:red">string</strong><strong>, </strong><strong style="color:red">int</strong><strong>></strong> toBeKilled,
-								<strong style="color:red">QPlayer</strong> player<br />
-							<strong>Member Details (Advanced Use Only)</strong>: toBeKilled is a dictionary with mob names being the keys and amounts needing to be killed as the value. Currently the constructor accepts type and amount to input one mob type into the dictionary. <strong>Note: If you do not edit the toBeKilled member, you may not have concurrent mob killing objectives.</strong> player is the player expected to kill the mobs.
-						</p>
-						<hr />
-					</li>
-					<li id="pass">
-						<h3>Pass</h3>
-						<p>
-							<strong>Function</strong>: Pauses the quest for as long as the tickrate is. Default tickrate is a 1/4 second.<br />
-							<strong>Arguments</strong>: None<br />
-							<strong>Members (Advanced Use Only)</strong>: None<br />
-							<strong>Additional Details</strong>: Remember that this only pauses the quest for the duration of the tickrate. You <strong>must</strong> insert this trigger as many times as needed. For example, I'd insert this trigger 8 times if I wanted to pause for 2 seconds.							
-						</p>
+							<strong>Useful Members (Advanced Use Only)</strong>:
+								<strong>Dictionary<</strong><strong style="color:red">string</strong><strong>, </strong><strong style="color:red">int</strong><strong>></strong> 
+							toBeKilled<br />
+							<strong>Member Details (Advanced Use Only)</strong>: toBeKilled is a dictionary with mob names being the keys and amounts needing to be killed as the value. Currently the constructor accepts type and amount to input one mob type into the dictionary. <strong>Note: If you do not edit the toBeKilled member, you may not have concurrent mob killing objectives.</strong></p>
 						<hr />
 					</li>
 					<li id="private">
-						<h3>Private</h3>
+						<h3>MessagePlayer</h3>
 						<p>
 							<strong>Function</strong>: Sends a message to the player in a certain color.<br />
 							<strong>Arguments</strong>: 
 								<strong style="color:red">string</strong> message,
 								<strong style="color:red">QPlayer</strong> player,
-								<strong style="color:red">Color</strong> color<br />
-							<strong>Members (Advanced Use Only)</strong>: 
-								<strong style="color:red">string</strong> message,
-								<strong style="color:red">QPlayer</strong> player,
-								<strong style="color:red">Color</strong> color<br />		
-							<strong>Member Details (Advanced Use Only)</strong>: message is the string to be sent to the player, player is the target player, color is the color the message will be in.
-						</p>
+								<strong style="color:red">Color</strong> color</p>
 						<hr />
 					</li>
 					<li id="chatline">
@@ -280,28 +260,11 @@
 							<strong>Arguments</strong>: 
 								<strong style="color:red">QPlayer</strong> player,
 								<strong style="color:red">bool</strong> hideMsg = false<br />
-							<strong>Members (Advanced Use Only)</strong>: 
+							<strong>Useful Members (Advanced Use Only)</strong>: 
 								<strong style="color:red">QPlayer</strong> player,
 								<strong style="color:red">string</strong> Message,
 								<strong style="color:red">bool</strong> hideMessage<br />		
-							<strong>Member Details (Advanced Use Only)</strong>: player is the player who is expected to speak. Message is the string captured, default is null. hideMessage is a bool designating whether the player's chatline should be displayed to the players, including the one who said it.
-						</p>
-						<hr />
-					</li>
-					<li id="retrieve">
-						<h3>RetrieveItem</h3>
-						<p>
-							<strong>Function</strong>: Waits for a player to drop a certain item in a certain amount. It then deletes the dropped item and allows them to continue.<br />
-							<strong>Arguments</strong>: 
-								<strong style="color:red">QPlayer</strong> player,
-								<strong style="color:red">string</strong> type,
-								<strong style="color:red">int</strong> amount=1<br />
-							<strong>Members (Advanced Use Only)</strong>: 
-								<strong>Dictionary<</strong><strong style="color:red">string</strong>, <strong style="color:red">int</strong><strong>></strong> toBeCollected,
-								<strong style="color:red">QPlayer</strong> player,
-								<strong style="color:red">void</strong> addItem<br />		
-							<strong>Member Details (Advanced Use Only)</strong>: player is the player expected to drop the item. toBeCollected is a <string, int> dictionary where the key is the item name and the value is the amount expected. addItem is a method that returns nothing. More details in the next section.<br />
-							<strong>Additional Details</strong>: The contructor initially adds only one item to the dictionary of expected items. To have this trigger expect multiple items use the addItem method. addItem accepts a <strong style="color:red">string</strong> and then an <strong style="color:red">int</strong>. The string is the item name, the amount is the amount expected.
+							<strong>Member Details (Advanced Use Only)</strong>: Message is the string captured, default is null. hideMessage is a bool designating whether the player's chatline should be displayed to the players, including the one who said it.
 						</p>
 						<hr />
 					</li>
@@ -314,13 +277,14 @@
 								<strong style="color:red">string</strong> item,
 								<strong style="color:red">int</strong> stack=1,
 								<strong style="color:red">int</strong> prefix=0<br />
-							<strong>Members (Advanced Use Only)</strong>:
-								<strong style="color:red">QPlayer</strong> player,
-								<strong style="color:red">Item</strong> item,
-								<strong style="color:red">int</strong> stack,
-								<strong style="color:red">int</strong> prefix<br />		
-							<strong>Member Details (Advanced Use Only)</strong>: player is the player to give the item to. item is the Item object automatically generated by the constructor. stack is the amount of items to give and prefix is the prefix id to give.<br />
-							<strong>Additional Details</strong>: You may edit the item member in order to tweak the item that will be given. It's all fairly advanced and lower level than the trigger itself, so don't toy around with it if you don't know what you're doing.
+							<strong>Useful Members (Advanced Use Only)</strong>:<strong><span style="color:red">
+							</span> </strong> <strong style="color:red">Item</strong> 
+							item<br />		
+							<strong>Member Details (Advanced Use Only)</strong>: 
+							item is an Item type object that is automatically 
+							generated by the constructor. You may edit it for 
+							more low level control over the item you want to 
+							give the player.
 						</p>
 						<hr />
 					</li>
@@ -332,14 +296,7 @@
 								<strong style="color:red">string</strong> name,
 								<strong style="color:red">int</strong> x,
 								<strong style="color:red">int</strong> y,
-								<strong style="color:red">int</strong> amount=0<br />
-							<strong>Members (Advanced Use Only)</strong>:
-								<strong style="color:red">string</strong> name,
-								<strong style="color:red">int</strong> x,
-								<strong style="color:red">int</strong> y,
-								<strong style="color:red">int</strong> amount<br />		
-							<strong>Member Details (Advanced Use Only)</strong>: name is the mob name, x and y are the target coordinates and amount is how many to spawn.
-						</p>
+								<strong style="color:red">int</strong> amount=0</p>
 						<hr />
 					</li>
 					<li id="teleport">
@@ -349,13 +306,7 @@
 							<strong>Arguments</strong>: 
 								<strong style="color:red">int</strong> x,
 								<strong style="color:red">int</strong> y,
-								<strong style="color:red">QPlayer</strong> player<br />
-							<strong>Members (Advanced Use Only)</strong>:
-								<strong style="color:red">QPlayer</strong> player,
-								<strong style="color:red">int</strong> x,
-								<strong style="color:red">int</strong> y<br />		
-							<strong>Member Details (Advanced Use Only)</strong>: x and y are the target coordinates. player is the player to be moved.
-						</p>
+								<strong style="color:red">QPlayer</strong> player</p>
 						<hr />
 					</li>
 					<li id="tileedit">
@@ -365,12 +316,11 @@
 							<strong>Arguments</strong>: 
 								<strong style="color:red">int</strong> x,
 								<strong style="color:red">int</strong> y,
-								<strong style="color:red">string</strong> tile<br />
-							<strong>Members (Advanced Use Only)</strong>:
-								<strong style="color:red">int</strong> x,
-								<strong style="color:red">int</strong> y,
-								<strong style="color:red">string</strong> name<br />		
-							<strong>Member Details (Advanced Use Only)</strong>: x and y are the target coordinates. name is the name of the new tile. Names come from the dictionary of tile names in the source code.
+								<strong style="color:red">string</strong> tile<br>
+							<strong>Additional Details</strong>: Tile names are 
+							stored in a dictionary as defined in the source 
+							code. Check out the source code if you want a list 
+							of tile names.<br />
 						</p>
 						<hr />
 					</li>
@@ -382,12 +332,10 @@
 								<strong style="color:red">int</strong> x,
 								<strong style="color:red">int</strong> y,
 								<strong style="color:red">string</strong> wall<br />
-							<strong>Members (Advanced Use Only)</strong>:
-								<strong style="color:red">int</strong> x,
-								<strong style="color:red">int</strong> y,
-								<strong style="color:red">string</strong> name<br />		
-							<strong>Member Details (Advanced Use Only)</strong>: x and y are the target coordinates. name is the name of the new wall. Names come from the dictionary of wall names in the source code.
-						</p>
+							<strong>Additional Details</strong>: Wall names are 
+							stored in a dictionary as defined in the source 
+							code. Check out the source code if you want a list 
+							of wall names.</p>
 						<hr />
 					</li>
 				</ul>

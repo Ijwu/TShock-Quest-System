@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Skeleton V1.2
 * Copyright 2011, Dave Gamache
 * www.getskeleton.com
@@ -102,7 +102,7 @@
 /* #Lists
 ================================================== */
 	ul, ol { margin-bottom: 20px; }
-	ul { list-style: none outside; }
+	ul { list-style: circle outside; }
 	ol { list-style: decimal; }
 	ol, ul.square, ul.circle, ul.disc { margin-left: 30px; }
 	ul.square { list-style: square outside; }
@@ -127,11 +127,7 @@
 /* #Buttons
 ================================================== */
 
-	.button,
-	button,
-	input[type="submit"],
-	input[type="reset"],
-	input[type="button"] {
+	.button, button, input[type=submit], input[type=reset], input[type=button] {
 		background: #eee; /* Old browsers */
 		background: #eee -moz-linear-gradient(top, rgba(255,255,255,.2) 0%, rgba(0,0,0,.2) 100%); /* FF3.6+ */
 		background: #eee -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,.2)), color-stop(100%,rgba(0,0,0,.2))); /* Chrome,Safari4+ */
@@ -157,11 +153,7 @@
 	  padding: 8px 10px;
 	  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
-	.button:hover,
-	button:hover,
-	input[type="submit"]:hover,
-	input[type="reset"]:hover,
-	input[type="button"]:hover {
+	.button:hover, button:hover, input[type=submit]:hover, input[type=reset]:hover, input[type=button]:hover {
 		color: #222;
 		background: #ddd; /* Old browsers */
 		background: #ddd -moz-linear-gradient(top, rgba(255,255,255,.3) 0%, rgba(0,0,0,.3) 100%); /* FF3.6+ */
@@ -174,11 +166,7 @@
 	  border-top: 1px solid #aaa;
 	  border-left: 1px solid #aaa; }
 
-	.button:active,
-	button:active,
-	input[type="submit"]:active,
-	input[type="reset"]:active,
-	input[type="button"]:active {
+	.button:active, button:active, input[type=submit]:active, input[type=reset]:active, input[type=button]:active {
 		border: 1px solid #666;
 		background: #ccc; /* Old browsers */
 		background: #ccc -moz-linear-gradient(top, rgba(255,255,255,.35) 0%, rgba(10,10,10,.4) 100%); /* FF3.6+ */
@@ -188,11 +176,7 @@
 		background: #ccc -ms-linear-gradient(top, rgba(255,255,255,.35) 0%,rgba(10,10,10,.4) 100%); /* IE10+ */
 		background: #ccc linear-gradient(top, rgba(255,255,255,.35) 0%,rgba(10,10,10,.4) 100%); /* W3C */ }
 
-	.button.full-width,
-	button.full-width,
-	input[type="submit"].full-width,
-	input[type="reset"].full-width,
-	input[type="button"].full-width {
+	.button.full-width, button.full-width, input[type=submit].full-width, input[type=reset].full-width, input[type=button].full-width {
 		width: 100%;
 		padding-left: 0 !important;
 		padding-right: 0 !important;
@@ -213,11 +197,7 @@
 		margin-bottom: 20px; }
 	fieldset {
 		margin-bottom: 20px; }
-	input[type="text"],
-	input[type="password"],
-	input[type="email"],
-	textarea,
-	select {
+	input[type=text], input[type=password], input[type=email], textarea, select {
 		border: 1px solid #ccc;
 		padding: 6px 4px;
 		outline: none;
@@ -234,10 +214,7 @@
 		background: #fff; }
 	select {
 		padding: 0; }
-	input[type="text"]:focus,
-	input[type="password"]:focus,
-	input[type="email"]:focus,
-	textarea:focus {
+	input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, textarea:focus {
 		border: 1px solid #aaa;
  		color: #444;
  		-moz-box-shadow: 0 0 3px rgba(0,0,0,.2);
@@ -252,7 +229,7 @@
 		font-size: 13px;  }
 	select {
 		width: 220px; }
-	input[type="checkbox"] {
+	input[type=checkbox] {
 		display: inline; }
 	label span,
 	legend span {

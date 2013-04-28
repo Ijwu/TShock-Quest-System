@@ -1,47 +1,103 @@
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>TShock Quest System - Index</title>
-		<meta name="description" content="So, Ijjie, how does it work?!">
-		<meta name="author" content="Ijwu">
-		
-		<link rel="stylesheet" href="stylesheets/base.css">
-		<link rel="stylesheet" href="stylesheets/skeleton.css">
-		<link rel="stylesheet" href="stylesheets/layout.css">
-		<link rel="stylesheet" href="stylesheets/docs.css">
-	</head>
-	<body>
-		<div class="container">
-			<div class="sixteen columns">
-				<h1 class="remove-bottom" style="margin-top: 40px">TShock Quest System</h1>
-				<hr />
-			</div>
-			<div class="twelve columns content">
-				<div class="doc-section">
-					<h3>Introduction</h3>
-					<p>
-						Welcome to the TShock Quest System plugin. Originally created by Twitchy and now maintained by Ijwu. If you're new to the system click <a href="new.html">here</a>. If you're a returning scripter and have experience in the old system you could click <a href="returning.html">here</a>. The page for new scriptors gives info on how to run lua and get started scripting. The returning scripter page gives the basic run-down of the changes so you can get started scripting right away.
-					</p>
-				</div>
-				<div class="doc-section">
-					<h3>List of Triggers and Members</h3>
-					<p>
-						If you would like to see the list of triggers and their members, along with all relevant information, click <a href="triggers.html">here</a>
-					</p>
-				</div>
-				<div class="doc-section">
-					<h3>Config Files</h3>
-					<p>
-						Every quest script must have a config file with it. Config files must have the .cfg extension and 	must contain at least the <em>Name</em> field to show up in the Quest System. See config file into <a href="config.html">here</a>.
-					</p>
-				</div>
-				<div class="doc-section">
-					<h3>Commands</h3>
-					<p>
-						Information about commands and permissions can be found <a href="commands.html">here</a>.
-					</p>
-				</div>
-			</div>
+
+<head>
+<meta charset="utf-8">
+<title>TShock Quest System - Index</title>
+<meta content="So, Ijjie, how does it work?!" name="description">
+<meta content="Ijwu" name="author">
+<link href="stylesheets/base.css" rel="stylesheet">
+<link href="stylesheets/skeleton.css" rel="stylesheet">
+<link href="stylesheets/layout.css" rel="stylesheet">
+<link href="stylesheets/docs.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+	<div class="sixteen columns">
+		<h1 class="remove-bottom" style="margin-top: 40px">TShock Quest System</h1>
+		<hr /></div>
+	<div class="twelve columns content">
+		<div class="doc-section">
+			<h3>Introduction</h3>
+			<p>Welcome to the TShock Quest System plugin. Originally created by 
+			Twitchy and now maintained by Ijwu. For a tutorial on how the system 
+			works go <a href="tutorial.html">here</a>.</p>
+			<p>It's assumed you know the basic concepts programming and of the 
+			object oriented paradigm. You may want to look into some other 
+			online tutorials.</p>
 		</div>
-	</body>
+		<div class="doc-section">
+			<h3>List of Triggers and Members</h3>
+			<p>If you would like to see the list of triggers and their members, 
+			along with all relevant information, click <a href="triggers.html">here</a>
+			</p>
+		</div>
+		<div class="doc-section">
+			<h3>Config Files</h3>
+			<p>Every quest script must have a config file with it. Config files 
+			must have the .cfg extension and must contain at least the <em>Name</em> 
+			field to show up in the Quest System. See config file into
+			<a href="config.html">here</a>. </p>
+		</div>
+		<div class="doc-section">
+			<h3>Commands</h3>
+			<p>Information about commands and permissions can be found
+			<a href="commands.html">here</a>. </p>
+			<h3>Changelog</h3>
+			<ul>
+&nbsp;<li>Version 2.1 - April, 28, 2013</li>
+				<li>Added CallFunction trigger.<ul>
+					<li>Arguments: LuaFunction func, LuaTable args</li>
+					<li>Calls the function passed to it when evaluated with the 
+					table passed to it as the argument.</li>
+				</ul>
+				</li>
+				<li>Lowered default tick rate to 1 ms.</li>
+				<li>Added Enqueue and ClearQueue functions.<ul>
+					<li>Enqueue takes a list of triggers and adds them to the quest 
+					in that order.</li>
+					<li>ClearQueue clears the list of triggers in the quest.</li>
+				</ul>
+				</li>
+				<li>Changed the name of some triggers to be more specific to their 
+				function:<ul>
+					<li>Private to MessagePlayer</li>
+					<li>Gather to GatherItem</li>
+					<li>Pass to Delay<ul>
+						<li>Delay is now useless as the pause is 1ms long. I'll 
+						look into other ways to pause a quest.</li>
+					</ul>
+					</li>
+					<li>DeleteBoth to DeleteTileWall</li>
+					<li>RetrieveItem to GiveUpItem</li>
+					<li>Hunt to HuntMob</li>
+				</ul>
+				</li>
+				<li>Triggers are now dynamically loaded from the Triggers namespace.<ul>
+					<li>Other plugins should now be able to register their own triggers 
+					with the system.<ul>
+						<li>Custom triggers must be a subclass of QuestSystemLUA.Trigger.<br>
+						Custom triggers must have only one constructor.</li>
+					</ul>
+					</li>
+				</ul>
+				</li>
+			</ul>
+			<h3>Known Bugs</h3>
+			<ul>
+				&nbsp;<li>GiveUpItem spams the player with &quot;change&quot; when they 
+				drop too many items if they keep moving around.<ul>
+					<li>As a result this trigger is now disabled.</li>
+				</ul>
+				</li>
+				<li>If a quest script never adds any triggers, it crashes on 
+				start.</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+</body>
+
 </html>

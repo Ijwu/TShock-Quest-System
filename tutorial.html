@@ -1,0 +1,138 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>TShock Quest System - New User</title>
+		<meta name="description" content="So, Ijjie, how does it work?!">
+		<meta name="author" content="Ijwu">
+		
+		<link rel="stylesheet" href="stylesheets/base.css">
+		<link rel="stylesheet" href="stylesheets/skeleton.css">
+		<link rel="stylesheet" href="stylesheets/layout.css">
+		<link rel="stylesheet" href="stylesheets/docs.css">
+	</head>
+	<body>
+		<div class="container">
+			<div class="sixteen columns">
+				<h1 class="remove-bottom" style="margin-top: 40px">TShock Quest System</h1>
+				<hr />
+			</div>
+			<div class="twelve columns content">
+				<div class="doc-section" id="intro">
+					<h3>Triggers</h3>
+					<p>
+						Each quest contains a list of Triggers. The Trigger 
+						class is the base class for each quest objective. 
+						Triggers are dynamically loaded from the Triggers 
+						namespace in the Quest System assembly, but can also be 
+						added to by other plugins, but more on that later.</p>
+					<p>
+						Because triggers are simply Trigger sub-classes they all 
+						contain the <em>Callback</em> member. You may assign a 
+						lua function to this member in order to have that 
+						function called as soon as the trigger is completed. The 
+						function will be passed one argument, that is the 
+						trigger instance it belongs to at the time of 
+						completion. This allows you to check other members of 
+						the trigger at its time of completion in order to help 
+						alter the quest flow.</p>
+					<p>
+						To activate a trigger for use in a quest you may use one 
+						of a the various methods exposed to lua to place trigger 
+						instances into the quest's list.
+					</p>
+					<p>
+						The functions to manipulate the list are: Add(), 
+						Prioritize(), Enqueue(), and ClearQueue().</p>
+					<p>
+						Add() accepts a trigger instance as its only argument 
+						and places it onto the end of the trigger list. This 
+						should typically be used as the backbone of a quest. 
+						Many simple quests can be simply made by using only 
+						Add().</p>
+					<p>
+						Prioritize() also only accepts one trigger instance as 
+						its argument. It places that trigger at the front of the 
+						trigger list. This is useful in trigger callbacks in 
+						order to alter the flow of the quest dynamically.</p>
+					<p>
+						Enqueue() accepts a lua table of trigger instances. This 
+						allows you to place multiple triggers into the quest at 
+						once in the order in which they appear in the table.</p>
+					<p>
+						ClearQueue() simply removes all triggers from the quest 
+						queue. This should only be used in callbacks and may end 
+						the quest prematurely should you not insert more 
+						triggers after it.</p>
+				</div>
+				<div class="doc-section" id="members">
+					<h3>Trigger Members</h3>
+					<p>
+						To re-iterate, triggers are just classes. When you call 
+						its function you are calling its class constructor. This 
+						is useful because you can access a trigger's member 
+						variables from lua. This is unnecessary with some 
+						triggers. Inversely, some other triggers can only be 
+						useful if you access their members. Get comfortable with 
+						the trigger and member list <a href="triggers.html">here</a>.</p>
+				</div>
+				<div class="doc-section" id="firstQuest">
+					<h3>Using the Quest System - Your First Quest</h3>
+					<p>
+						Think back to any game you&#39;ve played with quests in it. 
+						You&#39;ve had to perform certain tasks like hunting or 
+						gathering, right? These are what you should consider 
+						triggers to be. When you want to direct a player to 
+						perform a certain task you should ask yourself first if 
+						there is a trigger that facilitates this directly.
+					</p>
+					<p>
+						Once again, triggers are activated for use via any of 
+						the trigger list altering functions discussed above. You 
+						must pass it a trigger instance, so the function call 
+						may directly contain a constructor or the instance may 
+						be saved to a variable and then passed to the function.</p>
+					<p>
+						Example trigger addition to quest:</p>
+					<pre>
+ <code>	Add(MessagePlayer(&quot;Hello&quot;, Player, Color.Aqua))
+	x = MessagePlayer(&quot;Bye&quot;, Player, Color.Aqua)
+	Add(x)</code></pre>
+				</div>
+				<div class="doc-section" id="callback">
+					<h3>Using Callbacks</h3>
+					<p>Recap: Callback functions are immediately called when a 
+					trigger is completed. They are passed only one argument, 
+					that is the trigger they belong to. Callbacks are a member 
+					of the Trigger base class and as such are present in all 
+					triggers. Their default action is to do nothing.</p>
+					<pre><code>	function callbackFunc(trigger)
+		Prioritize(MessagePlayer("Good Bye!", Player, Color.Magenta))
+	end
+	x = MessagePlayer("Hello", Player, Color.Aqua)
+	x.Callback = callbackFunc</code></pre>
+				</div>
+				<p>
+				So what&#39;s happening here? I defined a function and called it 
+				callbackFunc. I assigned an instance of MessagePlayer to x and 
+				then changed its callback to my callback function.</p>
+				<p>
+				If you ran this quest just as it is the player would receive two 
+				messages. &quot;Hello&quot; in aqua, and then &quot;Good Bye!&quot; in magenta.</p>
+					<h3>Expanding the System</h3>
+				<p>Any plugin may register its own triggers with the quest 
+				plugin. It is important to note that the quest plugin must load 
+				first. When the quest system is loaded it'll automatically tally 
+				its own triggers and place them in the registry. The registry's 
+				fully qualified name is <em>QuestSystemLUA.QMain.TriggerHandler</em>. 
+				Using the <em>RegisterTrigger()</em> method defined by the 
+				TriggerRegistry allows a plugin to register triggers. The <em>
+				RegisterTrigger()</em> function can accept a <em>ConstructorInfo</em> 
+				type directly but is also overloaded to accept a trigger Type, 
+				or a trigger instance. An important thing to note is that 
+				triggers may only have one constructor. Do not overload the 
+				constructor!<br>
+				</p>
+			</div>
+		</div>
+	</body>
+</html>
