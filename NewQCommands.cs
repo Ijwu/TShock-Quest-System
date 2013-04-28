@@ -49,8 +49,16 @@ namespace QuestSystemLUA
         		{
         			foreach (QuestInfo q in qr.Quests)
         			{
-        				if (q.Name.ToLower() == args.Parameters[0].ToLower() && player.TSPlayer.Group.HasPermission(q.Permission))
+        				if (q.Name.ToLower() == args.Parameters[0].ToLower())
 	        			{
+        					if (!(q.Permission == ""))
+        					{
+	        					if (!player.TSPlayer.Group.HasPermission(q.Permission))
+	        					{
+	        						player.TSPlayer.SendErrorMessage("You do not have permission to start this quest.");
+		        					return;
+	        					}
+        					}
 	        				if (QTools.IntervalLeft(player, q) == 0)
 	                        {
 	                        	lock(QMain.ThreadClass.RunningQuests)
@@ -72,12 +80,9 @@ namespace QuestSystemLUA
 	        					return;
 	        				}
         				}
-        				else
-        				{
-        					player.TSPlayer.SendErrorMessage("This quest is either non-existant or you do not have the permission to start it.");
-        					return;
-        				}
         			}
+    			player.TSPlayer.SendErrorMessage("This quest is non-existant.");
+				return;
         		}
         	}
         	else

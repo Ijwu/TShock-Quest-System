@@ -46,6 +46,10 @@ namespace QuestSystemLUA
         
         public static SqlTableEditor SQLEditor;
         public static SqlTableCreator SQLWriter;
+        
+        public static Lua utilityInterpreter = new Lua();
+        
+        public static TriggerRegistry TriggerHandler = new TriggerRegistry();
 
         public override void Initialize()
         {
@@ -107,6 +111,8 @@ namespace QuestSystemLUA
             QTools.LoadPlayers();
                         
             Running = true;
+            
+            TriggerHandler.InitializeRegistry();
             
             QuestHandler = new Thread(ThreadClass.QuestHandler);
             QuestHandler.Start();

@@ -89,18 +89,45 @@ namespace QuestSystemLUA
 			triggers.AddLast(trigger);
 		}
 		
+		public void Enqueue(LuaTable triggers)
+		{
+			IEnumerator enumerator = triggers.Values.GetEnumerator();
+			List<Trigger> trigs = new List<Trigger>();
+			while(enumerator.MoveNext())
+			{
+				trigs.Add((Trigger)enumerator.Current);
+			}
+			trigs.Reverse();
+			foreach(Trigger trig in trigs)
+			{
+				Prioritize(trig);
+			}
+		}
+		
+		public void ClearQueue()
+		{
+			this.triggers = new LinkedList<Trigger>();
+			this.currentTrigger = null;
+		}
+		
 		public void loadQuest()
 		{
 			try
 			{
 				Lua lua = new Lua();
-				QTools.SetupScope(lua, this);
+				QMain.TriggerHandler.SetupScope(lua, this);
 				lua["Quest"] = this;
 				lua["Player"] = this.player;
+				lua["Color"] = new Color();
+				
 				lua.RegisterFunction("Add", this, this.GetType().GetMethod("Add"));
 				lua.RegisterFunction("Prioritize", this, this.GetType().GetMethod("Prioritize"));
+				lua.RegisterFunction("Enqueue", this, this.GetType().GetMethod("Enqueue"));
+				lua.RegisterFunction("ClearQueue", this, this.GetType().GetMethod("ClearQueue"));
+				
 				lua.DoFile(this.path);
 				this.player.TSPlayer.SendInfoMessage(string.Format("Quest {0} has started.", this.info.Name));
+				
 				running = true;
 				currentTrigger = triggers.Last.Value;
 				currentTrigger.Initialize();
@@ -108,11 +135,11 @@ namespace QuestSystemLUA
 			}
 			catch (Exception e)
 			{
-				ConsoleColor colorbuffer = Console.ForegroundColor;
-				Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine("Error in quest system while loading quest: Player: {0} QuestName: {1}", player.TSPlayer.Name, this.path);
-				Console.WriteLine(e.Message);
-				Console.ForegroundColor = colorbuffer;
+				System.Text.StringBuilder errorMessage = new System.Text.StringBuilder();
+				errorMessage.AppendLine(string.Format("Error in quest system while loading quest: Player: {0} QuestName: {1}", this.player.TSPlayer.Name, this.path));
+				errorMessage.AppendLine(e.Message);
+				errorMessage.AppendLine(e.StackTrace);
+				TShockAPI.Log.ConsoleError(errorMessage.ToString());
 			}
 		}
 	}

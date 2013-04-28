@@ -341,31 +341,6 @@ namespace QuestSystemLUA
             str = str.Replace(@"\'", "\'");
             return str;
         }
-        public static void SetupScope(Lua lua, Quest q)
-        {
-        	lua["Color"] = new Color();
-            lua.RegisterFunction("AtXY", q, typeof(AtXY).GetConstructor(new Type[]{typeof(QPlayer), typeof(int), typeof(int), typeof(int)}));
-            lua.RegisterFunction("Broadcast", q, typeof(Broadcast).GetConstructor(new Type[]{typeof(string), typeof(Color)}));
-            lua.RegisterFunction("BuffPlayer", q, typeof(BuffPlayer).GetConstructor(new Type[]{typeof(QPlayer), typeof(string), typeof(int)}));
-            lua.RegisterFunction("DeleteBoth", q, typeof(DeleteBoth).GetConstructor(new Type[]{typeof(int), typeof(int)}));
-            lua.RegisterFunction("DeleteTile", q, typeof(DeleteTile).GetConstructor(new Type[]{typeof(int), typeof(int)}));
-            lua.RegisterFunction("DeleteWall", q, typeof(DeleteWall).GetConstructor(new Type[]{typeof(int), typeof(int)}));
-            lua.RegisterFunction("Gather", q, typeof(Gather).GetConstructor(new Type[]{typeof(QPlayer), typeof(string), typeof(int)}));
-            lua.RegisterFunction("GetRegionTilePercentage", q, typeof(GetRegionTilePercentage).GetConstructor(new Type[]{typeof(string), typeof(string)}));
-            lua.RegisterFunction("GetRegionWallPercentage", q, typeof(GetRegionWallPercentage).GetConstructor(new Type[]{typeof(string), typeof(string)}));
-            lua.RegisterFunction("GetXYTilePercentage", q, typeof(GetXYTilePercentage).GetConstructor(new Type[]{typeof(string), typeof(int), typeof(int), typeof(int), typeof(int)}));
-            lua.RegisterFunction("GetXYWallPercentage", q, typeof(GetXYWallPercentage).GetConstructor(new Type[]{typeof(string), typeof(int), typeof(int), typeof(int), typeof(int)}));
-            lua.RegisterFunction("Hunt", q, typeof(Hunt).GetConstructor(new Type[]{typeof(QPlayer), typeof(string), typeof(int)}));
-            lua.RegisterFunction("Pass", q, typeof(Pass).GetConstructor(new Type[]{}));
-            lua.RegisterFunction("Private", q, typeof(Private).GetConstructor(new Type[] {typeof(string), typeof(QPlayer), typeof(Color)}));
-            lua.RegisterFunction("ReadNextChatLine", q, typeof(ReadNextChatLine).GetConstructor(new Type[]{typeof(QPlayer), typeof(bool)}));
-            lua.RegisterFunction("RetrieveItem", q, typeof(RetrieveItem).GetConstructor(new Type[]{typeof(QPlayer), typeof(string), typeof(int)}));
-            lua.RegisterFunction("Reward", q, typeof(Reward).GetConstructor(new Type[]{typeof(QPlayer), typeof(string), typeof(int), typeof(int)}));
-            lua.RegisterFunction("SpawnMob", q, typeof(SpawnMob).GetConstructor(new Type[]{typeof(string), typeof(int), typeof(int), typeof(int)}));
-            lua.RegisterFunction("Teleport", q, typeof(Teleport).GetConstructor(new Type[]{typeof(int), typeof(int), typeof(QPlayer)}));
-            lua.RegisterFunction("TileEdit", q, typeof(TileEdit).GetConstructor(new Type[]{typeof(int), typeof(int), typeof(string)}));
-            lua.RegisterFunction("WallEdit", q, typeof(WallEdit).GetConstructor(new Type[]{typeof(int), typeof(int), typeof(string)}));
-        }
         public static bool IsLoggedIn(int id)
         {
         	foreach (QPlayer ply in QMain.Players)

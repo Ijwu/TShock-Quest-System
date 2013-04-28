@@ -14,7 +14,7 @@ namespace QuestSystemLUA
     {
     	public List<Quest> RunningQuests = new List<Quest>();
     	public DateTime LastExecution = DateTime.UtcNow;
-    	public static TimeSpan TickRate = new TimeSpan(0,0,0,0,250); //250 milliseconds
+    	public static TimeSpan TickRate = new TimeSpan(0,0,0,0,1); //1 milliseconds
     	public void QuestHandler()
     	{
     		while (QMain.Running)
@@ -57,12 +57,15 @@ namespace QuestSystemLUA
 		    			}
 	    				catch (LuaException e)
 						{
-							ConsoleColor colorbuffer = Console.ForegroundColor;
-							Console.ForegroundColor = ConsoleColor.Red;
-							Console.WriteLine("Error in quest system while running quest: Player: {0} QuestName: {1}", quest.player.TSPlayer.Name, quest.path);
-							Console.WriteLine(e.Message);
-							Console.WriteLine(e.StackTrace);
-							Console.ForegroundColor = colorbuffer;
+	    					StringBuilder errorMessage = new StringBuilder();
+	    					errorMessage.AppendLine(string.Format("Error in quest system while running quest: Player: {0} QuestName: {1}", quest.player.TSPlayer.Name, quest.path));
+	    					errorMessage.AppendLine(e.Message);
+	    					errorMessage.AppendLine(e.StackTrace);
+	    					TShockAPI.Log.ConsoleError(errorMessage.ToString());
+	    					
+	    					quest.player.TSPlayer.SendErrorMessage("Your current quest has encountered an exception and had to be stopped.");
+	    					
+	    					quest.running = false;
 						}
 		    		}
 		    		RunningQuests.RemoveAll(q => q.running == false);

@@ -10,13 +10,13 @@ using System.ComponentModel;
 using LuaInterface;
 
 namespace Triggers
-{	
-	public class Hunt : Trigger
+{		
+	public class HuntMob : Trigger
 	{
 		public Dictionary<string, int> toBeKilled = new Dictionary<string, int>();
 		public QPlayer player;
 		
-		public Hunt(QPlayer Player, string type, int amount=1)
+		public HuntMob(QPlayer Player, string type, int amount=1)
 		{
 			player = Player;
 			addNPC(type, amount);
@@ -38,7 +38,6 @@ namespace Triggers
 		public override void Initialize()
 		{
 			NetHooks.GetData += OnGetData;
-//			NpcHooks.StrikeNpc += OnStrike;
 		}
 		 
 		public override bool Update()
@@ -50,23 +49,8 @@ namespace Triggers
 		
 		public override void onComplete()
 		{
-//			NpcHooks.StrikeNpc -= OnStrike;
 			NetHooks.GetData -= OnGetData;
 		}
-		
-//		public void OnStrike(NpcStrikeEventArgs args)
-//		{
-//			Console.WriteLine("NPC Strike {0} {1}.", args.Damage, args.Npc.life);
-//			if (args.Npc.life - args.Damage <= 0)
-//			{
-//				if (toBeKilled.ContainsKey(args.Npc.name))
-//					toBeKilled[args.Npc.name] -= 1;
-//				
-//				if (toBeKilled[args.Npc.name] <= 0)
-//					toBeKilled.Remove(args.Npc.name);
-//			}
-//			
-//		}
 		
 		public void OnGetData(GetDataEventArgs args)
 		{
@@ -118,7 +102,8 @@ namespace Triggers
 		}
 	}
 	
-	public class RetrieveItem : Trigger
+	/*
+	public class GiveUpItem : Trigger
 	{
 		private Dictionary<string, int> toBeCollected = new Dictionary<string,int>();
 		private QPlayer player;
@@ -142,7 +127,7 @@ namespace Triggers
 			return false;
 		}
 		
-		public RetrieveItem(QPlayer player, string type, int amount=1)
+		public GiveUpItem(QPlayer player, string type, int amount=1)
 		{
 			this.player = player;
 			addItem(type, amount);
@@ -222,6 +207,7 @@ namespace Triggers
 			}
 		}
 	}
+	*/
 	
 	public class AtXY : Trigger
 	{
@@ -332,11 +318,11 @@ namespace Triggers
         }
 	}
 	
-	public class DeleteBoth : Trigger
+	public class DeleteTileWall : Trigger
 	{
 		public int x, y;
 		
-		public DeleteBoth(int x, int y)
+		public DeleteTileWall(int x, int y)
 		{
 			this.x = x;
 			this.y = y;
@@ -391,7 +377,7 @@ namespace Triggers
 		}
 	}
 	
-	public class Pass : Trigger
+	public class Delay : Trigger
 	{		
 		public override bool Update()
 		{
@@ -491,14 +477,14 @@ namespace Triggers
 		}
 	}
 	
-	public class Gather : Trigger
+	public class GatherItem : Trigger
 	{
 		public Item item;
 		public int amount;
 		private int count = 0;
 		public QPlayer player;		
 		
-		public Gather(QPlayer player, string item, int amount=1)
+		public GatherItem(QPlayer player, string item, int amount=1)
 		{
 			this.player = player;
 			this.amount = amount;
@@ -721,13 +707,13 @@ namespace Triggers
 		}
 	}
 	
-	public class Private : Trigger
+	public class MessagePlayer : Trigger
 	{
 		public string message;
 		public Color color;
 		public QPlayer player;
 		
-		public Private(string message, QPlayer player, Color color)
+		public MessagePlayer(string message, QPlayer player, Color color)
 		{
 			this.message = message;
 			this.color = color;
@@ -766,6 +752,24 @@ namespace Triggers
 			{
 				throw new FormatException("More than one or no buffs matched to the name provided.");
 			}
+		}
+	}
+	
+	public class CallFunction : Trigger
+	{
+		LuaFunction func;
+		LuaTable args;
+		
+		public override bool Update()
+		{
+			func.Call(new object[]{args});
+			return true;
+		}
+		
+		public CallFunction(LuaFunction func, LuaTable args)
+		{
+			this.func = func;
+			this.args = args;
 		}
 	}
 }
