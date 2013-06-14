@@ -40,7 +40,7 @@ namespace Triggers
 			NetHooks.GetData += OnGetData;
 		}
 		 
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			if (toBeKilled.Count == 0)
 				return true;
@@ -95,7 +95,7 @@ namespace Triggers
 			this.item.stack = stack;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			player.TSPlayer.GiveItem(item.type, item.name, item.width, item.height, item.stack, item.prefix);
 			return true;
@@ -224,7 +224,7 @@ namespace Triggers
 			this.radius = radius;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			return playerRect.Intersects(targetRect);
 		}
@@ -242,7 +242,7 @@ namespace Triggers
 			this.name = tile;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			byte type;
 			
@@ -298,7 +298,7 @@ namespace Triggers
 			this.name = wall;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			byte type;
 
@@ -318,6 +318,21 @@ namespace Triggers
         }
 	}
 	
+	public class Delay : Trigger
+	{
+		TimeSpan DelayTime;
+		
+		public Delay(int seconds)
+		{
+			DelayTime = new TimeSpan(0,0,seconds);
+		}
+		public override bool Update(Quest q)
+		{
+			q.PauseTime += DelayTime;
+			return true;
+		}
+	}
+	
 	public class DeleteTileWall : Trigger
 	{
 		public int x, y;
@@ -328,7 +343,7 @@ namespace Triggers
 			this.y = y;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			Main.tile[x, y].active = false;
             Main.tile[x, y].wall = 0;
@@ -349,7 +364,7 @@ namespace Triggers
 			this.y = y;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			Main.tile[x, y].wall = 0;
             QTools.UpdateTile(x, y);
@@ -367,7 +382,7 @@ namespace Triggers
 			this.y = y;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			Main.tile[x, y].active = false;
             Main.tile[x, y].skipLiquid = true;
@@ -389,7 +404,7 @@ namespace Triggers
 			this.player = player;
         }
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
             return player.TSPlayer.Teleport(x, y + 3);
 		}
@@ -400,7 +415,7 @@ namespace Triggers
 		public string name;
 		public int x, y, amount;
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			List<NPC> npcs = TShock.Utils.GetNPCByIdOrName(name);
 			if (npcs.Count == 1)
@@ -433,7 +448,7 @@ namespace Triggers
 		public int x, y, amount;
 		public LuaTable mods;
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{			
 			List<NPC> npcs = TShock.Utils.GetNPCByIdOrName(name);
 			if (npcs.Count == 1)
@@ -510,7 +525,7 @@ namespace Triggers
 			ServerHooks.Chat -= onChat;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			if (Message != null)
 				return true;
@@ -559,7 +574,7 @@ namespace Triggers
 			}
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			int buffer = count;
             try
@@ -598,7 +613,7 @@ namespace Triggers
 			this.regionname = regionname;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			float amountofmatchedtiles = 0;
             float totaltilecount = 0;
@@ -640,7 +655,7 @@ namespace Triggers
 			
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			float amountofmatchedtiles = 0;
             float totaltilecount = 0;
@@ -675,7 +690,7 @@ namespace Triggers
 			this.walltype = walltype;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			float amountofmatchedwalls = 0;
             float totalwallcount = 0;
@@ -718,7 +733,7 @@ namespace Triggers
 			this.Height = Height;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			float amountofmatchedwalls = 0;
             float totalwallcount = 0;
@@ -753,7 +768,7 @@ namespace Triggers
 			this.color = color;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			TShock.Utils.Broadcast(message, color);
 			return true;
@@ -773,7 +788,7 @@ namespace Triggers
 			this.player = player;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
             player.TSPlayer.SendMessage(message, color);
             return true;
@@ -793,7 +808,7 @@ namespace Triggers
 			this.time = time;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			List<int> buffs = TShock.Utils.GetBuffByName(buffname);
             if (buffs.Count == 1)
@@ -813,7 +828,7 @@ namespace Triggers
 		LuaFunction func;
 		LuaTable args;
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			func.Call(new object[]{args});
 			return true;
@@ -844,7 +859,7 @@ namespace Triggers
 			}
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			TShock.Users.SetUserGroup(TShock.Users.GetUserByName(player.Name), targetGroup);
 			return true;

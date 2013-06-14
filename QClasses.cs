@@ -13,7 +13,7 @@ namespace QuestSystemLUA
 	{
 		public LuaFunction Callback = QMain.utilityInterpreter.LoadString("return", "blankCallback");
 		public virtual void Initialize() {}
-		public virtual bool Update() {return true;}
+		public virtual bool Update(Quest q) {return true;}
 		public virtual void onComplete() {}
 	}
 	
@@ -74,7 +74,7 @@ namespace QuestSystemLUA
 		}
 		public void EvaluateTrigger()
 		{
-			if (currentTrigger.Update())
+			if (currentTrigger.Update(this))
 			{
 				currentTrigger.onComplete();
 				
@@ -114,11 +114,6 @@ namespace QuestSystemLUA
 			this.currentTrigger = null;
 		}
 		
-		public void Pause(int seconds)
-		{
-			PauseTime += new TimeSpan(0, 0, seconds);
-		}
-		
 		public void LoadQuest()
 		{
 			try
@@ -133,7 +128,6 @@ namespace QuestSystemLUA
 				lua.RegisterFunction("Prioritize", this, this.GetType().GetMethod("Prioritize"));
 				lua.RegisterFunction("Enqueue", this, this.GetType().GetMethod("Enqueue"));
 				lua.RegisterFunction("ClearQueue", this, this.GetType().GetMethod("ClearQueue"));
-				lua.RegisterFunction("Pause", this, this.GetType().GetMethod("Pause"));
 				
 				lua.DoFile(this.path);
 				this.player.TSPlayer.SendInfoMessage(string.Format("Quest {0} has started.", this.info.Name));
