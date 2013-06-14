@@ -249,12 +249,12 @@ namespace QuestSystemLUA
                 }
             }
         }
-        public static void LoadQuestData(CommandArgs args)
+        public static void LoadQuestData(TShockAPI.Hooks.ReloadEventArgs args)
         {
         	QTools.LoadPlayers();
         	QTools.LoadQuests();
         	QTools.LoadRegions();
-            args.Player.SendMessage("Successfully Loaded Quest Data!", Color.Yellow);
+            args.Player.SendMessage("Successfully reloaded QuestSystem data.", Color.Yellow);
         }
         public static void GiveQuest(CommandArgs args)
         {

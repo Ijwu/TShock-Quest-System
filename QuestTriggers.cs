@@ -377,14 +377,6 @@ namespace Triggers
 		}
 	}
 	
-	public class Delay : Trigger
-	{		
-		public override bool Update()
-		{
-			return true;
-		}
-	}
-	
 	public class Teleport : Trigger
 	{
 		QPlayer player;
@@ -432,6 +424,67 @@ namespace Triggers
 			this.y = y;
 			this.amount = amount;
 			this.name = name;
+        }
+	}
+	
+	public class SpawnModdedMob : Trigger //TODO: Make this work, kay?
+	{
+		public string name;
+		public int x, y, amount;
+		public LuaTable mods;
+		
+		public override bool Update()
+		{			
+			List<NPC> npcs = TShock.Utils.GetNPCByIdOrName(name);
+			if (npcs.Count == 1)
+			{
+				NPC npc = npcs[0];
+				for (int i = 0; i < amount; i++)
+      			{
+					int sx;
+					int sy;
+					TShock.Utils.GetRandomClearTileWithInRange(x, y, 5, 5, out sx, out sy);
+					int index = NPC.NewNPC(sx, sy, npc.type);
+					Main.npc[index].SetDefaults(npc.type);
+					Main.npc[index].netDefaults(npc.type);
+					SetModdedMob(ref Main.npc[index]);
+					NetMessage.SendData(23, -1, -1, "", index, 0f, 0f, 0f, 0);
+        		}
+				return true;
+			}
+			else
+			{
+				throw new FormatException("More than one or no NPCs matched to name or ID.");
+			}
+		}
+		
+		private void SetModdedMob(ref NPC returned)
+		{
+			if (mods["name"] != null)
+			{
+				returned.name = mods["name"].ToString();
+				returned.displayName = mods["name"].ToString();
+			}
+			
+			if (mods["maxlife"] != null)
+			{
+				returned.lifeMax = (int)mods["maxlife"];
+				returned.life = (int)mods["maxlife"];
+			}
+			
+			if (mods["scale"] != null)
+			{
+				returned.scale = float.Parse(mods["scale"].ToString());
+			}
+		}
+		
+		public SpawnModdedMob(string name, int x, int y, int amount = 1, LuaTable mods = null)
+        {
+			this.x = x;
+			this.y = y;
+			this.amount = amount;
+			this.name = name;
+			this.mods = mods;
         }
 	}
 	
@@ -772,4 +825,30 @@ namespace Triggers
 			this.args = args;
 		}
 	}
+	
+	public class ChangePlayerGroup : Trigger
+	{
+		string targetGroup;
+		TSPlayer player;
+		
+		public ChangePlayerGroup(QPlayer player, string targetGroup)
+		{
+			this.player = player.TSPlayer;
+			if (TShock.Groups.GroupExists(targetGroup))
+			{
+				this.targetGroup = targetGroup;
+			}
+			else
+			{
+				throw new FormatException(string.Format("The group {0} does not exist.", targetGroup));
+			}
+		}
+		
+		public override bool Update()
+		{
+			TShock.Users.SetUserGroup(TShock.Users.GetUserByName(player.Name), targetGroup);
+			return true;
+		}
+	}
+		
 }

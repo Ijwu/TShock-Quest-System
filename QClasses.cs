@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Threading;
 using LuaInterface;
+using TShockAPI;
+using Terraria;
+using TShockAPI.DB;
 
 namespace QuestSystemLUA
 {
 	public abstract class Trigger
 	{
-		public LuaFunction Callback = new Lua().LoadString("return", "blankCallback");
+		public LuaFunction Callback = QMain.utilityInterpreter.LoadString("return", "blankCallback");
 		public virtual void Initialize() {}
 		public virtual bool Update() {return true;}
 		public virtual void onComplete() {}
@@ -47,15 +50,16 @@ namespace QuestSystemLUA
 		public bool running;
 		public string path {get {return this.info.Path;}}
 		public DateTime starttime = DateTime.UtcNow;
+		public TimeSpan PauseTime;
 		
 		public Quest(QPlayer player, QuestInfo info) 
 		{
 			this.player = player;
 			this.info = info;
-			loadQuest();
+			LoadQuest();
 		}
 		
-		public void nextTrigger()
+		public void NextTrigger()
 		{
 			if (triggers.Count == 0)
 			{
@@ -68,14 +72,14 @@ namespace QuestSystemLUA
 				currentTrigger.Initialize();
 			}
 		}
-		public void evaluateTrigger()
+		public void EvaluateTrigger()
 		{
 			if (currentTrigger.Update())
 			{
 				currentTrigger.onComplete();
 				
 				currentTrigger.Callback.Call(new Object[]{currentTrigger});
-				nextTrigger();
+				NextTrigger();
 			}
 		}
 		
@@ -110,7 +114,12 @@ namespace QuestSystemLUA
 			this.currentTrigger = null;
 		}
 		
-		public void loadQuest()
+		public void Pause(int seconds)
+		{
+			PauseTime += new TimeSpan(0, 0, seconds);
+		}
+		
+		public void LoadQuest()
 		{
 			try
 			{
@@ -124,11 +133,16 @@ namespace QuestSystemLUA
 				lua.RegisterFunction("Prioritize", this, this.GetType().GetMethod("Prioritize"));
 				lua.RegisterFunction("Enqueue", this, this.GetType().GetMethod("Enqueue"));
 				lua.RegisterFunction("ClearQueue", this, this.GetType().GetMethod("ClearQueue"));
+				lua.RegisterFunction("Pause", this, this.GetType().GetMethod("Pause"));
 				
 				lua.DoFile(this.path);
 				this.player.TSPlayer.SendInfoMessage(string.Format("Quest {0} has started.", this.info.Name));
 				
+				if (triggers.Count == 0)
+					throw new LuaScriptException(string.Format("The script for the quest \"{0}\" never enqueues any triggers. Quests must enqueue at least one trigger.", this.info.Name), this.info.Path);
+				
 				running = true;
+				
 				currentTrigger = triggers.Last.Value;
 				currentTrigger.Initialize();
 				triggers.RemoveLast();
@@ -143,4 +157,63 @@ namespace QuestSystemLUA
 			}
 		}
 	}
+	
+	public class QPlayer
+    {
+        public int Index { get; set; }
+        public TSPlayer TSPlayer { get { return TShock.Players[Index]; } }
+        public Item[] Inventory { get { return TSPlayer.TPlayer.inventory; } }
+        public StoredQPlayer MyDBPlayer;
+        public bool IsLoggedIn = false;
+        public Vector2 LastTilePos = Vector2.Zero;
+        public string CurQuestRegionName { get; set; }
+        public QuestRegion CurQuestRegion { get; set; }
+        public bool RunningQuest = false;
+        public int LastTileHitX { get; set; }
+        public int LastTileHitY { get; set; }
+
+        public QPlayer(int index)
+        {
+            Index = index;
+        }
+    }
+	public class QuestRegion : Region
+    {
+        public string MessageOnEntry;
+        public string MessageOnExit;
+        public List<QuestInfo> Quests = new List<QuestInfo>();
+
+        public QuestRegion(string name, List<QuestInfo> quests, int x1, int y1, int x2, int y2, string entry, string exit)
+        {
+            this.Name = name;
+            Quests = quests;
+            this.Area = new Rectangle(x1, y1, Math.Abs(x2 - x1), Math.Abs(y2 - y1));
+            MessageOnEntry = entry;
+            MessageOnExit = exit;
+        }
+    }
+	public class StoredQPlayer
+    {
+        public string LoggedInName;
+        public List<QuestAttemptData> QuestAttemptData = new List<QuestAttemptData>();
+
+        public StoredQPlayer(string name, List<QuestAttemptData> playerdata)
+        {
+            LoggedInName = name;
+            QuestAttemptData = playerdata;
+        }
+    }
+    public class QuestAttemptData //TODO: Add number of quest attempts here.
+    {
+        public string QuestName;
+        public bool Complete = false;
+        public DateTime LastAttempt;
+
+        public QuestAttemptData(string name, bool Complete, DateTime LastAttempt)
+        {
+            QuestName = name;
+            this.Complete = Complete;
+            this.LastAttempt = LastAttempt;
+        }
+    }
 }

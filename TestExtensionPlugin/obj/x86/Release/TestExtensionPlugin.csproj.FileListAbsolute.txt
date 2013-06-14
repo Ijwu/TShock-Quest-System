@@ -1,0 +1,13 @@
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\bin\Release\TestExtensionPlugin.dll
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\bin\Release\TerrariaServer.exe
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\bin\Release\TShockAPI.dll
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\bin\Release\Twitchys-Quest-Mod.dll
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\bin\Release\LuaInterface.dll
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\bin\Release\MySql.Data.dll
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\bin\Release\HttpServer.dll
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\bin\Release\Newtonsoft.Json.dll
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\bin\Release\Mono.Data.Sqlite.dll
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\bin\Release\lua51.dll
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\bin\Release\Twitchys-Quest-Mod.pdb
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\obj\x86\Release\TestExtensionPlugin.csprojResolveAssemblyReference.cache
+E:\Dropbox\GitProjectsAndStuff\TestExtensionPlugin\obj\x86\Release\TestExtensionPlugin.dll

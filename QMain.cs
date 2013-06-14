@@ -14,7 +14,7 @@ using Triggers;
 
 namespace QuestSystemLUA
 {
-    [APIVersion(1, 12)]
+    [APIVersion(1, 13)]
     public class QMain : TerrariaPlugin
     {        
         public override string Name
@@ -31,7 +31,7 @@ namespace QuestSystemLUA
         }
         public override Version Version
         {
-            get { return Assembly.GetExecutingAssembly().GetName().Version; }
+        	get { return new Version(2,1); }
         }
         
         public static QThreadable ThreadClass = new QThreadable();
@@ -58,6 +58,7 @@ namespace QuestSystemLUA
             ServerHooks.Leave += OnLeave;
             GameHooks.Initialize += OnInitialize;
             GameHooks.Update += OnUpdate;
+            TShockAPI.Hooks.GeneralHooks.ReloadEvent += QCommands.LoadQuestData;
         }
         protected override void Dispose(bool disposing)
         {
@@ -69,6 +70,7 @@ namespace QuestSystemLUA
                 ServerHooks.Leave -= OnLeave;
                 GameHooks.Initialize -= OnInitialize;
                 GameHooks.Update -= OnUpdate;
+                TShockAPI.Hooks.GeneralHooks.ReloadEvent -= QCommands.LoadQuestData;
             }
             base.Dispose(disposing);
         }
@@ -84,7 +86,7 @@ namespace QuestSystemLUA
             Commands.ChatCommands.Add(new Command("usequest", QCommands.ListQuest, "listquests"));
             Commands.ChatCommands.Add(new Command("usequest", QCommands.StartQuest, "startquest"));
             Commands.ChatCommands.Add(new Command("questregion", QCommands.QuestRegion, "questr"));
-            Commands.ChatCommands.Add(new Command("reloadqdata", QCommands.LoadQuestData, "reloadquestdata"));
+            //Commands.ChatCommands.Add(new Command("reloadqdata", QCommands.LoadQuestData, "reloadquestdata"));
             Commands.ChatCommands.Add(new Command("giveq", QCommands.GiveQuest, "giveq"));
 			Commands.ChatCommands.Add(new Command("forcequestonall", QCommands.ForceQuestOnAllPlayers, "forcequest"));             
             

@@ -27,21 +27,26 @@ namespace QuestSystemLUA
 		    			{
 			    			if (quest.running)
 			    			{
+			    				if (!quest.PauseTime.Equals(TimeSpan.Zero)) //If there is pause time in the quest, then skip this quest and remove the tickrate time from the pause time.
+			    				{
+			    					quest.PauseTime -= TickRate;
+			    					continue;
+			    				}
 			    				if (!quest.player.RunningQuest)
 			    					quest.player.RunningQuest = true;
 			    				
-			    				if (quest.info.Time != 0)
+			    				if (quest.info.Time != 0) //If time limit on quest exists
 			    				{
-			    					if (DateTime.UtcNow.Subtract(quest.starttime) > TimeSpan.FromSeconds(quest.info.Time))
+			    					if (DateTime.UtcNow.Subtract(quest.starttime) > TimeSpan.FromSeconds(quest.info.Time)) //Check the start time of the quest with the time limit
 			    					{
 			    						quest.player.TSPlayer.SendErrorMessage(string.Format("Quest \"{0}\" aborted. Your time limit of {1} seconds is up.", quest.info.Name, quest.info.Time));
 		    							quest.running = false;
 			    						quest.player.RunningQuest = false;
 			    					}
 			    				}
-			    				if (QTools.IsLoggedIn(quest.player.Index))
+			    				if (QTools.IsLoggedIn(quest.player.Index)) //If the player is still logged in
 				    			{
-					    			quest.evaluateTrigger();
+					    			quest.EvaluateTrigger(); //Main quest handling, run the current trigger
 					    			if (quest.triggers.Count <= 0 && quest.currentTrigger == null)
 					    			{
 				    					quest.running = false;
@@ -49,7 +54,7 @@ namespace QuestSystemLUA
 					    				quest.player.MyDBPlayer.QuestAttemptData.Find(x => x.QuestName == quest.info.Name).Complete = true;
 					    			}
 				    			}
-				    			else
+				    			else //If the player isn't logged in, end the quest
 				    			{
 		    						quest.running = false;
 				    			}
@@ -65,10 +70,10 @@ namespace QuestSystemLUA
 	    					
 	    					quest.player.TSPlayer.SendErrorMessage("Your current quest has encountered an exception and had to be stopped.");
 	    					
-	    					quest.running = false;
+	    					quest.running = false; //Quit quest on exception
 						}
 		    		}
-		    		RunningQuests.RemoveAll(q => q.running == false);
+		    		RunningQuests.RemoveAll(q => q.running == false); //Remove inactive quests
 		    		LastExecution = DateTime.UtcNow;
 	    		}
     		}
