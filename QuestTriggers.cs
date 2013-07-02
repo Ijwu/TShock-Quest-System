@@ -102,7 +102,7 @@ namespace Triggers
 		}
 	}
 	
-	/*
+	
 	public class GiveUpItem : Trigger
 	{
 		private Dictionary<string, int> toBeCollected = new Dictionary<string,int>();
@@ -118,7 +118,7 @@ namespace Triggers
 		 	NetHooks.GetData -= checkItemDrops;
 		}
 		
-		public override bool Update()
+		public override bool Update(Quest q)
 		{
 			if (toBeCollected.Count == 0)
 			{
@@ -151,19 +151,21 @@ namespace Triggers
 		{
 			if (args.MsgID == PacketTypes.ItemDrop)
 			{
+				if (args.Handled)
+					return;
+				
 				using (var data = new MemoryStream(args.Msg.readBuffer, args.Index, args.Length))
 	            {
-		            var reader = new BinaryReader(data);
-		            var id = reader.ReadInt16();
-		            var posx = reader.ReadSingle();
-		            var posy = reader.ReadSingle();
-		            var velx = reader.ReadSingle();
-		            var vely = reader.ReadSingle();
-		            var stack = reader.ReadByte();
-		            var prefix = reader.ReadByte();
-		            var type = reader.ReadInt16();
+		            Int16 id = data.ReadInt16();
+		            float posx = data.ReadSingle();
+		            float posy = data.ReadSingle();
+		            float velx = data.ReadSingle();
+		            float vely = data.ReadSingle();
+		            int stack = data.ReadByte();
+		            int prefix = data.ReadByte();
+		            Int16 type = data.ReadInt16();
 		            
-		            var item = new Item();
+		            Item item = new Item();
 		            item.SetDefaults(type);
 		         	
 		            if (id == 0)
@@ -207,7 +209,7 @@ namespace Triggers
 			}
 		}
 	}
-	*/
+	
 	
 	public class AtXY : Trigger
 	{
