@@ -57,7 +57,7 @@ namespace Extension
     
     public class NewBroadcast : Trigger
     {
-    	public override bool Update()
+    	public override bool Update(Quest q)
     	{
     		TShock.Utils.Broadcast("Text has been displayed.", Color.SeaGreen);
     		return true;
@@ -66,7 +66,7 @@ namespace Extension
     
     public class NewBroadcast2 : Trigger
     {
-    	public override bool Update()
+    	public override bool Update(Quest q)
     	{
     		TShock.Utils.Broadcast("Text has been displayed.", Color.Sienna);
     		return true;
@@ -75,7 +75,7 @@ namespace Extension
     
     public class NewBroadcast3 : Trigger
     {
-    	public override bool Update()
+    	public override bool Update(Quest q)
     	{
     		TShock.Utils.Broadcast("Text has been displayed.", Color.Tomato);
     		return true;

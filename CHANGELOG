@@ -1,7 +1,12 @@
 ﻿* API Tick to 1.3
 * Hooked into the TShock ReloadEvent
 	* The system now automatically reloads all quest data on the /reload command.
-* Fixed Quest pausing. Untested.
+* Fixed Quest pausing.
+* Fixed GiveUpItem
 	
 Less Important/No need to state:
 * Capitalized some of the names of the members of the Quest class
+
+^^^ Commited ^^^
+----------------------------------------------------
+
