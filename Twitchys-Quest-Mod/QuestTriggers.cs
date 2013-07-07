@@ -149,6 +149,9 @@ namespace Triggers
 		
 		private void checkItemDrops(GetDataEventArgs args)
 		{
+			if (!(player.Index == args.Msg.whoAmI))
+				return;
+			
 			if (args.MsgID == PacketTypes.ItemDrop)
 			{
 				if (args.Handled)
@@ -536,7 +539,10 @@ namespace Triggers
 		}
 		
 		public void onChat(messageBuffer msg, int ply, string text, HandledEventArgs e)
-		{			
+		{		
+			if (e.Handled)
+				return;
+			
 			if (ply == player.Index)
 			{
 				Message = text;
