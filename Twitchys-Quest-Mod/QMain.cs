@@ -34,6 +34,8 @@ namespace QuestSystemLUA
         	get { return new Version(2,1); }
         }
         
+        public delegate void MenuAction(Object sender, MenuEventArgs args);
+        
         public static QThreadable ThreadClass = new QThreadable();
         public static Thread QuestHandler;
         public static bool Running;
@@ -58,6 +60,8 @@ namespace QuestSystemLUA
             ServerHooks.Leave += OnLeave;
             GameHooks.Initialize += OnInitialize;
             GameHooks.Update += OnUpdate;
+            ServerHooks.Chat += OnChat;
+            NetHooks.GetData += OnGetData;
             TShockAPI.Hooks.GeneralHooks.ReloadEvent += QCommands.LoadQuestData;
         }
         protected override void Dispose(bool disposing)
@@ -70,6 +74,8 @@ namespace QuestSystemLUA
                 ServerHooks.Leave -= OnLeave;
                 GameHooks.Initialize -= OnInitialize;
                 GameHooks.Update -= OnUpdate;
+                ServerHooks.Chat -= OnChat;
+                NetHooks.GetData -= OnGetData;
                 TShockAPI.Hooks.GeneralHooks.ReloadEvent -= QCommands.LoadQuestData;
             }
             base.Dispose(disposing);
@@ -88,7 +94,8 @@ namespace QuestSystemLUA
             Commands.ChatCommands.Add(new Command("questregion", QCommands.QuestRegion, "questr"));
             //Commands.ChatCommands.Add(new Command("reloadqdata", QCommands.LoadQuestData, "reloadquestdata"));
             Commands.ChatCommands.Add(new Command("giveq", QCommands.GiveQuest, "giveq"));
-			Commands.ChatCommands.Add(new Command("forcequestonall", QCommands.ForceQuestOnAllPlayers, "forcequest"));             
+			Commands.ChatCommands.Add(new Command("forcequestonall", QCommands.ForceQuestOnAllPlayers, "forcequest"));
+			Commands.ChatCommands.Add(new Command("usequest", QCommands.DisplayQuestMenu, "progress"));
             
             var table = new SqlTable("QuestPlayers",
                  new SqlColumn("LogInName", MySqlDbType.VarChar, 50) { Unique = true, Length = 50},
@@ -124,6 +131,72 @@ namespace QuestSystemLUA
         {
             Order = -10;
         }
+        
+        public static void OnGetData(GetDataEventArgs e)
+        {
+            try
+            {
+                if (e.MsgID == PacketTypes.PlayerUpdate)
+                {
+                    byte plyID = e.Msg.readBuffer[e.Index];
+                    byte flags = e.Msg.readBuffer[e.Index + 1]; 
+                    bool up = false;
+                    bool down = false;
+                    bool space = false;
+                    if ((flags & 1) == 1)
+                        up = true;
+                    if ((flags & 2) == 2)
+                        down = true;
+                    if ((flags & 16) == 16)
+                        space = true;
+                    var player = Players[plyID];
+                    if (player != null)
+                    {
+                        if (player.InMenu)  // HANDLE MENU NAVIGATION
+                        {
+                            if (up && down)
+                            {
+                                player.QuestMenu.Close();
+                                e.Handled = true;
+                                return;
+                            }
+                            if (up)
+                            {
+                                player.QuestMenu.MoveUp();
+                                e.Handled = true;
+                            }
+                            if (down)
+                            {
+                                player.QuestMenu.MoveDown();
+                                e.Handled = true;
+                            }
+                            if (space)
+                            {
+                                player.QuestMenu.Select();
+                                e.Handled = true;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { Log.ConsoleError(ex.ToString()); }
+        }
+        
+        public void OnChat(messageBuffer buf, int who, string text, HandledEventArgs args)
+	    {
+	        if (text[0] == '/')
+	            return;
+	        var player = QMain.Players[who];
+	        if (player != null)
+	        {
+	            if (player.InMenu)
+	            {
+	                if (player.QuestMenu.contents[player.QuestMenu.index].Writable)
+	                    player.QuestMenu.OnInput(text);
+	                args.Handled = true;
+	            }
+	        }
+	    }
         
         public void OnUpdate()
         {      	

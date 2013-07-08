@@ -11,6 +11,20 @@ namespace QuestSystemLUA
 {
     public class QCommands
     {
+    	public static void DisplayQuestMenu(CommandArgs args)
+    	{
+    		List<MenuItem> items = new List<MenuItem>();
+    		items.Add(new MenuItem("Hello"));
+    		items.Add(new MenuItem("Hello", 1));
+    		items.Add(new MenuItem("Hello", 2, Color.Aqua));
+    		items.Add(new MenuItem("Hello", 3, false, Color.White));
+    		items.Add(new MenuItem("Hello", 3, false, true, Color.White));
+    		Menu.CreateMenu(args.Player.Index, "Test", items, EmptyCallback);
+    	}
+    	public static void EmptyCallback(object sender, MenuEventArgs args)
+    	{
+    		
+    	}
         public static void GetCoords(CommandArgs args)
         {
             int x = (int)args.Player.X / 16;

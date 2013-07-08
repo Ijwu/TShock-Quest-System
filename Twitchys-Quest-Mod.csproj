@@ -70,6 +70,7 @@
     <Compile Include="Twitchys-Quest-Mod\QClasses.cs" />
     <Compile Include="Twitchys-Quest-Mod\QCommands.cs" />
     <Compile Include="Twitchys-Quest-Mod\QMain.cs" />
+    <Compile Include="Twitchys-Quest-Mod\QMenu.cs" />
     <Compile Include="Twitchys-Quest-Mod\QNPC.cs" />
     <Compile Include="Twitchys-Quest-Mod\QThreadable.cs" />
     <Compile Include="Twitchys-Quest-Mod\QTools.cs" />

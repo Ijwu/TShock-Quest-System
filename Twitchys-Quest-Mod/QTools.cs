@@ -350,5 +350,9 @@ namespace QuestSystemLUA
         	}
         	return false;
         }
+        public static void StartQuest(QPlayer ply, QuestInfo q)
+        {
+        	QMain.ThreadClass.RunningQuests.Add(new Quest(ply, q));
+        }
     }
 }

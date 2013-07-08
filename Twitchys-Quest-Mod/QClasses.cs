@@ -163,8 +163,8 @@ namespace QuestSystemLUA
         public string CurQuestRegionName { get; set; }
         public QuestRegion CurQuestRegion { get; set; }
         public bool RunningQuest = false;
-        public int LastTileHitX { get; set; }
-        public int LastTileHitY { get; set; }
+        public bool InMenu = false;
+        public Menu QuestMenu;
 
         public QPlayer(int index)
         {
