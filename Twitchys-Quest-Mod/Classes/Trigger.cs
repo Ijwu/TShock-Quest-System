@@ -1,4 +1,4 @@
-﻿using LuaInterface;
+﻿using NLua;
 
 namespace QuestSystemLUA
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using LuaInterface;
+using NLua;
 using Terraria;
 using TShockAPI;
 using TShockAPI.DB;
@@ -63,7 +63,7 @@ namespace QuestSystemLUA
 				    			}
 			    			}
 		    			}
-	    				catch (LuaException e)
+	    				catch (NLua.Exceptions.LuaException e)
 						{
 	    					StringBuilder errorMessage = new StringBuilder();
 	    					errorMessage.AppendLine(string.Format("Error in quest system while running quest: Player: {0} QuestName: {1}", quest.player.TSPlayer.Name, quest.path));

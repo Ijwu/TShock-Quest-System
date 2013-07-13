@@ -46,11 +46,11 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LuaInterface">
-      <HintPath>DLLS\LuaInterface.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data">
       <HintPath>DLLS\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="NLua">
+      <HintPath>DLLS\NLua.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

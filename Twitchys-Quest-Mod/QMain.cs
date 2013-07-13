@@ -8,7 +8,7 @@ using Hooks;
 using TShockAPI;
 using TShockAPI.DB;
 using System.ComponentModel;
-using LuaInterface;
+using NLua;
 using System.IO; 
 using Triggers;
 

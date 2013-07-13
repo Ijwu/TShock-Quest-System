@@ -3,7 +3,7 @@ using Triggers;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
-using LuaInterface;
+using NLua;
 
 namespace QuestSystemLUA
 {

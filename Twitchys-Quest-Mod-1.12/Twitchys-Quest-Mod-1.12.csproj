@@ -41,14 +41,14 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LuaInterface">
-      <HintPath>..\TShock-Quest-System-API1.3\DLLS\LuaInterface.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\TShock-Quest-System-API1.3\DLLS\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\TShock-Quest-System-API1.3\DLLS\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLua">
+      <HintPath>..\DLLS\NLua.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

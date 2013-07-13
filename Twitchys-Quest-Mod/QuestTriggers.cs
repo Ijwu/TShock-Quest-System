@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using Hooks;
 using System.IO;
 using System.ComponentModel;
-using LuaInterface;
+using NLua;
 using System.Linq;
 
 namespace Triggers
