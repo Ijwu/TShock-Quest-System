@@ -5,18 +5,9 @@ using System.Threading;
 using LuaInterface;
 using TShockAPI;
 using Terraria;
-using TShockAPI.DB;
 
 namespace QuestSystemLUA
 {
-	public abstract class Trigger
-	{
-		public LuaFunction Callback = QMain.utilityInterpreter.LoadString("return", "blankCallback");
-		public virtual void Initialize() {}
-		public virtual bool Update(Quest q) {return true;}
-		public virtual void onComplete() {}
-	}
-	
 	public class QuestInfo
 	{
 		public string Path;
@@ -46,6 +37,7 @@ namespace QuestSystemLUA
 		public QPlayer player;
 		public QuestInfo info;
 		public LinkedList<Trigger> triggers = new LinkedList<Trigger>();
+		public List<Trigger> completedTriggers = new List<Trigger>();
 		public Trigger currentTrigger {get; protected set;}
 		public bool running;
 		public string path {get {return this.info.Path;}}
@@ -79,6 +71,7 @@ namespace QuestSystemLUA
 				currentTrigger.onComplete();
 				
 				currentTrigger.Callback.Call(new Object[]{currentTrigger});
+				completedTriggers.Add(currentTrigger);
 				NextTrigger();
 			}
 		}
@@ -137,9 +130,7 @@ namespace QuestSystemLUA
 				
 				running = true;
 				
-				currentTrigger = triggers.Last.Value;
-				currentTrigger.Initialize();
-				triggers.RemoveLast();
+				NextTrigger();
 			}
 			catch (Exception e)
 			{
@@ -147,57 +138,14 @@ namespace QuestSystemLUA
 				errorMessage.AppendLine(string.Format("Error in quest system while loading quest: Player: {0} QuestName: {1}", this.player.TSPlayer.Name, this.path));
 				errorMessage.AppendLine(e.Message);
 				errorMessage.AppendLine(e.StackTrace);
-				TShockAPI.Log.ConsoleError(errorMessage.ToString());
+				Log.ConsoleError(errorMessage.ToString());
+				Log.ConsoleError("Inner Exception:");
+				Log.ConsoleError(e.InnerException.ToString());
 			}
 		}
 	}
 	
-	public class QPlayer
-    {
-        public int Index { get; set; }
-        public TSPlayer TSPlayer { get { return TShock.Players[Index]; } }
-        public Item[] Inventory { get { return TSPlayer.TPlayer.inventory; } }
-        public StoredQPlayer MyDBPlayer;
-        public bool IsLoggedIn = false;
-        public Vector2 LastTilePos = Vector2.Zero;
-        public string CurQuestRegionName { get; set; }
-        public QuestRegion CurQuestRegion { get; set; }
-        public bool RunningQuest = false;
-        public bool InMenu = false;
-        public Menu QuestMenu;
-
-        public QPlayer(int index)
-        {
-            Index = index;
-        }
-    }
-	public class QuestRegion : Region
-    {
-        public string MessageOnEntry;
-        public string MessageOnExit;
-        public List<QuestInfo> Quests = new List<QuestInfo>();
-
-        public QuestRegion(string name, List<QuestInfo> quests, int x1, int y1, int x2, int y2, string entry, string exit)
-        {
-            this.Name = name;
-            Quests = quests;
-            this.Area = new Rectangle(x1, y1, Math.Abs(x2 - x1), Math.Abs(y2 - y1));
-            MessageOnEntry = entry;
-            MessageOnExit = exit;
-        }
-    }
-	public class StoredQPlayer
-    {
-        public string LoggedInName;
-        public List<QuestAttemptData> QuestAttemptData = new List<QuestAttemptData>();
-
-        public StoredQPlayer(string name, List<QuestAttemptData> playerdata)
-        {
-            LoggedInName = name;
-            QuestAttemptData = playerdata;
-        }
-    }
-    public class QuestAttemptData //TODO: Add number of quest attempts here.
+	public class QuestAttemptData //TODO: Add number of quest attempts here.
     {
         public string QuestName;
         public bool Complete = false;

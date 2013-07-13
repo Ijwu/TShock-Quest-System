@@ -352,7 +352,25 @@ namespace QuestSystemLUA
         }
         public static void StartQuest(QPlayer ply, QuestInfo q)
         {
-        	QMain.ThreadClass.RunningQuests.Add(new Quest(ply, q));
+        	ply.CurrentQuest = new Quest(ply,q);
+        	lock (QMain.ThreadClass.RunningQuests)
+        		QMain.ThreadClass.RunningQuests.Add(ply.CurrentQuest);
+        }
+        public static void EmptyCallback(object sender, MenuEventArgs args) {}
+        public static Quest GetRunningQuest(int player, Quest q)
+        {
+        	foreach (Quest quest in QMain.ThreadClass.RunningQuests)
+        	{
+        		if (quest.player == QMain.Players[player])
+        		{
+        			if (quest.info.Name == q.info.Name)
+        			{
+        				return quest;
+        			}
+        		}
+        	}
+        	return null;
+        	//return QMain.ThreadClass.RunningQuests.Where(quest => quest.player == GetPlayerByID(player) && quest.info.Name == q.info.Name).First();
         }
     }
 }

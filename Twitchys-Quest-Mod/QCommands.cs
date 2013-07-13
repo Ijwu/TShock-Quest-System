@@ -13,18 +13,15 @@ namespace QuestSystemLUA
     {
     	public static void DisplayQuestMenu(CommandArgs args)
     	{
-    		List<MenuItem> items = new List<MenuItem>();
-    		items.Add(new MenuItem("Hello"));
-    		items.Add(new MenuItem("Hello", 1));
-    		items.Add(new MenuItem("Hello", 2, Color.Aqua));
-    		items.Add(new MenuItem("Hello", 3, false, Color.White));
-    		items.Add(new MenuItem("Hello", 3, false, true, Color.White));
-    		Menu.CreateMenu(args.Player.Index, "Test", items, EmptyCallback);
+    		QPlayer player = QTools.GetPlayerByID(args.Player.Index);
+    		if (player.CurrentQuest != null && player.QuestMenu == null)
+    			QuestMenuBuilder.ShowMenu(args.Player.Index, player.CurrentQuest);
+    		else if (player.CurrentQuest == null)
+    			args.Player.SendErrorMessage("You have not started a quest.");
+    		else if (player.QuestMenu != null)
+    			args.Player.SendErrorMessage("You have a menu already open. Press Up+Down at the same time to close it.");
     	}
-    	public static void EmptyCallback(object sender, MenuEventArgs args)
-    	{
-    		
-    	}
+
         public static void GetCoords(CommandArgs args)
         {
             int x = (int)args.Player.X / 16;
@@ -74,9 +71,8 @@ namespace QuestSystemLUA
 	        					}
         					}
 	        				if (QTools.IntervalLeft(player, q) == 0)
-	                        {
-	                        	lock(QMain.ThreadClass.RunningQuests)
-	                        		QMain.ThreadClass.RunningQuests.Add(new Quest(player, q));
+	                        {	                        	
+	                        	QTools.StartQuest(player, q);
 	                        	
 	                        	QuestAttemptData lastAttempt = player.MyDBPlayer.QuestAttemptData.Find(x => x.QuestName == q.Name);
 	                        	if (lastAttempt != null)
@@ -280,8 +276,7 @@ namespace QuestSystemLUA
                     QuestInfo q;
                     if ((q = QTools.GetQuestByName(args.Parameters[1])) != null)
                     {
-                    	lock(QMain.ThreadClass.RunningQuests)
-                    		QMain.ThreadClass.RunningQuests.Add(new Quest(ply, q));
+                    	QTools.StartQuest(ply, q);
                     }
                     else
                         args.Player.SendMessage("Quest does not exist!", Color.Red);
@@ -303,8 +298,7 @@ namespace QuestSystemLUA
         					QMain.ThreadClass.RunningQuests.Remove(quest);
         			ply.TSPlayer.SendErrorMessage("Your quest was removed by server staff.");
         		}
-        		lock(QMain.ThreadClass.RunningQuests)
-        			QMain.ThreadClass.RunningQuests.Add(new Quest(ply, q));
+        		QTools.StartQuest(ply, q);
         		ply.TSPlayer.SendInfoMessage(string.Format("New quest: \"{0}\" forced by admin.", q.Name));
         	}
         }

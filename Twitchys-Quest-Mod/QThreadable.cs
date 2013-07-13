@@ -42,6 +42,7 @@ namespace QuestSystemLUA
 			    						quest.player.TSPlayer.SendErrorMessage(string.Format("Quest \"{0}\" aborted. Your time limit of {1} seconds is up.", quest.info.Name, quest.info.Time));
 		    							quest.running = false;
 			    						quest.player.RunningQuest = false;
+			    						quest.player.CurrentQuest = null;
 			    					}
 			    				}
 			    				if (QTools.IsLoggedIn(quest.player.Index)) //If the player is still logged in
@@ -51,12 +52,14 @@ namespace QuestSystemLUA
 					    			{
 				    					quest.running = false;
 					    				quest.player.RunningQuest = false;
+					    				quest.player.CurrentQuest = null;
 					    				quest.player.MyDBPlayer.QuestAttemptData.Find(x => x.QuestName == quest.info.Name).Complete = true;
 					    			}
 				    			}
 				    			else //If the player isn't logged in, end the quest
 				    			{
 		    						quest.running = false;
+		    						quest.player.CurrentQuest = null;
 				    			}
 			    			}
 		    			}
@@ -71,7 +74,27 @@ namespace QuestSystemLUA
 	    					quest.player.TSPlayer.SendErrorMessage("Your current quest has encountered an exception and had to be stopped.");
 	    					
 	    					quest.running = false; //Quit quest on exception
+	    					quest.player.RunningQuest = false;
+	    					quest.player.CurrentQuest = null;
 						}
+	    				catch (Exception e)
+	    				{
+	    					StringBuilder errorMessage = new StringBuilder();
+	    					errorMessage.AppendLine(string.Format("Error in quest system while running quest: Player: {0} QuestName: {1}", quest.player.TSPlayer.Name, quest.path));
+	    					errorMessage.AppendLine("This error is not associated with the lua script and is caused by the plugin itself. Please report it to Ijwu!");
+	    					errorMessage.AppendLine(e.Message);
+	    					errorMessage.AppendLine(e.StackTrace);
+	    					errorMessage.AppendLine();
+	    					errorMessage.AppendLine(e.InnerException.ToString());
+	    					TShockAPI.Log.ConsoleError(errorMessage.ToString());
+	    					
+	    					quest.player.TSPlayer.SendErrorMessage("Your current quest has encountered an exception and had to be stopped.");
+	    					
+	    					quest.running = false; //Quit quest on exception
+	    					quest.player.RunningQuest = false;
+	    					quest.player.CurrentQuest = null;
+	    					
+	    				}
 		    		}
 		    		RunningQuests.RemoveAll(q => q.running == false); //Remove inactive quests
 		    		LastExecution = DateTime.UtcNow;

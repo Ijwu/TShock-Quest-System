@@ -67,10 +67,14 @@
   <ItemGroup>
     <None Include="CHANGELOG.txt" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Twitchys-Quest-Mod\QClasses.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Classes\QMenu.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Classes\QPlayer.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Classes\QuestClasses.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Classes\QuestMenuBuilder.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Classes\QuestRegion.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Classes\Trigger.cs" />
     <Compile Include="Twitchys-Quest-Mod\QCommands.cs" />
     <Compile Include="Twitchys-Quest-Mod\QMain.cs" />
-    <Compile Include="Twitchys-Quest-Mod\QMenu.cs" />
     <Compile Include="Twitchys-Quest-Mod\QNPC.cs" />
     <Compile Include="Twitchys-Quest-Mod\QThreadable.cs" />
     <Compile Include="Twitchys-Quest-Mod\QTools.cs" />
@@ -80,12 +84,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Twitchys-Quest-Mod" />
+    <Folder Include="Twitchys-Quest-Mod\Classes" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\Twitchys-Quest-Mod.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary"
+    <PostBuildEvent>copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\Twitchys-Quest-Mod.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary\ServerPlugins"
 copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\lua51.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary"
-copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\LuaInterface.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary"
+copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\LuaInterface.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary\ServerPlugins"
 copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\CHANGELOG.txt" "E:\Dropbox\TShock QuestSystem Development"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,8 @@
 ﻿
-Version 2.1.2 (Current and ongoing)
+Version 2.2 (Current and ongoing) (API 1.13 Only currently. Will port to 1.12 if I finish this version before TShock 4.1 releases.)
 * Fixed bug in GiveUpItem which causes one player's drops to count for another's.
+* WIP: /progress command. Displays a menu showing your current progress in a quest.
+* Untested: Changed GatherItem trigger to allow for concurrent objectives like HuntMob and GiveUpItem.
 
 Version 2.1.1
 * API Tick to 1.13

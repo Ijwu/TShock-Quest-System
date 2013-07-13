@@ -14,7 +14,7 @@ using Triggers;
 
 namespace QuestSystemLUA
 {
-    [APIVersion(1, 13)]
+    [APIVersion(1, 12)]
     public class QMain : TerrariaPlugin
     {        
         public override string Name

@@ -80,6 +80,8 @@ namespace QuestSystemLUA
             }
             base.Dispose(disposing);
         }
+        
+        #region OnInitialize
         public void OnInitialize()
         {
             Main.ignoreErrors = true;
@@ -125,13 +127,18 @@ namespace QuestSystemLUA
             
             QuestHandler = new Thread(ThreadClass.QuestHandler);
             QuestHandler.Start();
-        }          
+        }  
+		#endregion
+		
+		#region Constructor
         public QMain(Main game)
             : base(game)
         {
             Order = -10;
         }
+        #endregion
         
+        #region OnGetData 
         public static void OnGetData(GetDataEventArgs e)
         {
             try
@@ -181,7 +188,9 @@ namespace QuestSystemLUA
             }
             catch (Exception ex) { Log.ConsoleError(ex.ToString()); }
         }
+        #endregion
         
+        #region OnChat
         public void OnChat(messageBuffer buf, int who, string text, HandledEventArgs args)
 	    {
 	        if (text[0] == '/')
@@ -197,7 +206,9 @@ namespace QuestSystemLUA
 	            }
 	        }
 	    }
+        #endregion
         
+        #region OnUpdate
         public void OnUpdate()
         {      	
             lock (Players)
@@ -238,15 +249,20 @@ namespace QuestSystemLUA
                 }
             }
         }
+        #endregion
         
+        #region OnJoin
         public void OnJoin(int who, HandledEventArgs e)
         {
+        	Console.WriteLine(who);
             QPlayer player = new QPlayer(who);
 
             lock (Players)
                 Players.Add(player);
         }
+        #endregion
         
+        #region OnLeave
         public void OnLeave(int ply)
         {
             lock (Players)
@@ -261,5 +277,6 @@ namespace QuestSystemLUA
                 }
             }
         }
+        #endregion
     }
 }
