@@ -156,14 +156,14 @@ namespace QuestSystemLUA
                         down = true;
                     if ((flags & 16) == 16)
                         space = true;
-                    var player = Players[plyID];
+                    QPlayer player = QTools.GetPlayerByID(plyID);
                     if (player != null)
                     {
                         if (player.InMenu)  // HANDLE MENU NAVIGATION
                         {
                             if (up && down)
                             {
-                                player.QuestMenu.Close();
+                                player.QuestMenu.Close(); //here
                                 e.Handled = true;
                                 return;
                             }
@@ -193,9 +193,14 @@ namespace QuestSystemLUA
         #region OnChat
         public void OnChat(messageBuffer buf, int who, string text, HandledEventArgs args)
 	    {
+        	Console.WriteLine("DEBUG: ONCHAT: ARGS.HANDLED: {0}", args.Handled);
+        	if (args.Handled)
+        		return;
+        	
 	        if (text[0] == '/')
 	            return;
-	        var player = QMain.Players[who];
+	        
+	        QPlayer player = QTools.GetPlayerByID(who);
 	        if (player != null)
 	        {
 	            if (player.InMenu)
@@ -205,6 +210,7 @@ namespace QuestSystemLUA
 	                args.Handled = true;
 	            }
 	        }
+	        Console.WriteLine("DEBUG: ONCHAT: END: ARGS.HANDLED: {0}", args.Handled);
 	    }
         #endregion
         

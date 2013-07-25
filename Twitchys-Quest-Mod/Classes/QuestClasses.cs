@@ -104,6 +104,7 @@ namespace QuestSystemLUA
 		public void ClearQueue()
 		{
 			this.triggers = new LinkedList<Trigger>();
+			this.currentTrigger.onComplete();
 			this.currentTrigger = null;
 		}
 		
@@ -116,6 +117,8 @@ namespace QuestSystemLUA
 				lua["Quest"] = this;
 				lua["Player"] = this.player;
 				lua["Color"] = new Color();
+				if (this.player.CurQuestRegion != null)
+					lua["Region"] = this.player.CurQuestRegion;
 				
 				lua.RegisterFunction("Add", this, this.GetType().GetMethod("Add"));
 				lua.RegisterFunction("Prioritize", this, this.GetType().GetMethod("Prioritize"));

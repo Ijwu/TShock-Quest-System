@@ -3,6 +3,13 @@ Version 2.2 (Current and ongoing) (API 1.13 Only currently. Will port to 1.12 if
 * Fixed bug in GiveUpItem which causes one player's drops to count for another's.
 * WIP: /progress command. Displays a menu showing your current progress in a quest.
 * Untested: Changed GatherItem trigger to allow for concurrent objectives like HuntMob and GiveUpItem.
+* Switched to NLua as lua interface between lua and .NET.
+* Both versions: Added Quest Region a quest is started in to the scope of the quest.
+
+Known Bugs/Issues:
+* ReadNextChatLine's hook doesn't pick up on chat messages. **Also in API V1.12**
+* Quests ended by players logging out leak memory. The current hook will not be properly destroyed. - Fixed
+* Quests added to a region do not appear in the region until the server is restarted.
 
 Version 2.1.1
 * API Tick to 1.13

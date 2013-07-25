@@ -180,7 +180,6 @@ namespace QuestSystemLUA
             return null;
         }
 
-        // --------------------------- STATIC METHODS -------------------------
         public static Menu CreateMenu(int playerID, string title, List<MenuItem> data, QMain.MenuAction callback)
         {
             var player = QMain.Players[playerID];

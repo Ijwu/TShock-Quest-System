@@ -272,7 +272,7 @@ namespace Triggers
 		public int x, y;
 		public string name;
 		
-		public TileEdit(int x, int y, string tile)
+		public TileEdit(string tile, int x, int y)
 		{
 			this.x = x;
 			this.y = y;
@@ -328,7 +328,7 @@ namespace Triggers
 		public int x, y;
 		public string name;
 		
-		public WallEdit(int x, int y, string wall)
+		public WallEdit(string wall, int x, int y)
 		{
 			this.x = x;
 			this.y = y;
@@ -580,17 +580,17 @@ namespace Triggers
 		}
 		
 		public void onChat(messageBuffer msg, int ply, string text, HandledEventArgs e)
-		{		
-			if (e.Handled)
-				return;
-			
+		{	
+			Console.WriteLine("PLY: {0}, PLAYER.INDEX: {1}, PLAYER.INMENU: {2}, E.HANDLED: {3}", ply, player.Index, player.InMenu, e.Handled);
+//			if (e.Handled)
+//				return;
+
 			if (ply == player.Index)
 			{
 				Message = text;
 				if (hideMessage)
 					e.Handled = true;
 			}
-			
 		}
 	}
 	
@@ -603,6 +603,7 @@ namespace Triggers
 		public GatherItem(QPlayer player, string item, int amount=1)
 		{
 			RepresentInMenu = true;
+			this.player = player;
 			addItem(item, amount);
 		}
 		
@@ -642,9 +643,9 @@ namespace Triggers
 		public void addItem(string item, int amount=1)
 		{
 			List<Item> matches = TShock.Utils.GetItemByName(item);
-			try
+			if (matches.Count == 1)
 			{
-				Item match = matches.Single();
+				Item match = matches[0];
 				int count = 0;
 				foreach (Item slot in player.Inventory)
 				{
@@ -655,7 +656,7 @@ namespace Triggers
 				toBeGathered.Add(match.name, amount);
 				itemCounts.Add(match.name, count);
 			}
-			catch (InvalidOperationException e)
+			else
 			{
 				throw new FormatException("More than one or no items matched to name or ID.");
 			}
@@ -902,7 +903,12 @@ namespace Triggers
 		
 		public override bool Update(Quest q)
 		{
-			func.Call(new object[]{args});
+			object[] arguments = new object[args.Values.Count];
+			for (int i=0; i < args.Values.Count; i++)
+			{
+				args.Values.CopyTo(arguments, i);
+			}
+			func.Call(arguments);
 			return true;
 		}
 		

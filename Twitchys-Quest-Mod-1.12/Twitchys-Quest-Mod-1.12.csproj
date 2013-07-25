@@ -39,6 +39,7 @@
     <Optimize>True</Optimize>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
+    <StartAction>Project</StartAction>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data">
@@ -84,7 +85,8 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "E:\Dropbox\GitProjectsAndStuff\Twitchys-Quest-Mod-1.12\bin\Release\Twitchys-Quest-Mod-1.12.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.12 Binary\ServerPlugins"
-copy "E:\Dropbox\GitProjectsAndStuff\Twitchys-Quest-Mod-1.12\bin\Release\LuaInterface.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.12 Binary\ServerPlugins"
-copy "E:\Dropbox\GitProjectsAndStuff\Twitchys-Quest-Mod-1.12\bin\Release\lua51.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.12 Binary"</PostBuildEvent>
+copy "E:\Dropbox\GitProjectsAndStuff\Twitchys-Quest-Mod-1.12\bin\Release\NLua.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.12 Binary\ServerPlugins"
+copy "E:\Dropbox\GitProjectsAndStuff\Twitchys-Quest-Mod-1.12\bin\Release\KeraLua.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.12 Binary\ServerPlugins"
+copy "E:\Dropbox\GitProjectsAndStuff\Twitchys-Quest-Mod-1.12\bin\Release\lua52.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.12 Binary"</PostBuildEvent>
   </PropertyGroup>
 </Project>
