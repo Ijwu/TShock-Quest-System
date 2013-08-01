@@ -5,9 +5,12 @@ Version 2.2 (Current and ongoing) (API 1.13 Only currently. Will port to 1.12 if
 * Untested: Changed GatherItem trigger to allow for concurrent objectives like HuntMob and GiveUpItem.
 * Switched to NLua as lua interface between lua and .NET.
 * Both versions: Added Quest Region a quest is started in to the scope of the quest.
+* Parameters for TileEdit and WallEdit triggers have been rearranged in order to keep the system consistent.
+	* New Parameter Order: string name, int x, int y
+* New Parameters for ReadNextChatLine: QPlayer player
+	* The hide message parameter has been removed.
 
 Known Bugs/Issues:
-* ReadNextChatLine's hook doesn't pick up on chat messages. **Also in API V1.12**
 * Quests ended by players logging out leak memory. The current hook will not be properly destroyed. - Fixed
 * Quests added to a region do not appear in the region until the server is restarted.
 

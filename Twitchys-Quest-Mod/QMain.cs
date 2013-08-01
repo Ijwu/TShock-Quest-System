@@ -193,7 +193,6 @@ namespace QuestSystemLUA
         #region OnChat
         public void OnChat(messageBuffer buf, int who, string text, HandledEventArgs args)
 	    {
-        	Console.WriteLine("DEBUG: ONCHAT: ARGS.HANDLED: {0}", args.Handled);
         	if (args.Handled)
         		return;
         	
@@ -210,7 +209,6 @@ namespace QuestSystemLUA
 	                args.Handled = true;
 	            }
 	        }
-	        Console.WriteLine("DEBUG: ONCHAT: END: ARGS.HANDLED: {0}", args.Handled);
 	    }
         #endregion
         

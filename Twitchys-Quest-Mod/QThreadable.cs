@@ -15,6 +15,7 @@ namespace QuestSystemLUA
     	public List<Quest> RunningQuests = new List<Quest>();
     	public DateTime LastExecution = DateTime.UtcNow;
     	public static TimeSpan TickRate = new TimeSpan(0,0,0,0,1); //1 milliseconds
+
     	public void QuestHandler()
     	{
     		try
@@ -70,7 +71,7 @@ namespace QuestSystemLUA
 		    				catch (NLua.Exceptions.LuaException e)
 							{
 		    					StringBuilder errorMessage = new StringBuilder();
-		    					errorMessage.AppendLine(string.Format("Error in quest system while running quest: Player: {0} QuestName: {1}", quest.player.TSPlayer.Name, quest.path));
+		    					errorMessage.AppendLine(string.Format("Error in quest system while running quest: Player: {0} Quest: {1}", quest.player.TSPlayer.Name, quest.path));
 		    					errorMessage.AppendLine(e.Message);
 		    					errorMessage.AppendLine(e.StackTrace);
 		    					TShockAPI.Log.ConsoleError(errorMessage.ToString());
@@ -85,7 +86,7 @@ namespace QuestSystemLUA
 		    				catch (Exception e)
 		    				{
 		    					StringBuilder errorMessage = new StringBuilder();
-		    					errorMessage.AppendLine(string.Format("Error in quest system while running quest: Player: {0} QuestName: {1}", quest.player.TSPlayer.Name, quest.path));
+		    					errorMessage.AppendLine(string.Format("Error in quest system while running quest: Player: {0} Quest: {1}", quest.player.TSPlayer.Name, quest.path));
 		    					errorMessage.AppendLine("This error is not associated with the lua script and is caused by the plugin itself. Please report it to Ijwu!");
 		    					errorMessage.AppendLine(e.Message);
 		    					errorMessage.AppendLine(e.StackTrace);

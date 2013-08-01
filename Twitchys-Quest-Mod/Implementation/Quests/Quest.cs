@@ -80,8 +80,11 @@ namespace QuestSystemLUA
 		public void ClearQueue()
 		{
 			this.triggers = new LinkedList<Trigger>();
-			this.currentTrigger.onComplete();
-			this.currentTrigger = null;
+			if (this.currentTrigger != null)
+			{
+				this.currentTrigger.onComplete();
+				this.currentTrigger = null;
+			}
 		}
 		
 		public void LoadQuest()
@@ -114,12 +117,15 @@ namespace QuestSystemLUA
 			catch (Exception e)
 			{
 				System.Text.StringBuilder errorMessage = new System.Text.StringBuilder();
-				errorMessage.AppendLine(string.Format("Error in quest system while loading quest: Player: {0} QuestName: {1}", this.player.TSPlayer.Name, this.path));
+				errorMessage.AppendLine(string.Format("Error in quest system while loading quest: Player: {0} Quest: {1}", this.player.TSPlayer.Name, this.path));
 				errorMessage.AppendLine(e.Message);
 				errorMessage.AppendLine(e.StackTrace);
 				Log.ConsoleError(errorMessage.ToString());
-				Log.ConsoleError("Inner Exception:");
-				Log.ConsoleError(e.InnerException.ToString());
+				if (e.InnerException != null)
+				{
+					Log.ConsoleError("Inner Exception:");
+					Log.ConsoleError(e.InnerException.ToString());
+				}
 			}
 		}
 	}

@@ -553,17 +553,15 @@ namespace Triggers
 	{
 		public QPlayer player;
 		public string Message;
-		public bool hideMessage;
 		
 		public override void Initialize()
 		{
 			ServerHooks.Chat += onChat;
 		}
 		
-		public ReadNextChatLine(QPlayer player, bool hideMsg = false)
+		public ReadNextChatLine(QPlayer player)
 		{
 			this.player = player;
-			this.hideMessage = hideMsg;
 		}	
 		
 		public override void onComplete()
@@ -585,12 +583,7 @@ namespace Triggers
 			{
 				if (Message == null)
 					Message = text;
-				if (hideMessage)
-					e.Handled = true;
 			}
-			
-			if (e.Handled)
-				return;
 		}
 	}
 	

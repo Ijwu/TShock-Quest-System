@@ -153,6 +153,7 @@ namespace QuestSystemLUA
                                     {
 	                                    r.Quests.Add(q);
 	                                    QTools.SaveRegions();
+	                                    QTools.LoadRegions();
                                     }
                                     else
                                     	args.Player.SendErrorMessage(string.Format("Quest region \"{0}\" already contains quest \"{1}\"", r.Name, q.Name));
@@ -179,6 +180,7 @@ namespace QuestSystemLUA
                                     args.Player.SendMessage(string.Format("Removed Quest: \"{0}\" from the Quest Region: \"{1}\"", q.Name, r.Name), Color.Yellow);
                                     r.Quests.Remove(q);
                                     QTools.SaveRegions();
+                                    QTools.LoadRegions();
                                 }
                                 else if (r == null)
                                     args.Player.SendMessage("Invalid Quest Region Name", Color.Red);
