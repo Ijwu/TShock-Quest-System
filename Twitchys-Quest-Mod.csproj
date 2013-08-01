@@ -67,27 +67,35 @@
   <ItemGroup>
     <None Include="CHANGELOG.txt" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Twitchys-Quest-Mod\Classes\Menu.cs" />
-    <Compile Include="Twitchys-Quest-Mod\Classes\QPlayer.cs" />
-    <Compile Include="Twitchys-Quest-Mod\Classes\QuestClasses.cs" />
-    <Compile Include="Twitchys-Quest-Mod\Classes\QuestMenuBuilder.cs" />
-    <Compile Include="Twitchys-Quest-Mod\Classes\QuestRegion.cs" />
-    <Compile Include="Twitchys-Quest-Mod\Classes\Trigger.cs" />
-    <Compile Include="Twitchys-Quest-Mod\Classes\TriggerRegistry.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Menu\Menu.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Menu\QuestMenuBuilder.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Player\QPlayer.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Player\StoredQPlayer.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\QuestRegion.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Quests\Quest.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Quests\QuestInfo.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Quests\QuestAttemptData.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Trigger\QuestTriggers.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Trigger\Trigger.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Trigger\TriggerRegistry.cs" />
     <Compile Include="Twitchys-Quest-Mod\QCommands.cs" />
     <Compile Include="Twitchys-Quest-Mod\QMain.cs" />
     <Compile Include="Twitchys-Quest-Mod\QThreadable.cs" />
     <Compile Include="Twitchys-Quest-Mod\QTools.cs" />
-    <Compile Include="Twitchys-Quest-Mod\QuestTriggers.cs" />
     <Compile Include="Twitchys-Quest-Mod\TypesList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Twitchys-Quest-Mod" />
-    <Folder Include="Twitchys-Quest-Mod\Classes" />
+    <Folder Include="Twitchys-Quest-Mod\Implementation" />
+    <Folder Include="Twitchys-Quest-Mod\Implementation\Menu" />
+    <Folder Include="Twitchys-Quest-Mod\Implementation\Trigger" />
+    <Folder Include="Twitchys-Quest-Mod\Implementation\Player" />
+    <Folder Include="Twitchys-Quest-Mod\Implementation\Quests" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\Twitchys-Quest-Mod.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary\ServerPlugins"
+copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\Twitchys-Quest-Mod.dll" "C:\Users\KassHuss\Desktop\Huss' Stuff\Games\Terraria\Fresh TShock with API 1.3 NLua\ServerPlugins"
 copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\lua52.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary"
 copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\NLua.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary\ServerPlugins"
 copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\KeraLua.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary\ServerPlugins"

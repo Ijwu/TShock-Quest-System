@@ -36,7 +36,6 @@ namespace QuestSystemLUA
 				    				}
 				    				if (!quest.player.RunningQuest)
 				    					quest.player.RunningQuest = true;
-				    				
 				    				if (quest.info.Time != 0) //If time limit on quest exists
 				    				{
 				    					if (DateTime.UtcNow.Subtract(quest.starttime) > TimeSpan.FromSeconds(quest.info.Time)) //Check the start time of the quest with the time limit
@@ -111,9 +110,9 @@ namespace QuestSystemLUA
 	    	catch (Exception e)
 	    	{
 	    		TShockAPI.Log.ConsoleError(e.ToString());
-	    		TShockAPI.Log.ConsoleError("INNER EXCEPTION:");
                 try
                 {
+                	TShockAPI.Log.ConsoleError("INNER EXCEPTION:");
                     TShockAPI.Log.ConsoleError(e.InnerException.ToString());
                 }
                 catch { }

@@ -581,16 +581,16 @@ namespace Triggers
 		
 		public void onChat(messageBuffer msg, int ply, string text, HandledEventArgs e)
 		{	
-			Console.WriteLine("PLY: {0}, PLAYER.INDEX: {1}, PLAYER.INMENU: {2}, E.HANDLED: {3}", ply, player.Index, player.InMenu, e.Handled);
-//			if (e.Handled)
-//				return;
-
 			if (ply == player.Index)
 			{
-				Message = text;
+				if (Message == null)
+					Message = text;
 				if (hideMessage)
 					e.Handled = true;
 			}
+			
+			if (e.Handled)
+				return;
 		}
 	}
 	
