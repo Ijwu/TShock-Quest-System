@@ -359,9 +359,10 @@ namespace QuestSystemLUA
         public static void EmptyCallback(object sender, MenuEventArgs args) {}
         public static Quest GetRunningQuest(int player, Quest q)
         {
+        	QPlayer target = QTools.GetPlayerByID(player);
         	foreach (Quest quest in QMain.ThreadClass.RunningQuests)
         	{
-        		if (quest.player == QMain.Players[player])
+        		if (quest.player == target) ///*QMain.Players[player] NOTE: Possible trouble line
         		{
         			if (quest.info.Name == q.info.Name)
         			{

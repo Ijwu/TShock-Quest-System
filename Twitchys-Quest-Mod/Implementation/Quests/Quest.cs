@@ -42,6 +42,8 @@ namespace QuestSystemLUA
 		}
 		public void EvaluateTrigger()
 		{
+//			if (currentTrigger != null)
+//				Console.WriteLine("Trigger type: {0}", currentTrigger.GetType().Name);
 			if (currentTrigger.Update(this))
 			{
 				currentTrigger.onComplete();
@@ -126,6 +128,7 @@ namespace QuestSystemLUA
 					Log.ConsoleError("Inner Exception:");
 					Log.ConsoleError(e.InnerException.ToString());
 				}
+				player.TSPlayer.SendErrorMessage("Your quest has failed to load due to an error in the script or the system. Please report this to a server administrator.");
 			}
 		}
 	}

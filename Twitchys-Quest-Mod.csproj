@@ -16,7 +16,7 @@
     <NoStdLib>False</NoStdLib>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <TargetFrameworkProfile />
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -38,6 +38,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <StartAction>Project</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <RegisterForComInterop>False</RegisterForComInterop>

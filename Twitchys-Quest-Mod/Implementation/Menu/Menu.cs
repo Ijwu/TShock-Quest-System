@@ -75,15 +75,20 @@ namespace QuestSystemLUA
             this.contents = contents;
             this.PlayerID = playerid;
             this.title = title;
+            
             if (del != null)
-                this.MenuActionHandler = del;
-            if (QMain.Players[playerid] != null)
-                QMain.Players[playerid].InMenu = true;
+            	this.MenuActionHandler = del;
+            
+            QPlayer target = QMain.Players[QMain.Players.IndexOf(QTools.GetPlayerByID(playerid))];
+            
+            if (target != null)
+            	target.InMenu = true;
+            
             this.DisplayMenu();
         }
         public void DisplayMenu()
         {
-            var player = TShock.Players[this.PlayerID];
+            TSPlayer player = TShock.Players[this.PlayerID];
             if (player != null)
             {
                 int j = -2;
@@ -106,7 +111,6 @@ namespace QuestSystemLUA
                         player.SendData(PacketTypes.ChatText, "", 255, 0f, 0f, 0f, 1);
                     else
                         player.SendData(PacketTypes.ChatText, this.contents[this.index + i].Text.Replace("@0", this.contents[this.index + i].Input), 255, this.contents[this.index + i].Color.R, this.contents[this.index + i].Color.G, this.contents[this.index + i].Color.B, 1);
-
                 }
             }
         }
@@ -130,7 +134,7 @@ namespace QuestSystemLUA
         {
             try
             {
-                var player = QMain.Players[this.PlayerID];
+            	QPlayer player = QTools.GetPlayerByID(this.PlayerID);
                 if (player != null)
                 {
                     MenuEventArgs args = new MenuEventArgs(this.contents, this.PlayerID, -1, (force)?MenuStatus.ForceExit:MenuStatus.Exit);
@@ -182,12 +186,12 @@ namespace QuestSystemLUA
 
         public static Menu CreateMenu(int playerID, string title, List<MenuItem> data, QMain.MenuAction callback)
         {
-            var player = QMain.Players[playerID];
+        	QPlayer player = QTools.GetPlayerByID(playerID);
             try
             {
                 if (player != null && !player.InMenu)
                 {
-                    player.QuestMenu = new Menu(playerID, title, data, callback);
+                    player.QuestMenu = new Menu(player.Index, title, data, callback);
                     player.InMenu = true;
                     return player.QuestMenu;
                 }

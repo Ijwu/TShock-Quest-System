@@ -382,7 +382,7 @@ namespace Triggers
 		
 		public override bool Update(Quest q)
 		{
-			if (Main.tile[x,y] != null)
+			if (Main.tile[x,y] != null && (Main.tile[x, y].active == true || Main.tile[x,y].wall != 0))
 			{
 				Main.tile[x, y].active = false;
 	            Main.tile[x, y].wall = 0;
@@ -406,7 +406,7 @@ namespace Triggers
 		
 		public override bool Update(Quest q)
 		{
-			if (Main.tile[x,y] != null)
+			if (Main.tile[x,y] != null && Main.tile[x, y].wall != 0)
 			{
 				Main.tile[x, y].wall = 0;
 	            QTools.UpdateTile(x, y);
@@ -427,7 +427,7 @@ namespace Triggers
 		
 		public override bool Update(Quest q)
 		{
-			if (Main.tile[x,y] != null)
+			if (Main.tile[x,y] != null && Main.tile[x, y].active)
 			{
 				Main.tile[x, y].active = false;
 	            Main.tile[x, y].skipLiquid = true;
