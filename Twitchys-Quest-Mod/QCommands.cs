@@ -11,6 +11,17 @@ namespace QuestSystemLUA
 {
     public class QCommands
     {
+    	public static void DisplayQuestMenu(CommandArgs args)
+    	{
+    		QPlayer player = QTools.GetPlayerByID(args.Player.Index);
+    		if (player.CurrentQuest != null && player.QuestMenu == null)
+    			QuestMenuBuilder.ShowMenu(args.Player.Index, player.CurrentQuest);
+    		else if (player.CurrentQuest == null)
+    			args.Player.SendErrorMessage("You have not started a quest.");
+    		else if (player.QuestMenu != null)
+    			args.Player.SendErrorMessage("You have a menu already open. Press Up+Down at the same time to close it.");
+    	}
+
         public static void GetCoords(CommandArgs args)
         {
             int x = (int)args.Player.X / 16;
@@ -60,9 +71,8 @@ namespace QuestSystemLUA
 	        					}
         					}
 	        				if (QTools.IntervalLeft(player, q) == 0)
-	                        {
-	                        	lock(QMain.ThreadClass.RunningQuests)
-	                        		QMain.ThreadClass.RunningQuests.Add(new Quest(player, q));
+	                        {	                        	
+	                        	QTools.StartQuest(player, q);
 	                        	
 	                        	QuestAttemptData lastAttempt = player.MyDBPlayer.QuestAttemptData.Find(x => x.QuestName == q.Name);
 	                        	if (lastAttempt != null)
@@ -143,6 +153,7 @@ namespace QuestSystemLUA
                                     {
 	                                    r.Quests.Add(q);
 	                                    QTools.SaveRegions();
+	                                    QTools.LoadRegions();
                                     }
                                     else
                                     	args.Player.SendErrorMessage(string.Format("Quest region \"{0}\" already contains quest \"{1}\"", r.Name, q.Name));
@@ -169,6 +180,7 @@ namespace QuestSystemLUA
                                     args.Player.SendMessage(string.Format("Removed Quest: \"{0}\" from the Quest Region: \"{1}\"", q.Name, r.Name), Color.Yellow);
                                     r.Quests.Remove(q);
                                     QTools.SaveRegions();
+                                    QTools.LoadRegions();
                                 }
                                 else if (r == null)
                                     args.Player.SendMessage("Invalid Quest Region Name", Color.Red);
@@ -266,8 +278,7 @@ namespace QuestSystemLUA
                     QuestInfo q;
                     if ((q = QTools.GetQuestByName(args.Parameters[1])) != null)
                     {
-                    	lock(QMain.ThreadClass.RunningQuests)
-                    		QMain.ThreadClass.RunningQuests.Add(new Quest(ply, q));
+                    	QTools.StartQuest(ply, q);
                     }
                     else
                         args.Player.SendMessage("Quest does not exist!", Color.Red);
@@ -289,8 +300,7 @@ namespace QuestSystemLUA
         					QMain.ThreadClass.RunningQuests.Remove(quest);
         			ply.TSPlayer.SendErrorMessage("Your quest was removed by server staff.");
         		}
-        		lock(QMain.ThreadClass.RunningQuests)
-        			QMain.ThreadClass.RunningQuests.Add(new Quest(ply, q));
+        		QTools.StartQuest(ply, q);
         		ply.TSPlayer.SendInfoMessage(string.Format("New quest: \"{0}\" forced by admin.", q.Name));
         	}
         }

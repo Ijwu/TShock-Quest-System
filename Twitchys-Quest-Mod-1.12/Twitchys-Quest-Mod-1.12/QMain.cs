@@ -8,13 +8,13 @@ using Hooks;
 using TShockAPI;
 using TShockAPI.DB;
 using System.ComponentModel;
-using LuaInterface;
+using NLua;
 using System.IO; 
 using Triggers;
 
 namespace QuestSystemLUA
 {
-    [APIVersion(1, 13)]
+    [APIVersion(1, 12)]
     public class QMain : TerrariaPlugin
     {        
         public override string Name

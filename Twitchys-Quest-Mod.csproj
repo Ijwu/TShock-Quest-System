@@ -16,7 +16,7 @@
     <NoStdLib>False</NoStdLib>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <TargetFrameworkProfile />
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -38,6 +38,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <StartAction>Project</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <RegisterForComInterop>False</RegisterForComInterop>
@@ -46,11 +47,11 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LuaInterface">
-      <HintPath>DLLS\LuaInterface.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data">
       <HintPath>DLLS\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="NLua">
+      <HintPath>DLLS\NLua.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -65,26 +66,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="CHANGELOG" />
+    <None Include="CHANGELOG.txt" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Twitchys-Quest-Mod\QClasses.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Menu\Menu.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Menu\QuestMenuBuilder.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Player\QPlayer.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Player\StoredQPlayer.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\QuestRegion.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Quests\Quest.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Quests\QuestInfo.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Quests\QuestAttemptData.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Trigger\QuestTriggers.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Trigger\Trigger.cs" />
+    <Compile Include="Twitchys-Quest-Mod\Implementation\Trigger\TriggerRegistry.cs" />
     <Compile Include="Twitchys-Quest-Mod\QCommands.cs" />
     <Compile Include="Twitchys-Quest-Mod\QMain.cs" />
-    <Compile Include="Twitchys-Quest-Mod\QNPC.cs" />
     <Compile Include="Twitchys-Quest-Mod\QThreadable.cs" />
     <Compile Include="Twitchys-Quest-Mod\QTools.cs" />
-    <Compile Include="Twitchys-Quest-Mod\QuestTriggers.cs" />
-    <Compile Include="Twitchys-Quest-Mod\TriggerRegistry.cs" />
     <Compile Include="Twitchys-Quest-Mod\TypesList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Twitchys-Quest-Mod" />
+    <Folder Include="Twitchys-Quest-Mod\Implementation" />
+    <Folder Include="Twitchys-Quest-Mod\Implementation\Menu" />
+    <Folder Include="Twitchys-Quest-Mod\Implementation\Trigger" />
+    <Folder Include="Twitchys-Quest-Mod\Implementation\Player" />
+    <Folder Include="Twitchys-Quest-Mod\Implementation\Quests" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\Twitchys-Quest-Mod.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary"
-copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\lua51.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary"
-copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\LuaInterface.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary"</PostBuildEvent>
+    <PostBuildEvent>copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\Twitchys-Quest-Mod.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary\ServerPlugins"
+copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\Twitchys-Quest-Mod.dll" "C:\Users\KassHuss\Desktop\Huss' Stuff\Games\Terraria\Fresh TShock with API 1.3 NLua\ServerPlugins"
+copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\lua52.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary"
+copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\NLua.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary\ServerPlugins"
+copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\bin\Release\KeraLua.dll" "E:\Dropbox\TShock QuestSystem Development\API Version 1.13 Binary\ServerPlugins"
+copy "E:\Dropbox\GitProjectsAndStuff\TShock-Quest-System-API1.3\CHANGELOG.txt" "E:\Dropbox\TShock QuestSystem Development"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

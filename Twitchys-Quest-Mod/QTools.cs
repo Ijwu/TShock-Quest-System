@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using LuaInterface;
+using NLua;
 using Terraria;
 using TShockAPI;
 using TShockAPI.DB;
@@ -349,6 +349,29 @@ namespace QuestSystemLUA
         			return true;
         	}
         	return false;
+        }
+        public static void StartQuest(QPlayer ply, QuestInfo q)
+        {
+        	ply.CurrentQuest = new Quest(ply,q);
+        	lock (QMain.ThreadClass.RunningQuests)
+        		QMain.ThreadClass.RunningQuests.Add(ply.CurrentQuest);
+        }
+        public static void EmptyCallback(object sender, MenuEventArgs args) {}
+        public static Quest GetRunningQuest(int player, Quest q)
+        {
+        	QPlayer target = QTools.GetPlayerByID(player);
+        	foreach (Quest quest in QMain.ThreadClass.RunningQuests)
+        	{
+        		if (quest.player == target) ///*QMain.Players[player] NOTE: Possible trouble line
+        		{
+        			if (quest.info.Name == q.info.Name)
+        			{
+        				return quest;
+        			}
+        		}
+        	}
+        	return null;
+        	//return QMain.ThreadClass.RunningQuests.Where(quest => quest.player == GetPlayerByID(player) && quest.info.Name == q.info.Name).First();
         }
     }
 }

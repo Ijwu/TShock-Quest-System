@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Streams;
+using System.Text;
 using QuestSystemLUA;
 using Terraria;
 using TShockAPI;
@@ -7,7 +8,8 @@ using System.Collections.Generic;
 using Hooks;
 using System.IO;
 using System.ComponentModel;
-using LuaInterface;
+using NLua;
+using System.Linq;
 
 namespace Triggers
 {		
@@ -18,6 +20,7 @@ namespace Triggers
 		
 		public HuntMob(QPlayer Player, string type, int amount=1)
 		{
+			RepresentInMenu = true;
 			player = Player;
 			addNPC(type, amount);
 		}
@@ -33,6 +36,17 @@ namespace Triggers
 			{
 				throw new FormatException("More than one or no NPCs matched to name or ID.");
 			}
+		}
+		
+		public override string Progress()
+		{
+			StringBuilder progressText = new StringBuilder();
+			progressText.Append("Monsters left to kill: ");
+			foreach (string key in toBeKilled.Keys)
+			{
+				progressText.AppendFormat("{0} ({1} Left), ", key, toBeKilled[key]);
+			}
+			return progressText.ToString();
 		}
 		
 		public override void Initialize()
@@ -129,6 +143,7 @@ namespace Triggers
 		
 		public GiveUpItem(QPlayer player, string type, int amount=1)
 		{
+			RepresentInMenu = true;
 			this.player = player;
 			addItem(type, amount);
 		}
@@ -147,8 +162,22 @@ namespace Triggers
 			}
 		}
 		
+		public override string Progress()
+		{
+			StringBuilder progressText = new StringBuilder();
+			progressText.Append("Items left to give: ");
+			foreach (string key in toBeCollected.Keys)
+			{
+				progressText.AppendFormat("{0} ({1} Left), ", key, toBeCollected[key]);
+			}
+			return progressText.ToString();
+		}
+		
 		private void checkItemDrops(GetDataEventArgs args)
 		{
+			if (!(player.Index == args.Msg.whoAmI))
+				return;
+			
 			if (args.MsgID == PacketTypes.ItemDrop)
 			{
 				if (args.Handled)
@@ -220,10 +249,16 @@ namespace Triggers
 		
 		public AtXY(QPlayer player, int x, int y, int radius = 1)
 		{
+			RepresentInMenu = true;
 			this.player = player;
 			this.x = x;
 			this.y = y;
 			this.radius = radius;
+		}
+		
+		public override string Progress()
+		{
+			return string.Format("Destination: ({0}, {1}). Your position is: ({2},{3}).", x, y, player.TSPlayer.TileX, player.TSPlayer.TileY);
 		}
 		
 		public override bool Update(Quest q)
@@ -237,7 +272,7 @@ namespace Triggers
 		public int x, y;
 		public string name;
 		
-		public TileEdit(int x, int y, string tile)
+		public TileEdit(string tile, int x, int y)
 		{
 			this.x = x;
 			this.y = y;
@@ -293,7 +328,7 @@ namespace Triggers
 		public int x, y;
 		public string name;
 		
-		public WallEdit(int x, int y, string wall)
+		public WallEdit(string wall, int x, int y)
 		{
 			this.x = x;
 			this.y = y;
@@ -347,11 +382,14 @@ namespace Triggers
 		
 		public override bool Update(Quest q)
 		{
-			Main.tile[x, y].active = false;
-            Main.tile[x, y].wall = 0;
-            Main.tile[x, y].skipLiquid = true;
-            Main.tile[x, y].liquid = 0;
-            QTools.UpdateTile(x, y);
+			if (Main.tile[x,y] != null && (Main.tile[x, y].active == true || Main.tile[x,y].wall != 0))
+			{
+				Main.tile[x, y].active = false;
+	            Main.tile[x, y].wall = 0;
+	            Main.tile[x, y].skipLiquid = true;
+	            Main.tile[x, y].liquid = 0;
+	            QTools.UpdateTile(x, y);
+            }
             return true;
 		}
 	}
@@ -368,8 +406,11 @@ namespace Triggers
 		
 		public override bool Update(Quest q)
 		{
-			Main.tile[x, y].wall = 0;
-            QTools.UpdateTile(x, y);
+			if (Main.tile[x,y] != null && Main.tile[x, y].wall != 0)
+			{
+				Main.tile[x, y].wall = 0;
+	            QTools.UpdateTile(x, y);
+			}
             return true;
 		}
 	}
@@ -386,10 +427,13 @@ namespace Triggers
 		
 		public override bool Update(Quest q)
 		{
-			Main.tile[x, y].active = false;
-            Main.tile[x, y].skipLiquid = true;
-            Main.tile[x, y].liquid = 0;
-            QTools.UpdateTile(x, y);
+			if (Main.tile[x,y] != null && Main.tile[x, y].active)
+			{
+				Main.tile[x, y].active = false;
+	            Main.tile[x, y].skipLiquid = true;
+	            Main.tile[x, y].liquid = 0;
+	            QTools.UpdateTile(x, y);
+			}
             return true;
 		}
 	}
@@ -509,17 +553,15 @@ namespace Triggers
 	{
 		public QPlayer player;
 		public string Message;
-		public bool hideMessage;
 		
 		public override void Initialize()
 		{
 			ServerHooks.Chat += onChat;
 		}
 		
-		public ReadNextChatLine(QPlayer player, bool hideMsg = false)
+		public ReadNextChatLine(QPlayer player)
 		{
 			this.player = player;
-			this.hideMessage = hideMsg;
 		}	
 		
 		public override void onComplete()
@@ -536,39 +578,76 @@ namespace Triggers
 		}
 		
 		public void onChat(messageBuffer msg, int ply, string text, HandledEventArgs e)
-		{			
+		{	
 			if (ply == player.Index)
 			{
-				Message = text;
-				if (hideMessage)
-					e.Handled = true;
+				if (Message == null)
+					Message = text;
 			}
-			
 		}
 	}
 	
 	public class GatherItem : Trigger
 	{
-		public Item item;
-		public int amount;
-		private int count = 0;
-		public QPlayer player;		
+		public Dictionary<string, int> toBeGathered = new Dictionary<string, int>();
+		public Dictionary<string, int> itemCounts = new Dictionary<string, int>();
+		public QPlayer player;
 		
 		public GatherItem(QPlayer player, string item, int amount=1)
 		{
+			RepresentInMenu = true;
 			this.player = player;
-			this.amount = amount;
-			
-			List<Item> items = TShock.Utils.GetItemByIdOrName(item);
-			if (items.Count == 1)
+			addItem(item, amount);
+		}
+		
+		public override bool Update(Quest q)
+		{
+			foreach (string key in toBeGathered.Keys)
 			{
-				this.item = items[0];
-				foreach(Item slot in player.Inventory)
+				int buffer = itemCounts[key];
+				try
+				{
+					foreach(Item slot in player.Inventory)
+					{
+						if (slot != null)
+							if (slot.name == key)
+								buffer += slot.stack;
+					}
+				}
+				catch (Exception e)
+				{
+					Log.Error(e.Message);
+				}
+				
+				if (buffer >= toBeGathered[key])
+				{
+					toBeGathered.Remove(key);
+					itemCounts.Remove(key);
+				}
+				
+				if (toBeGathered.Count == 0)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		public void addItem(string item, int amount=1)
+		{
+			List<Item> matches = TShock.Utils.GetItemByName(item);
+			if (matches.Count == 1)
+			{
+				Item match = matches[0];
+				int count = 0;
+				foreach (Item slot in player.Inventory)
 				{
 					if (slot != null)
-						if (slot.name.ToLower() == this.item.name.ToLower())
+						if (slot.name == match.name)
 							count -= slot.stack;
 				}
+				toBeGathered.Add(match.name, amount);
+				itemCounts.Add(match.name, count);
 			}
 			else
 			{
@@ -576,30 +655,15 @@ namespace Triggers
 			}
 		}
 		
-		public override bool Update(Quest q)
+		public override string Progress()
 		{
-			int buffer = count;
-            try
-            {
-                foreach (Item slot in player.Inventory)
-                {
-                    if (slot != null)
-                        if (slot.name.ToLower() == item.name.ToLower())
-                            count += slot.stack;
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Error(e.Message);
-            }
-            
-            if (count >= amount)
-            {
-            	return true;
-            }
-            
-            count = buffer;
-            return false;
+			StringBuilder progressText = new StringBuilder();
+			progressText.Append("Items left to gather: ");
+			foreach (string key in toBeGathered.Keys)
+			{
+				progressText.AppendFormat("{0} ({1} Left), ", key, toBeGathered[key]);
+			}
+			return progressText.ToString();
 		}
 	}
 	
@@ -832,7 +896,12 @@ namespace Triggers
 		
 		public override bool Update(Quest q)
 		{
-			func.Call(new object[]{args});
+			object[] arguments = new object[args.Values.Count];
+			for (int i=0; i < args.Values.Count; i++)
+			{
+				args.Values.CopyTo(arguments, i);
+			}
+			func.Call(arguments);
 			return true;
 		}
 		

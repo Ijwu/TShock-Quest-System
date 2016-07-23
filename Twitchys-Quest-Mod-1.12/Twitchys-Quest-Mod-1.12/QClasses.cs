@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Threading;
-using LuaInterface;
+using NLua;
 using TShockAPI;
 using Terraria;
 using TShockAPI.DB;
@@ -123,6 +123,8 @@ namespace QuestSystemLUA
 				lua["Quest"] = this;
 				lua["Player"] = this.player;
 				lua["Color"] = new Color();
+				if (this.player.CurQuestRegion != null)
+					lua["Region"] = this.player.CurQuestRegion;
 				
 				lua.RegisterFunction("Add", this, this.GetType().GetMethod("Add"));
 				lua.RegisterFunction("Prioritize", this, this.GetType().GetMethod("Prioritize"));
@@ -133,7 +135,7 @@ namespace QuestSystemLUA
 				this.player.TSPlayer.SendInfoMessage(string.Format("Quest {0} has started.", this.info.Name));
 				
 				if (triggers.Count == 0)
-					throw new LuaScriptException(string.Format("The script for the quest \"{0}\" never enqueues any triggers. Quests must enqueue at least one trigger.", this.info.Name), this.info.Path);
+					throw new NLua.Exceptions.LuaScriptException(string.Format("The script for the quest \"{0}\" never enqueues any triggers. Quests must enqueue at least one trigger.", this.info.Name), this.info.Path);
 				
 				running = true;
 				
